@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PEライン→リーダー変換ツール</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1><a href="index.html">芦名の淵釣り人備忘録</a></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="pe-converter.html">PEライン→リーダー変換ツール</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <h1>ライン → リーダー変換ツール</h1>
+      <p>PE号数を入力してください：</p>
+      <input type="number" id="pe" step="0.1" placeholder="例: 1.5" />
+      <button onclick="convert()">計算する</button>
+      <p id="result"></p>
+
+      <script>
+        function convert() {
+          const pe = parseFloat(document.getElementById("pe").value);
+          if (isNaN(pe) || pe <= 0) {
+            document.getElementById("result").innerText =
+              "正しい値を入力してください";
+            return;
+          }
+
+          // 例: PE号数 × 5 = おおよそのlb
+          const lb = Math.round(pe * 20 * 10) / 10;
+          document.getElementById(
+            "result"
+          ).innerText = `推奨リーダー：約 ${lb} lb`;
+        }
+      </script>
+    </main>
+    <footer>
+      <p>&copy; 2024 芦名の淵釣り人備忘録</p>
+    </footer>
+    <script src="pe-converter.js"></script>
+  </body>
+</html>

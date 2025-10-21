@@ -1,0 +1,77 @@
+// Firestore security rules for my-second-web-converter
+// Minimal rules with basic validation for `users` and `fishinglogs` collections.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // users: only the user may read/write their own profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // fishinglogs: owner-only access with basic shape validation for `catch`
+    match /fishinglogs/{logId} {
+      // helper functions
+      function isSignedIn() {
+        return request.auth != null;
+      }
+      function isOwner(uid) {
+        return uid == request.auth.uid;
+      }
+      function hasCatchShape(c) {
+        // require key set and simple type checks + length limits
+        return c.keys().hasAll(['fish', 'size', 'location', 'date', 'imageUrl', 'rod', 'reel', 'line', 'lure', 'memo'])
+          && c.fish is string && c.fish.size() > 0 && c.fish.size() <= 100
+          && c.size is number && c.size >= 0 && c.size <= 2000
+          && c.location is string && c.location.size() <= 200
+          && c.date is string && c.date.size() <= 50
+          && c.imageUrl is string && c.imageUrl.size() <= 2000
+          && c.rod is string && c.rod.size() <= 200
+          && c.reel is string && c.reel.size() <= 200
+          && c.line is string && c.line.size() <= 200
+          && c.lure is string && c.lure.size() <= 200
+          && c.memo is string && c.memo.size() <= 500;
+      }
+
+      // Create: must be signed in and the uid field in the incoming doc must match auth.uid
+      // and the `catch` map must match the expected shape.
+      allow create: if isSignedIn()
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.catch is map
+                    && hasCatchShape(request.resource.data.catch);
+
+      // helper to check friend relationship: the owner (resource.data.uid) has a `friends` array
+      // in /users/{ownerUid} that includes the requesting user id.
+      function isFriendOfOwner() {
+        return exists(/databases/$(database)/documents/users/$(resource.data.uid))
+          && request.auth.uid in get(/databases/$(database)/documents/users/$(resource.data.uid)).data.friends;
+      }
+
+      // Read: owner or friends
+      allow read: if isSignedIn() && (
+        resource.data.uid == request.auth.uid || isFriendOfOwner()
+      );
+
+      // Update/Delete: owner only. For update, validate the incoming shape when present.
+      allow update: if isSignedIn()
+                    && resource.data.uid == request.auth.uid
+                    && (request.resource == null || (
+                      request.resource.data.uid == resource.data.uid
+                      && request.resource.data.catch is map
+                      && hasCatchShape(request.resource.data.catch)
+                    ));
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+    }
+  }
+}
+
+// Notes:
+// - This is a conservative starting point. Adjust string length limits and required keys to match
+//   the actual frontend payloads before deploying to production.
+// - Storage (images) must be protected by Storage rules separately. Storing an image URL in
+//   the document does NOT control access to the binary in Cloud Storage.
+// - Test these rules with the Firebase Emulator before deploying:
+//     firebase emulators:start --only firestore
+//   And deploy rules with:
+//     firebase deploy --only firestore:rules

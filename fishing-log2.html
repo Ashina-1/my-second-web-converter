@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>釣果リスト | Fishing Log</title>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
+        authDomain: "fishing-log-app-5bea9.firebaseapp.com",
+        projectId: "fishing-log-app-5bea9",
+        storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
+        messagingSenderId: "730868295976",
+        appId: "1:730868295976:web:c745939c9f9b3936c7c81d",
+        measurementId: "G-5XT73YG2RP",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      // --- ログイン状態を監視 ---
+      import {
+        getAuth,
+        signOut,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+        setDoc,
+        updateDoc,
+        arrayUnion,
+        arrayRemove,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+      const auth = getAuth();
+      const db = getFirestore(app);
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("ログイン中:", user);
+          loadMyCatches(user.uid); // ユーザーの釣果を読み込む関数を呼び出し
+          loadFriends(user.uid); // フレンドリストを読み込む
+        } else {
+          console.log("ログアウト中");
+          window.location.href = "login.html"; // ログインページへリダイレクト
+        }
+      });
+      // --- 釣果を読み込む関数 ---
+      async function loadMyCatches(uid) {
+        const catchList = document.getElementById("catchList");
+        catchList.innerHTML = "読み込み中...";
+        // Firestoreから現在のユーザーの釣果を取得
+        const q = collection(db, "fishinglogs");
+        const querySnapshot = await getDocs(q);
+        let html = "";
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.uid === uid) {
+            html += `<div class="catch-item">
+            <p><strong>魚種:</strong> ${data.catch.fish}</p>
+            <p><strong>サイズ:</strong> ${data.catch.size} cm</p>
+            <p><strong>場所:</strong> ${data.catch.location}</p>
+            <p><strong>日付:</strong> ${data.catch.date}</p>
+            <p><strong>メモ:</strong> ${data.catch.memo}</p>
+            <p><strong>ロッド:</strong> ${data.catch.rod}</p>
+            <p><strong>リール:</strong> ${data.catch.reel}</p>
+            <p><strong>ライン:</strong> ${data.catch.line}</p>
+            <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>
+            <img src="${data.catch.imageUrl}" alt="Catch Image" style="max-width:100%; border-radius:8px;"/>
+            </div>`;
+          }
+        });
+        if (html === "") {
+          html = "<p>まだ釣果がありません。</p>";
+        }
+        catchList.innerHTML = html;
+      }
+
+      // --- friends 管理 ---
+      async function loadFriends(uid) {
+        const friendsPanel = document.getElementById("friendsPanel");
+        const friendsList = document.getElementById("friendsList");
+        const input = document.getElementById("friendUidInput");
+        friendsList.innerHTML = "読み込み中...";
+        try {
+          const userDocRef = doc(db, "users", uid);
+          const userSnap = await getDoc(userDocRef);
+          const friends = (userSnap.exists() && userSnap.data().friends) || [];
+          if (friends.length === 0) {
+            friendsList.innerHTML = "<p>友だちがいません。</p>";
+          } else {
+            friendsList.innerHTML = "";
+            friends.forEach((f) => {
+              const el = document.createElement("div");
+              el.className = "friend-item";
+              el.innerHTML = `<span>${f}</span> <button data-uid="${f}" class="remove-friend">削除</button>`;
+              friendsList.appendChild(el);
+            });
+            // attach remove handlers
+            friendsList.querySelectorAll(".remove-friend").forEach((btn) => {
+              btn.addEventListener("click", async (e) => {
+                const friendUid = e.target.getAttribute("data-uid");
+                await removeFriend(uid, friendUid);
+                await loadFriends(uid);
+              });
+            });
+          }
+        } catch (err) {
+          console.error("loadFriends error", err);
+          friendsList.innerHTML = "<p>友だちの読み込みに失敗しました</p>";
+        }
+        // add handler for add button
+        const addBtn = document.getElementById("addFriendBtn");
+        addBtn.onclick = async () => {
+          const target = document.getElementById("friendUidInput").value.trim();
+          if (!target) return alert("追加するユーザーのUIDを入力してください");
+          if (target === uid) return alert("自分を追加できません");
+          await addFriend(uid, target);
+          input.value = "";
+          await loadFriends(uid);
+        };
+      }
+
+      async function addFriend(uid, friendUid) {
+        try {
+          const userDocRef = doc(db, "users", uid);
+          await setDoc(
+            userDocRef,
+            { friends: arrayUnion(friendUid) },
+            { merge: true }
+          );
+        } catch (err) {
+          console.error("addFriend error", err);
+          alert("友だち追加に失敗しました");
+        }
+      }
+
+      async function removeFriend(uid, friendUid) {
+        try {
+          const userDocRef = doc(db, "users", uid);
+          await updateDoc(userDocRef, { friends: arrayRemove(friendUid) });
+        } catch (err) {
+          console.error("removeFriend error", err);
+          alert("友だち削除に失敗しました");
+        }
+      }
+      //　詳細ページへ
+      document.getElementById("catchList").addEventListener("click", (e) => {
+        if (e.target && e.target.matches(".catch-item img")) {
+          const imgSrc = e.target.src;
+          // リスト内のどこでもクリックされた場合に詳細ページへ遷移
+          window.location.href = `fishing-log2-detail.html?img=${encodeURIComponent(
+            imgSrc
+          )}`;
+        }
+      });
+      // 釣果登録ボタンから登録ページへ遷移
+      document.getElementById("toRegister").addEventListener("click", () => {
+        window.location.href = "fishing-log.html";
+      });
+    </script>
+
+    <style>
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
+        position: relative;
+        overflow-x: hidden;
+      }
+      h2 {
+        text-align: center;
+        color: #fff;
+        margin-top: 40px;
+        text-shadow: 0 2px 8px #0e6ba8cc;
+        letter-spacing: 2px;
+      }
+      .catch-item {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px 18px 30px 30px;
+        padding: 18px 18px 28px 18px;
+        margin: 24px auto 32px auto;
+        max-width: 500px;
+        box-shadow: 0 4px 16px 0 #0e6ba84d;
+        border-bottom: 8px solid #4fc3f7;
+        border-top: 2px solid #b3e5fc;
+        position: relative;
+      }
+      .catch-item img {
+        box-shadow: 0 4px 16px #4fc3f7aa;
+        border: 3px solid #b3e5fc;
+        background: #e1f5fe;
+      }
+      #logout,
+      #toRegister {
+        padding: 10px 24px;
+        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: bold;
+        box-shadow: 0 2px 8px #0288d166;
+        transition: background 0.3s;
+        flex: 1;
+        margin: 0 8px;
+      }
+      #logout:hover {
+        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
+      }
+      #toRegister {
+        background: linear-gradient(90deg, #66bb6a 0%, #a5d6a7 100%);
+      }
+      #toRegister:hover {
+        background: linear-gradient(90deg, #a5d6a7 0%, #66bb6a 100%);
+      }
+      .action-row {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin: 24px 0 0 0;
+        z-index: 2;
+        position: relative;
+      }
+      /* 波の装飾 */
+      .wave {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .wave.top {
+        top: 0;
+        transform: rotate(180deg);
+      }
+      .wave.bottom {
+        bottom: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wave top">
+      <svg
+        viewBox="0 0 1440 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="#4fc3f7"
+          fill-opacity="0.5"
+          d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+        ></path>
+      </svg>
+    </div>
+    <h2>� 釣果リスト</h2>
+    <div id="catchList">読み込み中...</div>
+
+    <!-- Friends panel -->
+    <section
+      id="friendsPanel"
+      style="
+        max-width: 500px;
+        margin: 16px auto;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+      "
+    >
+      <h3 style="color: #0288d1">友だち管理</h3>
+      <div
+        style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px"
+      >
+        <input
+          id="friendUidInput"
+          placeholder="友だちのUIDを入力"
+          style="
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #b3e5fc;
+          "
+        />
+        <button
+          id="addFriendBtn"
+          style="
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #66bb6a;
+            color: #fff;
+            border: none;
+          "
+        >
+          追加
+        </button>
+      </div>
+      <div id="friendsList">読み込み中...</div>
+    </section>
+    <div class="action-row">
+      <button id="toRegister">釣果登録へ</button>
+      <button id="logout">ログアウト</button>
+    </div>
+    <div class="wave bottom">
+      <svg
+        viewBox="0 0 1440 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="#4fc3f7"
+          fill-opacity="0.5"
+          d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+        ></path>
+      </svg>
+    </div>
+  </body>
+</html>
