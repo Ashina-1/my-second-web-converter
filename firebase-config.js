@@ -1,27 +1,21 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// WARNING: This file previously contained live Firebase credentials. To avoid
+// leaking API keys in the public repository, we've replaced the tracked
+// `firebase-config.js` content with a minimal stub. Keep a local copy of your
+// real credentials in the same path if needed, but DO NOT commit them.
+//
+// Use `firebase-config.example.js` as a template and copy it to
+// `firebase-config.js` locally, then fill in your real project values.
+// The real `firebase-config.js` is gitignored by .gitignore.
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
-  authDomain: "fishing-log-app-5bea9.firebaseapp.com",
-  projectId: "fishing-log-app-5bea9",
-  storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
-  messagingSenderId: "730868295976",
-  appId: "1:730868295976:web:430b3435d68ad122c7c81d",
-  measurementId: "G-GT36TCEJPM",
+export const firebaseConfig = {
+  apiKey: "REPLACE_WITH_YOUR_API_KEY",
+  authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
+  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
+  storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
+  messagingSenderId: "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
+  appId: "REPLACE_WITH_YOUR_APP_ID",
+  measurementId: "REPLACE_WITH_YOUR_MEASUREMENT_ID",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-export const db = getFirestore(app);
+// If you want to keep the previous initialization helpers in this file,
+// add the SDK imports and initialize locally (don't commit).
