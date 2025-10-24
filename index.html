@@ -1,23 +1,273 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>芦名の淵釣り人備忘録</title>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
-</head>
-<body>
-  <header>
-    <h1><a href="index.html">芦名の淵釣り人備忘録</a></h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">ホーム</a></li>
-        <li><a href="pe-converter.html">PEライン→リーダー変換ツール</a></li>
-        <li><a href="pe(tanatoru4)-converter.html"></a>【タナトル4専用】PEライン→リーダー変換ツール</li>
-      </ul>
-    </nav>
-  
-  </footer>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>芦名の淵釣り人備忘録</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Hiragino Kaku Gothic ProN", Arial, sans-serif;
+        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
+        min-height: 100vh;
+      }
+      header {
+        background: rgba(34, 49, 52, 0.9);
+        width: 100%;
+        padding: auto 20px;
+        top: 0;
+        position: fixed;
+        /* ヘッダーを常に最前面に表示 */
+        z-index: 10;
+        box-shadow: 0 2px 8px #00000066;
+      }
+      .site-title {
+        margin: auto;
+      }
+      .site-title a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px #0e6ba8cc;
+      }
+      .main-nav {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .main-nav li a {
+        color: #fff;
+        font-size: 1.1em;
+        padding: 18px 18px;
+        display: block;
+        border-radius: 8px 8px 0 0;
+        transition: background 0.3s;
+      }
+      .main-nav li a:hover {
+        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
+      }
+      .top-wrapper {
+        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        padding: 80px 20px 120px 20px;
+        top: 100px;
+      }
+      .top-wrapper h2 {
+        font-size: 2em;
+        margin-bottom: 16px;
+        text-shadow: 0 2px 8px #0e6ba8cc;
+      }
+      .top-wrapper p {
+        font-size: 1.1em;
+        margin-bottom: 40px;
+        text-shadow: 0 1px 4px #0e6ba8cc;
+      }
+      .btn-wrapper {
+        text-align: center;
+      }
+      .btn {
+        padding: 12px 32px;
+        color: white;
+        display: inline-block;
+        opacity: 0.9;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1em;
+        margin: 0 10px;
+        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
+        box-shadow: 0 2px 8px #0288d166;
+        border: none;
+        transition: background 0.3s, opacity 0.3s;
+        max-width: 420px;
+      }
+      .btn:hover {
+        opacity: 1;
+        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
+      }
+      .wave {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .wave.top {
+        top: 0;
+        transform: rotate(180deg);
+      }
+      .wave.bottom {
+        bottom: 0;
+      }
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        color: #b3aeb5;
+        background: none;
+      }
+      main {
+        padding-top: 80px;
+      }
+      .menu-icon {
+        display: none;
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 20;
+        font-size: 2em;
+        color: #fff;
+        background: rgba(34, 49, 52, 0.9);
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      @media (max-width: 750px) {
+        .menu-icon {
+          display: block;
+        }
+        .main-nav {
+          position: fixed;
+          top: 0;
+          left: -260px;
+          width: 220px;
+          height: 100vh;
+          background: linear-gradient(135deg, #0e6ba8 0%, #4fc3f7 100%);
+          flex-direction: column;
+          gap: 0;
+          align-items: stretch;
+          box-shadow: 2px 0 12px #0003;
+          transition: left 0.3s;
+          z-index: 19;
+          padding-top: 80px;
+        }
+        .main-nav.open {
+          left: 0;
+        }
+        .main-nav li a {
+          font-size: 1em;
+          padding: 18px 24px;
+          border-radius: 0;
+          border-bottom: 1px solid #26c6da;
+        }
+        .main-nav li:last-child a {
+          border-bottom: none;
+        }
+        header {
+          position: static;
+        }
+        .site-title {
+          margin-top: 24px;
+        }
+        .top-wrapper {
+          padding-top: 70px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="menu-icon" id="menuIcon"><i class="fa fa-bars"></i></span>
+      <h1 class="site-title"><a href="index.html">芦名の淵釣り人備忘録</a></h1>
+      <nav>
+        <ul class="main-nav" id="mainNav">
+          <li>
+            <a href="index.html"><i class="fa fa-home"></i> ホーム</a>
+          </li>
+          <li>
+            <a href="pe-converter.html"
+              ><i class="fa fa-exchange"></i> PEライン→リーダー変換</a
+            >
+          </li>
+          <li>
+            <a href="pe(tanatoru4)-converter.html"
+              ><i class="fa fa-exchange"></i> タナトル4専用変換</a
+            >
+          </li>
+          <li>
+            <a href="fishing-log.html"
+              ><i class="fa fa-pencil"></i> 釣果記録アプリ</a
+            >
+          </li>
+          <li>
+            <a href="fishing-log2.html"
+              ><i class="fa fa-list"></i> 釣果リスト</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="top-wrapper">
+        <div class="wave top">
+          <svg
+            viewBox="0 0 1440 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#4fc3f7"
+              fill-opacity="0.5"
+              d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+            ></path>
+          </svg>
+        </div>
+        <h2>海と釣りを愛する人のための便利ツール集</h2>
+        <p>
+          PEライン換算や釣果記録など、釣り人のためのWebアプリをまとめています。
+        </p>
+        <div class="btn-wrapper">
+          <a class="btn signup" href="fishing-log.html"
+            ><i class="fa fa-pencil"></i> 釣果を記録する</a
+          >
+          <a class="btn twitter" href="fishing-log2.html"
+            ><i class="fa fa-list"></i> 釣果リストを見る</a
+          >
+        </div>
+        <div class="wave bottom">
+          <svg
+            viewBox="0 0 1440 120"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#4fc3f7"
+              fill-opacity="0.5"
+              d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+            ></path>
+          </svg>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 芦名の淵釣り人備忘録</p>
+    </footer>
+    <script>
+      // サイドバー開閉
+      const menuIcon = document.getElementById("menuIcon");
+      const mainNav = document.getElementById("mainNav");
+      menuIcon.addEventListener("click", () => {
+        mainNav.classList.toggle("open");
+      });
+      // サイドバーリンククリックで自動的に閉じる
+      mainNav.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => {
+          mainNav.classList.remove("open");
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>釣果詳細</title>
+    <style>
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
+        position: relative;
+        overflow-x: hidden;
+      }
+      h1 {
+        color: #fff;
+        text-align: center;
+        margin-top: 40px;
+        text-shadow: 0 2px 8px #0e6ba8cc;
+        letter-spacing: 2px;
+      }
+      #fishinglogs {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 18px 18px 30px 30px;
+        padding: 24px 18px 32px 18px;
+        margin: 32px auto 40px auto;
+        max-width: 500px;
+        box-shadow: 0 4px 16px 0 #0e6ba84d;
+        border-bottom: 8px solid #4fc3f7;
+        border-top: 2px solid #b3e5fc;
+        position: relative;
+        z-index: 1;
+      }
+      #fishinglogs img {
+        box-shadow: 0 4px 16px #4fc3f7aa;
+        border: 3px solid #b3e5fc;
+        background: #e1f5fe;
+        border-radius: 10px;
+        margin-top: 12px;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      /* 波の装飾 */
+      .wave {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .wave.top {
+        top: 0;
+        transform: rotate(180deg);
+      }
+      .wave.bottom {
+        bottom: 0;
+      }
+    </style>
+    <body>
+      <div class="wave top">
+        <svg
+          viewBox="0 0 1440 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="#4fc3f7"
+            fill-opacity="0.5"
+            d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+          ></path>
+        </svg>
+      </div>
+      <h1>釣果詳細</h1>
+      <div id="fishinglogs">読み込み中...</div>
+      <div class="wave bottom">
+        <svg
+          viewBox="0 0 1440 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="#4fc3f7"
+            fill-opacity="0.5"
+            d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
+          ></path>
+        </svg>
+      </div>
+
+      <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import {
+          getFirestore,
+          doc,
+          getDoc,
+          collection,
+          query,
+          where,
+          getDocs,
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
+          authDomain: "fishing-log-app-5bea9.firebaseapp.com",
+          projectId: "fishing-log-app-5bea9",
+          storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
+          messagingSenderId: "730868295976",
+          appId: "1:730868295976:web:430b3435d68ad122c7c81d",
+          measurementId: "G-GT36TCEJPM",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const urlParams = new URLSearchParams(window.location.search);
+        const logId = urlParams.get("id"); // URLからIDを取得
+        const imgParam = urlParams.get("img"); // imgパラメータ取得
+        const fishinglogsDiv = document.getElementById("fishinglogs");
+        //釣果の詳細を取得して表示
+        async function showFishingLogData(data) {
+          fishinglogsDiv.innerHTML = `
+            <h2>${data.catch.fish} (${data.catch.size} cm)</h2>
+            <p><strong>場所:</strong> ${data.catch.location}</p>
+            <p><strong>日付:</strong> ${data.catch.date}</p>
+            <p><strong>メモ:</strong> ${data.catch.memo}</p>
+            <p><strong>ロッド:</strong> ${data.catch.rod}</p>
+            <p><strong>リール:</strong> ${data.catch.reel}</p>
+            <p><strong>ライン:</strong> ${data.catch.line}</p>
+            <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>
+            <img src="${data.catch.imageUrl}" alt="Catch Image" />
+          `;
+        }
+
+        async function fetchFishingLogById(id) {
+          try {
+            const docRef = doc(db, "fishinglogs", id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              showFishingLogData(docSnap.data());
+            } else {
+              fishinglogsDiv.innerHTML = "データが存在しません。";
+            }
+          } catch (error) {
+            console.error(error);
+            fishinglogsDiv.innerHTML = "データの取得中にエラーが発生しました。";
+          }
+        }
+
+        async function fetchFishingLogByImageUrl(imageUrl) {
+          try {
+            const q = query(
+              collection(db, "fishinglogs"),
+              where("catch.imageUrl", "==", imageUrl)
+            );
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+              // 最初に一致したものを表示
+              showFishingLogData(querySnapshot.docs[0].data());
+            } else {
+              fishinglogsDiv.innerHTML =
+                "画像URLに該当するデータが存在しません。";
+            }
+          } catch (error) {
+            console.error(error);
+            fishinglogsDiv.innerHTML = "画像URL検索中にエラーが発生しました。";
+          }
+        }
+
+        if (logId) {
+          fetchFishingLogById(logId);
+        } else if (imgParam) {
+          fetchFishingLogByImageUrl(imgParam);
+        } else {
+          fishinglogsDiv.innerHTML =
+            "URLにidパラメータまたはimgパラメータがありません。";
+        }
+      </script>
+    </body>
+  </head>
+</html>
