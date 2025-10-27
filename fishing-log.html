@@ -332,7 +332,12 @@
             return;
           }
           const fish = document.getElementById("fish").value;
-          const size = document.getElementById("size").value;
+          const sizeRaw = document.getElementById("size").value;
+          const size = Number(sizeRaw);
+          if (Number.isNaN(size) || size < 0 || size > 2000) {
+            alert("サイズは0〜2000の数値で入力してください");
+            return;
+          }
           const location = document.getElementById("location").value;
           const date = document.getElementById("date").value;
           //ファイル未選択時の処理

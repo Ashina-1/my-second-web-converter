@@ -36,6 +36,8 @@
         getFirestore,
         collection,
         getDocs,
+        query,
+        where,
         doc,
         getDoc,
         setDoc,
@@ -52,33 +54,41 @@
           loadFriends(user.uid); // フレンドリストを読み込む
         } else {
           console.log("ログアウト中");
-          window.location.href = "login.html"; // ログインページへリダイレクト
+          // 既存のログイン導線（fishing-log.html）へ誘導
+          window.location.href = "fishing-log.html";
         }
       });
       // --- 釣果を読み込む関数 ---
       async function loadMyCatches(uid) {
         const catchList = document.getElementById("catchList");
         catchList.innerHTML = "読み込み中...";
-        // Firestoreから現在のユーザーの釣果を取得
-        const q = collection(db, "fishinglogs");
+        // Firestoreから現在のユーザーの釣果のみを取得（最適化）
+        const q = query(collection(db, "fishinglogs"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
         let html = "";
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          if (data.uid === uid) {
-            html += `<div class="catch-item">
-            <p><strong>魚種:</strong> ${data.catch.fish}</p>
-            <p><strong>サイズ:</strong> ${data.catch.size} cm</p>
-            <p><strong>場所:</strong> ${data.catch.location}</p>
-            <p><strong>日付:</strong> ${data.catch.date}</p>
-            <p><strong>メモ:</strong> ${data.catch.memo}</p>
-            <p><strong>ロッド:</strong> ${data.catch.rod}</p>
-            <p><strong>リール:</strong> ${data.catch.reel}</p>
-            <p><strong>ライン:</strong> ${data.catch.line}</p>
-            <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>
-            <img src="${data.catch.imageUrl}" alt="Catch Image" style="max-width:100%; border-radius:8px;"/>
-            </div>`;
-          }
+          const placeholder =
+            "https://via.placeholder.com/800x600?text=No+Image";
+          const imgTag = data?.catch?.imageUrl
+            ? `<img src="${data.catch.imageUrl}"
+                   alt="Catch Image"
+                   style="max-width:100%; border-radius:8px;"
+                   onerror="this.onerror=null;this.src='${placeholder}';"/>`
+            : `<img src="${placeholder}" alt="No Image" style="max-width:100%; border-radius:8px;"/>`;
+
+          html += `<div class=\"catch-item\">\
+          <p><strong>魚種:</strong> ${data.catch.fish}</p>\
+          <p><strong>サイズ:</strong> ${data.catch.size} cm</p>\
+          <p><strong>場所:</strong> ${data.catch.location}</p>\
+          <p><strong>日付:</strong> ${data.catch.date}</p>\
+          <p><strong>メモ:</strong> ${data.catch.memo}</p>\
+          <p><strong>ロッド:</strong> ${data.catch.rod}</p>\
+          <p><strong>リール:</strong> ${data.catch.reel}</p>\
+          <p><strong>ライン:</strong> ${data.catch.line}</p>\
+          <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>\
+          ${imgTag}\
+          </div>`;
         });
         if (html === "") {
           html = "<p>まだ釣果がありません。</p>";
