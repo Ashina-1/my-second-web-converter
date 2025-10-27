@@ -66,34 +66,42 @@
         const q = query(collection(db, "fishinglogs"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
         let html = "";
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
+        querySnapshot.forEach((snap) => {
+          const data = snap.data();
+          const docId = snap.id;
           // DNS や外部依存を避けるため、プレースホルダーは data URI の SVG を使用
           const placeholderSvg = `
-              <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>
-                <rect width='100%' height='100%' fill='#e0e0e0'/>
-                <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='32' fill='#666'>No Image</text>
-              </svg>`;
+            <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>
+              <rect width='100%' height='100%' fill='#e0e0e0'/>
+              <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='32' fill='#666'>No Image</text>
+            </svg>`;
           const placeholder =
             "data:image/svg+xml;utf8," + encodeURIComponent(placeholderSvg);
-          const imgTag = data?.catch?.imageUrl
-            ? `<img src="${data.catch.imageUrl}"
-                     alt="Catch Image"
-                     style="max-width:100%; border-radius:8px;"
-                     onerror="this.onerror=null;this.src='${placeholder}';"/>`
+          const rawUrl = (data && data.catch && data.catch.imageUrl) || "";
+          const isValidUrl =
+            typeof rawUrl === "string" &&
+            (rawUrl.startsWith("http://") ||
+              rawUrl.startsWith("https://") ||
+              rawUrl.startsWith("data:") ||
+              rawUrl.startsWith("blob:"));
+          const imgTag = isValidUrl
+            ? `<img src="${rawUrl}"
+                   alt="Catch Image"
+                   style="max-width:100%; border-radius:8px;"
+                   onerror="this.onerror=null;this.src='${placeholder}';"/>`
             : `<img src="${placeholder}" alt="No Image" style="max-width:100%; border-radius:8px;"/>`;
 
-          html += `<div class=\"catch-item\">\
-          <p><strong>魚種:</strong> ${data.catch.fish}</p>\
-          <p><strong>サイズ:</strong> ${data.catch.size} cm</p>\
-          <p><strong>場所:</strong> ${data.catch.location}</p>\
-          <p><strong>日付:</strong> ${data.catch.date}</p>\
-          <p><strong>メモ:</strong> ${data.catch.memo}</p>\
-          <p><strong>ロッド:</strong> ${data.catch.rod}</p>\
-          <p><strong>リール:</strong> ${data.catch.reel}</p>\
-          <p><strong>ライン:</strong> ${data.catch.line}</p>\
-          <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>\
-          ${imgTag}\
+          html += `<div class="catch-item" data-id="${docId}">
+          <p><strong>魚種:</strong> ${data.catch.fish}</p>
+          <p><strong>サイズ:</strong> ${data.catch.size} cm</p>
+          <p><strong>場所:</strong> ${data.catch.location}</p>
+          <p><strong>日付:</strong> ${data.catch.date}</p>
+          <p><strong>メモ:</strong> ${data.catch.memo}</p>
+          <p><strong>ロッド:</strong> ${data.catch.rod}</p>
+          <p><strong>リール:</strong> ${data.catch.reel}</p>
+          <p><strong>ライン:</strong> ${data.catch.line}</p>
+          <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>
+          ${imgTag}
           </div>`;
         });
         if (html === "") {
@@ -172,12 +180,17 @@
       }
       //　詳細ページへ
       document.getElementById("catchList").addEventListener("click", (e) => {
-        if (e.target && e.target.matches(".catch-item img")) {
-          const imgSrc = e.target.src;
-          // リスト内のどこでもクリックされた場合に詳細ページへ遷移
-          window.location.href = `fishing-log2-detail.html?img=${encodeURIComponent(
-            imgSrc
-          )}`;
+        const item =
+          e.target && e.target.closest ? e.target.closest(".catch-item") : null;
+        const clickedImg =
+          e.target && e.target.matches && e.target.matches(".catch-item img");
+        if (item && clickedImg) {
+          const id = item.getAttribute("data-id");
+          if (id) {
+            window.location.href = `fishing-log2-detail.html?id=${encodeURIComponent(
+              id
+            )}`;
+          }
         }
       });
       // 釣果登録ボタンから登録ページへ遷移
