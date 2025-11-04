@@ -14,5 +14,35 @@
 
     <!-- 外部JS読み込み -->
     <script src="Tanatoru4-script.js"></script>
+    <!-- ホームへ戻るボタン -->
+    <button id="homeBtn" class="home-btn" title="ホームへ戻る">🏠</button>
+    <style>
+      .home-btn {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 9999;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
+        color: #fff;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+      }
+      .home-btn:hover {
+        filter: brightness(1.05);
+      }
+    </style>
+    <script>
+      document.getElementById("homeBtn").addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    </script>
   </body>
 </html>

@@ -124,12 +124,24 @@
             friendsList.innerHTML = "<p>友だちがいません。</p>";
           } else {
             friendsList.innerHTML = "";
-            friends.forEach((f) => {
-              const el = document.createElement("div");
-              el.className = "friend-item";
-              el.innerHTML = `<span>${f}</span> <button data-uid="${f}" class="remove-friend">削除</button>`;
-              friendsList.appendChild(el);
-            });
+            // fetch each friend's public profile to show displayName/shortId
+            for (const f of friends) {
+              try {
+                const friendDoc = await getDoc(doc(db, "users", f));
+                const fd = friendDoc.exists() ? friendDoc.data() : {};
+                const display = fd.displayName || fd.email || f;
+                const short = fd.shortId ? ` (${fd.shortId})` : "";
+                const el = document.createElement("div");
+                el.className = "friend-item";
+                el.innerHTML = `<span>${display}${short} <small style="color:#777; margin-left:8px;">${f}</small></span> <button data-uid="${f}" class="remove-friend">削除</button>`;
+                friendsList.appendChild(el);
+              } catch (err) {
+                const el = document.createElement("div");
+                el.className = "friend-item";
+                el.innerHTML = `<span>${f}</span> <button data-uid="${f}" class="remove-friend">削除</button>`;
+                friendsList.appendChild(el);
+              }
+            }
             // attach remove handlers
             friendsList.querySelectorAll(".remove-friend").forEach((btn) => {
               btn.addEventListener("click", async (e) => {
@@ -146,8 +158,29 @@
         // add handler for add button
         const addBtn = document.getElementById("addFriendBtn");
         addBtn.onclick = async () => {
-          const target = document.getElementById("friendUidInput").value.trim();
-          if (!target) return alert("追加するユーザーのUIDを入力してください");
+          let target = document.getElementById("friendUidInput").value.trim();
+          if (!target)
+            return alert("追加するユーザーのUIDまたは短いIDを入力してください");
+          // if user inputs a 10-digit numeric shortId, resolve it to uid
+          if (/^\d{10}$/.test(target)) {
+            try {
+              const q = query(
+                collection(db, "users"),
+                where("shortId", "==", target)
+              );
+              const snaps = await getDocs(q);
+              if (snaps.empty) {
+                alert("該当する短いIDのユーザーが見つかりません");
+                return;
+              }
+              // take first match
+              target = snaps.docs[0].id;
+            } catch (err) {
+              console.error("shortId lookup error", err);
+              alert("短いIDの照会でエラーが発生しました");
+              return;
+            }
+          }
           if (target === uid) return alert("自分を追加できません");
           await addFriend(uid, target);
           input.value = "";
@@ -357,5 +390,35 @@
         ></path>
       </svg>
     </div>
+    <!-- ホームへ戻るボタン -->
+    <button id="homeBtn" class="home-btn" title="ホームへ戻る">🏠</button>
+    <style>
+      .home-btn {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 9999;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
+        color: #fff;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+      }
+      .home-btn:hover {
+        filter: brightness(1.05);
+      }
+    </style>
+    <script>
+      document.getElementById("homeBtn").addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    </script>
   </body>
 </html>
