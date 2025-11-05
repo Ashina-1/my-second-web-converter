@@ -1,11 +1,12 @@
-// WARNING: This file previously contained live Firebase credentials. To avoid
-// leaking API keys in the public repository, we've replaced the tracked
-// `firebase-config.js` content with a minimal stub. Keep a local copy of your
-// real credentials in the same path if needed, but DO NOT commit them.
-//
-// Use `firebase-config.example.js` as a template and copy it to
-// `firebase-config.js` locally, then fill in your real project values.
-// The real `firebase-config.js` is gitignored by .gitignore.
+// Copy this file to `firebase-config.js` and fill in your real values.
+// Keep `firebase-config.js` out of source control (it's in .gitignore).
+
+// Copy this file to `firebase-config.js` and fill in your real values.
+// Keep `firebase-config.js` out of source control (it's in .gitignore).
+
+// This file should only export the config object. Do NOT import Firebase
+// SDK modules here when using the pages as static ES modules in the
+// browser — use the CDN SDK imports inside `firebase-init.js` instead.
 
 export const firebaseConfig = {
   apiKey: "REPLACE_WITH_YOUR_API_KEY",
@@ -17,5 +18,7 @@ export const firebaseConfig = {
   measurementId: "REPLACE_WITH_YOUR_MEASUREMENT_ID",
 };
 
-// If you want to keep the previous initialization helpers in this file,
-// add the SDK imports and initialize locally (don't commit).
+// If you want to initialize Firebase here instead of using `firebase-init.js`,
+// you may import SDKs and call initializeApp — but for this project the
+// recommended approach is to keep `firebase-init.js` as the single
+// initializer and put real values only in this file.
