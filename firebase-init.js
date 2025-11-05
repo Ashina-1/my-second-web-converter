@@ -37,20 +37,33 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
 import { firebaseConfig } from "./firebase-config.js";
+// Validate config to catch placeholder values early (helps with local dev)
+const isConfigPlaceholder =
+  !firebaseConfig ||
+  typeof firebaseConfig.apiKey !== "string" ||
+  firebaseConfig.apiKey.includes("REPLACE_WITH");
 
-// Initialize app
-const app = initializeApp(firebaseConfig);
+export const configValid = !isConfigPlaceholder;
+
+if (!configValid) {
+  console.error(
+    "Firebase config appears to be a placeholder. Copy firebase-config.example.js to firebase-config.js and fill in real project values."
+  );
+}
+
+// Initialize app only when config looks valid
+const app = configValid ? initializeApp(firebaseConfig) : null;
 let analytics = null;
 try {
-  analytics = getAnalytics(app);
+  if (app) analytics = getAnalytics(app);
 } catch (e) {
   // analytics may fail in some environments (e.g., missing window), ignore
   analytics = null;
 }
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const auth = app ? getAuth(app) : null;
+const db = app ? getFirestore(app) : null;
+const storage = app ? getStorage(app) : null;
 
 export {
   app,
