@@ -28,7 +28,13 @@ import {
   arrayUnion,
   arrayRemove,
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -52,6 +58,11 @@ export {
   auth,
   db,
   storage,
+  // re-export storage helpers
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
   // re-export common firestore helpers for convenience
   collection,
   getDocs,

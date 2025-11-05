@@ -151,7 +151,7 @@
     </div>
     <h1>プロフィール</h1>
     <!-- ページ内ログインボタン（未ログイン時に表示） -->
-    <div style="text-align:center; margin-top:12px;">
+    <div style="text-align: center; margin-top: 12px">
       <button id="loginBtn" class="secondary">Googleでログイン</button>
     </div>
     <section class="card" id="profileCard">
@@ -292,11 +292,11 @@
         }
       })();
 
-  const avatarEl = document.getElementById("avatar");
+      const avatarEl = document.getElementById("avatar");
       const emailEl = document.getElementById("email");
       const uidEl = document.getElementById("uid");
       const copyUidBtn = document.getElementById("copyUid");
-  const loginBtn = document.getElementById("loginBtn");
+      const loginBtn = document.getElementById("loginBtn");
       const displayNameInput = document.getElementById("displayName");
       const homeGroundInput = document.getElementById("homeGround");
       const bioInput = document.getElementById("bio");
@@ -461,12 +461,18 @@
               setStatus("ログインしました: " + (res.user.displayName || ""));
             }
           } catch (err) {
-            console.warn("profile: signInWithPopup failed, falling back to redirect", err);
+            console.warn(
+              "profile: signInWithPopup failed, falling back to redirect",
+              err
+            );
             try {
               await signInWithRedirect(auth, provider);
             } catch (redirErr) {
               console.error("profile: redirect sign-in failed", redirErr);
-              setStatus("ログインに失敗しました。ブラウザの設定を確認してください", "error");
+              setStatus(
+                "ログインに失敗しました。ブラウザの設定を確認してください",
+                "error"
+              );
             }
           }
         });
