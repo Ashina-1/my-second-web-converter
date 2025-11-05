@@ -255,6 +255,10 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
       import {
         getAuth,
+        signInWithPopup,
+        signInWithRedirect,
+        getRedirectResult,
+        GoogleAuthProvider,
         onAuthStateChanged,
         signOut,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
@@ -283,6 +287,19 @@
       const app = initializeApp(firebaseConfig);
       const auth = getAuth();
       const db = getFirestore(app);
+
+      // If the page returns from a redirect sign-in, process the result.
+      (async () => {
+        try {
+          const rr = await getRedirectResult(auth);
+          if (rr && rr.user) {
+            console.log('profile: signInWithRedirect result', rr.user);
+          }
+        } catch (err) {
+          // missing initial state errors can happen in some browsers; log for diagnosis
+          console.warn('profile: getRedirectResult error (may be missing initial state):', err);
+        }
+      })();
 
       const avatarEl = document.getElementById("avatar");
       const emailEl = document.getElementById("email");
