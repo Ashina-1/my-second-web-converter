@@ -254,6 +254,8 @@
       import {
         getAuth,
         signInWithPopup,
+        signInWithRedirect,
+        getRedirectResult,
         GoogleAuthProvider,
         signOut,
         onAuthStateChanged,
@@ -303,6 +305,22 @@
       const db = getFirestore(app);
       const storage = getStorage(app);
       //ページ読み込み時にログイン状態を確認
+      // If the app returned from a redirect sign-in, process the result first
+      (async () => {
+        try {
+          const redirectResult = await getRedirectResult(auth);
+          if (redirectResult && redirectResult.user) {
+            console.log("signInWithRedirect result:", redirectResult.user);
+          }
+        } catch (err) {
+          // missing initial state errors may surface here; we'll log and continue
+          console.warn(
+            "getRedirectResult error (may be missing state in some browsers):",
+            err
+          );
+        }
+      })();
+
       onAuthStateChanged(auth, (user) => {
         if (user) {
           console.log("ログイン中:", user);
@@ -339,14 +357,26 @@
             await signOut(auth);
             alert("ログアウトしました");
           } else {
-            // ログイン処理
+            // ログイン処理 - try popup first, fallback to redirect when popup blocked or not allowed
             try {
               const result = await signInWithPopup(auth, provider);
               const user = result.user;
               alert("ログインしました: " + user.displayName);
             } catch (error) {
-              console.error("Error during sign-in:", error);
-              alert("ログインに失敗しました");
+              console.warn(
+                "signInWithPopup failed, attempting redirect as fallback",
+                error
+              );
+              // Common popup failure codes: auth/popup-blocked, auth/cancelled-popup-request
+              try {
+                await signInWithRedirect(auth, provider);
+                // redirect will navigate away; result is handled on return via getRedirectResult
+              } catch (redirErr) {
+                console.error("Redirect sign-in also failed:", redirErr);
+                alert(
+                  "ログインに失敗しました。ブラウザのポップアップ設定やCookie設定を確認してください。"
+                );
+              }
             }
           }
         });
