@@ -150,6 +150,10 @@
       </svg>
     </div>
     <h1>プロフィール</h1>
+    <!-- ページ内ログインボタン（未ログイン時に表示） -->
+    <div style="text-align:center; margin-top:12px;">
+      <button id="loginBtn" class="secondary">Googleでログイン</button>
+    </div>
     <section class="card" id="profileCard">
       <div class="row avatar-row">
         <img id="avatar" class="avatar" alt="avatar" />
@@ -252,18 +256,16 @@
     </script>
 
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      // Use centralized firebase initializer
       import {
-        getAuth,
-        signInWithPopup,
-        signInWithRedirect,
-        getRedirectResult,
+        auth,
+        db,
         GoogleAuthProvider,
+        getRedirectResult,
         onAuthStateChanged,
         signOut,
-      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+      } from "./firebase-init.js";
       import {
-        getFirestore,
         doc,
         getDoc,
         setDoc,
@@ -274,37 +276,27 @@
         where,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
-        authDomain: "fishing-log-app-5bea9.firebaseapp.com",
-        projectId: "fishing-log-app-5bea9",
-        storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
-        messagingSenderId: "730868295976",
-        appId: "1:730868295976:web:430b3435d68ad122c7c81d",
-        measurementId: "G-GT36TCEJPM",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth();
-      const db = getFirestore(app);
-
       // If the page returns from a redirect sign-in, process the result.
       (async () => {
         try {
           const rr = await getRedirectResult(auth);
           if (rr && rr.user) {
-            console.log('profile: signInWithRedirect result', rr.user);
+            console.log("profile: signInWithRedirect result", rr.user);
           }
         } catch (err) {
           // missing initial state errors can happen in some browsers; log for diagnosis
-          console.warn('profile: getRedirectResult error (may be missing initial state):', err);
+          console.warn(
+            "profile: getRedirectResult error (may be missing initial state):",
+            err
+          );
         }
       })();
 
-      const avatarEl = document.getElementById("avatar");
+  const avatarEl = document.getElementById("avatar");
       const emailEl = document.getElementById("email");
       const uidEl = document.getElementById("uid");
       const copyUidBtn = document.getElementById("copyUid");
+  const loginBtn = document.getElementById("loginBtn");
       const displayNameInput = document.getElementById("displayName");
       const homeGroundInput = document.getElementById("homeGround");
       const bioInput = document.getElementById("bio");
@@ -319,10 +311,16 @@
       }
 
       onAuthStateChanged(auth, async (user) => {
+        // If no user, show login button and hide profile card instead of redirecting
         if (!user) {
-          window.location.href = "fishing-log.html";
+          loginBtn.style.display = "inline-block";
+          document.getElementById("profileCard").style.display = "none";
+          setStatus("ログインしてください");
           return;
         }
+        // hide login UI for authenticated users
+        loginBtn.style.display = "none";
+        document.getElementById("profileCard").style.display = "block";
         // 基本プロフの反映
         uidEl.textContent = user.uid;
         emailEl.textContent = user.email || "";
@@ -442,6 +440,37 @@
           setStatus("ログアウトに失敗しました", "error");
         }
       });
+
+      // Login button handler: try popup, fallback to redirect
+      if (loginBtn) {
+        const provider = new GoogleAuthProvider();
+        loginBtn.addEventListener("click", async () => {
+          if (auth.currentUser) {
+            // already logged in, no-op or sign out
+            try {
+              await signOut(auth);
+              setStatus("ログアウトしました");
+            } catch (e) {
+              setStatus("ログアウトに失敗しました", "error");
+            }
+            return;
+          }
+          try {
+            const res = await signInWithPopup(auth, provider);
+            if (res && res.user) {
+              setStatus("ログインしました: " + (res.user.displayName || ""));
+            }
+          } catch (err) {
+            console.warn("profile: signInWithPopup failed, falling back to redirect", err);
+            try {
+              await signInWithRedirect(auth, provider);
+            } catch (redirErr) {
+              console.error("profile: redirect sign-in failed", redirErr);
+              setStatus("ログインに失敗しました。ブラウザの設定を確認してください", "error");
+            }
+          }
+        });
+      }
 
       toListBtn.addEventListener("click", () => {
         window.location.href = "fishing-log2.html";

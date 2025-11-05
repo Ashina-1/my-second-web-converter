@@ -123,29 +123,16 @@
       </script>
 
       <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        // Use centralized initializer (v12) and import only needed firestore helpers
+        import { db } from "./firebase-init.js";
         import {
-          getFirestore,
           doc,
           getDoc,
           collection,
           query,
           where,
           getDocs,
-        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
-          authDomain: "fishing-log-app-5bea9.firebaseapp.com",
-          projectId: "fishing-log-app-5bea9",
-          storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
-          messagingSenderId: "730868295976",
-          appId: "1:730868295976:web:430b3435d68ad122c7c81d",
-          measurementId: "G-GT36TCEJPM",
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
         const urlParams = new URLSearchParams(window.location.search);
         const logId = urlParams.get("id"); // URLからIDを取得
         const imgParam = urlParams.get("img"); // imgパラメータ取得

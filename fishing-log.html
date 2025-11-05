@@ -17,36 +17,6 @@
       h1 {
         color: #fff;
         text-align: center;
-        margin-top: 40px;
-        text-shadow: 0 2px 8px #0e6ba8cc;
-        letter-spacing: 2px;
-      }
-      #catchForm {
-        margin: 32px auto 0 auto;
-        display: none;
-        background: rgba(255, 255, 255, 0.97);
-        border-radius: 18px 18px 30px 30px;
-        padding: 24px 18px 32px 18px;
-        max-width: 500px;
-        box-shadow: 0 4px 16px 0 #0e6ba84d;
-        border-bottom: 8px solid #4fc3f7;
-        border-top: 2px solid #b3e5fc;
-        position: relative;
-        z-index: 1;
-      }
-      #catchForm label {
-        display: block;
-        margin-bottom: 10px;
-      }
-      #catchForm input[type="text"],
-      #catchForm input[type="number"],
-      #catchForm input[type="date"] {
-        width: 100%;
-        padding: 8px;
-        margin-top: 4px;
-        box-sizing: border-box;
-        border-radius: 6px;
-        border: 1px solid #b3e5fc;
         background: #e1f5fe;
       }
       #catchForm button {
@@ -54,13 +24,9 @@
         padding: 10px 24px;
         background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
         color: #fff;
-        border: none;
-        border-radius: 8px;
         cursor: pointer;
         font-size: 1.1em;
         font-weight: bold;
-        box-shadow: 0 2px 8px #0288d166;
-        transition: background 0.3s;
       }
       #catchForm button:hover {
         background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
@@ -248,20 +214,22 @@
     </script>
 
     <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+      // Use centralized initializer module (firebase-init.js) which sets up
+      // the Firebase app (v12) and exports auth, db, storage and common helpers.
       import {
-        getAuth,
+        auth,
+        db,
+        storage,
+        analytics,
+        GoogleAuthProvider,
         signInWithPopup,
         signInWithRedirect,
         getRedirectResult,
-        GoogleAuthProvider,
-        signOut,
         onAuthStateChanged,
-      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+        signOut,
+      } from "./firebase-init.js";
+
       import {
-        getFirestore,
         collection,
         addDoc,
         getDocs,
@@ -273,37 +241,15 @@
         serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
       import {
-        getStorage,
         ref,
         uploadBytes,
         getDownloadURL,
         deleteObject,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
 
-      // Your web app's Firebase configuration
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-      const firebaseConfig = {
-        apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
-        authDomain: "fishing-log-app-5bea9.firebaseapp.com",
-        projectId: "fishing-log-app-5bea9",
-        storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
-        messagingSenderId: "730868295976",
-        appId: "1:730868295976:web:430b3435d68ad122c7c81d",
-        measurementId: "G-GT36TCEJPM",
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const provider = new GoogleAuthProvider();
-      const auth = getAuth();
-      //
       const loginBtn = document.getElementById("loginBtn");
       const catchForm = document.getElementById("catchForm");
-      const db = getFirestore(app);
-      const storage = getStorage(app);
       //ページ読み込み時にログイン状態を確認
       // If the app returned from a redirect sign-in, process the result first
       (async () => {
