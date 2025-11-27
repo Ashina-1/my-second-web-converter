@@ -1,0 +1,98 @@
+<header role="banner" aria-label="サイトヘッダー">
+  <div class="container">
+    <div class="header-left">
+      <a class="logo" href="index.html" aria-label="ホーム">
+        <svg
+          width="40"
+          height="28"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="7" cy="12" r="1" fill="currentColor" />
+        </svg>
+      </a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div
+        class="header-right"
+        role="navigation"
+        aria-label="メインナビゲーション"
+      >
+        <a href="index.html" tabindex="0">ホーム</a>
+        <a href="fishing-log2.html" tabindex="0">釣果一覧</a>
+        <a href="fishing-log.html" tabindex="0">登録</a>
+        <div class="nav-tools">
+          <button
+            class="tools-btn"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="tools-submenu"
+          >
+            ツール ▾
+          </button>
+          <div
+            id="tools-submenu"
+            class="submenu"
+            role="menu"
+            aria-hidden="true"
+          >
+            <a role="menuitem" href="pe-converter.html" tabindex="0">PE変換</a>
+            <a role="menuitem" href="pe(tanatoru4)-converter.html" tabindex="0"
+              >タナトル4</a
+            >
+            <a role="menuitem" href="index.html" tabindex="0">その他</a>
+          </div>
+        </div>
+        <a href="profile.html" tabindex="0">プロフィール</a>
+      </div>
+      <button
+        class="menu-icon"
+        id="menuIcon"
+        aria-label="メニュー"
+        aria-expanded="false"
+      >
+        <svg
+          class="hamburger"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            class="bar bar1"
+            d="M4 6h16"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+          <path
+            class="bar bar2"
+            d="M4 12h16"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+          <path
+            class="bar bar3"
+            d="M4 18h16"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

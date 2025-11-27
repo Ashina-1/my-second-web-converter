@@ -1,32 +1,40 @@
-//firebase-config.jsからFirebaseの初期化コードをインポート
-import { auth } from "./firebase-config.js";
+// Lightweight auth helper using centralized `firebase-init.js` (ES module)
+// Uses the centralized initializer so pages don't import package-style modules.
 import {
-  getAuth,
+  auth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  signOut,
   onAuthStateChanged,
-} from "firebase/auth";
+} from "./firebase-init.js";
 
 const provider = new GoogleAuthProvider();
-const fm = document.getElementById("catchForm");
+const catchForm = document.getElementById("catchForm");
 const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn") || null;
 
-// ボタンクリックでログイン
-loginBtn.addEventListener("click", () => {
-  signInWithPopup(auth, provider).catch((err) =>
-    console.error("ログイン失敗:", err)
-  );
-});
+// The click handler is attached by pages (fishing-log.html) once to avoid
+// multiple bindings. Keep this file defensive: export nothing and just
+// ensure DOM references are consistent when used.
+// Note: if a page wants to attach handlers here, it can reference loginBtn.
 
-// 状態変化を監視
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loginBtn.style.display = "none"; // ログインボタンを隠す
-    form.style.display = "block"; // フォームを表示
-    alert(`ようこそ ${user.displayName} さん`);
-  } else {
-    loginBtn.style.display = "block"; // ボタンを表示
-    form.style.display = "none"; // フォーム非表示
-  }
-});
+// Watch auth state and toggle UI
+if (onAuthStateChanged && auth) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (loginBtn) loginBtn.style.display = "none";
+      if (catchForm) catchForm.style.display = "block";
+      if (logoutBtn) logoutBtn.style.display = "inline-block";
+      try {
+        console.log(`ようこそ ${user.displayName} さん`);
+      } catch (e) {
+        /* ignore */
+      }
+    } else {
+      if (loginBtn) loginBtn.style.display = "block";
+      if (catchForm) catchForm.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "none";
+    }
+  });
+}

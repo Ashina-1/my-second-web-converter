@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <title>釣果リスト | Fishing Log</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>釣果一覧</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="stylesheet.css" />
     <script type="module">
-      // Use centralized initializer module (firebase-init.js)
       import {
         auth,
         db,
-        analytics,
-        signOut,
-        onAuthStateChanged,
-        getRedirectResult,
-      } from "./firebase-init.js";
-
-      import {
+        configValid,
         collection,
         getDocs,
         query,
@@ -25,33 +21,89 @@
         updateDoc,
         arrayUnion,
         arrayRemove,
-      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-      // If the page returns from a redirect sign-in, process the result for diagnostics
-      (async () => {
-        try {
-          const rr = await getRedirectResult(auth);
-          if (rr && rr.user) {
-            console.log("fishing-log2: signInWithRedirect result", rr.user);
-          }
-        } catch (err) {
-          console.warn(
-            "fishing-log2: getRedirectResult error (may be missing initial state):",
-            err
-          );
-        }
-      })();
+        onAuthStateChanged,
+      } from "./firebase-init.js";
 
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          console.log("ログイン中:", user);
-          loadMyCatches(user.uid); // ユーザーの釣果を読み込む関数を呼び出し
-          loadFriends(user.uid); // フレンドリストを読み込む
-        } else {
-          console.log("ログアウト中");
-          // 既存のログイン導線（fishing-log.html）へ誘導
-          window.location.href = "fishing-log.html";
+      // If firebase isn't configured, show a friendly message and stop.
+      if (!configValid) {
+        const el = document.getElementById("catchList");
+        if (el) {
+          el.innerHTML = `<div class="site-card">Firebase が未構成のためデータは読み込めません。firebase-config.js を設定してください。</div>`;
         }
-      });
+      }
+
+      // helper to set owner header (name + optional back-to-me button)
+      function setOwnerHeader(name, uid, isSelf) {
+        const hdr = document.getElementById("ownerHeader");
+        if (!hdr) return;
+        const backBtn = isSelf
+          ? ""
+          : `<button id='backToMeBtn' style='margin-right:8px;'>自分に戻る</button>`;
+        hdr.innerHTML = `<div style='display:flex;align-items:center;gap:12px;justify-content:space-between'><div><strong style='color:#0288d1'>${escapeHtml(
+          name
+        )}</strong></div><div>${backBtn}</div></div>`;
+        const btn = document.getElementById("backToMeBtn");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            if (window.currentUserUid) {
+              setOwnerHeader("自分", window.currentUserUid, true);
+              loadMyCatches(window.currentUserUid);
+            }
+          });
+        }
+      }
+
+      // auth state: set global uid and trigger initial load when DOM is ready
+      if (onAuthStateChanged && auth) {
+        onAuthStateChanged(auth, (user) => {
+          window.currentUserUid = user ? user.uid : null;
+          // ensure DOM is parsed before attempting to render
+          const start = () => {
+            if (user) {
+              // try to resolve displayName for header
+              loadOwnerAndSetHeader(user.uid, true);
+              loadMyCatches(user.uid);
+              loadFriends(user.uid);
+            } else {
+              // clear owner header and show login hint
+              const hdr = document.getElementById("ownerHeader");
+              if (hdr)
+                hdr.innerHTML = `<div class='subtle'>ログインして自分の釣果を表示してください</div>`;
+              const catchList = document.getElementById("catchList");
+              if (catchList)
+                catchList.innerHTML = `<p>ログインすると自分と友だちの釣果を閲覧できます。</p>`;
+            }
+          };
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", start);
+          } else {
+            start();
+          }
+        });
+      }
+
+      // fetch user's displayName from users collection and set owner header
+      async function loadOwnerAndSetHeader(uid, isSelf) {
+        try {
+          const udoc = await getDoc(doc(db, "users", uid));
+          const d = udoc.exists() ? udoc.data() : {};
+          const name = d.displayName || d.email || (isSelf ? "自分" : uid);
+          setOwnerHeader(name, uid, isSelf);
+        } catch (err) {
+          console.warn("loadOwnerAndSetHeader failed", err);
+          setOwnerHeader(isSelf ? "自分" : uid, uid, isSelf);
+        }
+      }
+
+      // small utility to avoid XSS in simple strings
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
       // --- 釣果を読み込む関数 ---
       async function loadMyCatches(uid) {
         const catchList = document.getElementById("catchList");
@@ -63,7 +115,20 @@
         querySnapshot.forEach((snap) => {
           const data = snap.data();
           const docId = snap.id;
-          // DNS や外部依存を避けるため、プレースホルダーは data URI の SVG を使用
+          const fish = escapeHtml(
+            (data && data.catch && data.catch.fish) || ""
+          );
+          const date = escapeHtml(
+            (data && data.catch && data.catch.date) || ""
+          );
+          const size = escapeHtml(
+            String((data && data.catch && data.catch.size) || "")
+          );
+          const location = escapeHtml(
+            (data && data.catch && data.catch.location) || ""
+          );
+
+          // image thumbnail (use placeholder SVG when missing/invalid)
           const placeholderSvg = `
             <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>
               <rect width='100%' height='100%' fill='#e0e0e0'/>
@@ -79,23 +144,17 @@
               rawUrl.startsWith("data:") ||
               rawUrl.startsWith("blob:"));
           const imgTag = isValidUrl
-            ? `<img src="${rawUrl}"
-                   alt="Catch Image"
-                   style="max-width:100%; border-radius:8px;"
-                   onerror="this.onerror=null;this.src='${placeholder}';"/>`
-            : `<img src="${placeholder}" alt="No Image" style="max-width:100%; border-radius:8px;"/>`;
+            ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src='${placeholder}'"/>`
+            : `<img src="${placeholder}" alt="No Image" class="thumb-img"/>`;
 
-          html += `<div class="catch-item" data-id="${docId}">
-          <p><strong>魚種:</strong> ${data.catch.fish}</p>
-          <p><strong>サイズ:</strong> ${data.catch.size} cm</p>
-          <p><strong>場所:</strong> ${data.catch.location}</p>
-          <p><strong>日付:</strong> ${data.catch.date}</p>
-          <p><strong>メモ:</strong> ${data.catch.memo}</p>
-          <p><strong>ロッド:</strong> ${data.catch.rod}</p>
-          <p><strong>リール:</strong> ${data.catch.reel}</p>
-          <p><strong>ライン:</strong> ${data.catch.line}</p>
-          <p><strong>仕掛け or ルアー等:</strong> ${data.catch.lure}</p>
-          ${imgTag}
+          // simplified card with thumbnail on left and meta on right
+          html += `<div class="catch-item" data-id="${docId}" tabindex="0" role="button">
+            <div class="img-thumb">${imgTag}</div>
+             <div class="meta compact">
+              <p class="title"><strong>${fish}</strong> <small class="date">${date}</small></p>
+              <p class="summary"><span class="label">サイズ:</span> ${size} cm</p>
+              <p class="summary"><span class="label">場所:</span> ${location}</p>
+            </div>
           </div>`;
         });
         if (html === "") {
@@ -127,12 +186,14 @@
                 const short = fd.shortId ? ` (${fd.shortId})` : "";
                 const el = document.createElement("div");
                 el.className = "friend-item";
-                el.innerHTML = `<span>${display}${short} <small style="color:#777; margin-left:8px;">${f}</small></span> <button data-uid="${f}" class="remove-friend">削除</button>`;
+                el.innerHTML = `<span style="cursor:pointer;">${escapeHtml(
+                  display
+                )}${short} <small style="color:#777; margin-left:8px;">${f}</small></span> <button data-view="${f}" class="view-friend" style="margin-left:8px;padding:6px 8px;border-radius:6px;border:none;background:#0288d1;color:#fff;display:inline-flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>表示</button> <button data-uid="${f}" class="remove-friend" style="margin-left:6px;padding:6px 8px;border-radius:6px;border:none;background:#e53935;color:#fff;display:inline-flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><polyline points="3 6 5 6 21 6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>削除</button>`;
                 friendsList.appendChild(el);
               } catch (err) {
                 const el = document.createElement("div");
                 el.className = "friend-item";
-                el.innerHTML = `<span>${f}</span> <button data-uid="${f}" class="remove-friend">削除</button>`;
+                el.innerHTML = `<span style="cursor:pointer;">${f}</span> <button data-view="${f}" class="view-friend" style="margin-left:8px;padding:6px 8px;border-radius:6px;border:none;background:#0288d1;color:#fff;display:inline-flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>表示</button> <button data-uid="${f}" class="remove-friend" style="margin-left:6px;padding:6px 8px;border-radius:6px;border:none;background:#e53935;color:#fff;display:inline-flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><polyline points="3 6 5 6 21 6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>削除</button>`;
                 friendsList.appendChild(el);
               }
             }
@@ -142,6 +203,14 @@
                 const friendUid = e.target.getAttribute("data-uid");
                 await removeFriend(uid, friendUid);
                 await loadFriends(uid);
+              });
+            });
+            // attach view handlers
+            friendsList.querySelectorAll(".view-friend").forEach((btn) => {
+              btn.addEventListener("click", async (e) => {
+                const friendUid = e.target.getAttribute("data-view");
+                if (!friendUid) return;
+                await loadFriendCatches(friendUid);
               });
             });
           }
@@ -205,13 +274,86 @@
           alert("友だち削除に失敗しました");
         }
       }
-      //　詳細ページへ
+
+      // --- 他ユーザー（フレンド）の釣果を読み込む関数 ---
+      async function loadFriendCatches(friendUid) {
+        const catchList = document.getElementById("catchList");
+        catchList.innerHTML = "読み込み中...";
+        try {
+          // fetch friend's profile for display name
+          let display = friendUid;
+          try {
+            const friendDoc = await getDoc(doc(db, "users", friendUid));
+            if (friendDoc.exists()) {
+              const fd = friendDoc.data();
+              display = fd.displayName || fd.email || friendUid;
+            }
+          } catch (e) {
+            console.warn("friend profile fetch failed", e);
+          }
+          setOwnerHeader(display, friendUid, false);
+
+          const q = query(
+            collection(db, "fishinglogs"),
+            where("uid", "==", friendUid)
+          );
+          const querySnapshot = await getDocs(q);
+          let html = "";
+          querySnapshot.forEach((snap) => {
+            const data = snap.data();
+            const docId = snap.id;
+            const fish = escapeHtml(
+              (data && data.catch && data.catch.fish) || ""
+            );
+            const date = escapeHtml(
+              (data && data.catch && data.catch.date) || ""
+            );
+            const size = escapeHtml(
+              String((data && data.catch && data.catch.size) || "")
+            );
+            const location = escapeHtml(
+              (data && data.catch && data.catch.location) || ""
+            );
+
+            const placeholderSvg = `
+            <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>
+              <rect width='100%' height='100%' fill='#e0e0e0'/>
+              <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='32' fill='#666'>No Image</text>
+            </svg>`;
+            const placeholder =
+              "data:image/svg+xml;utf8," + encodeURIComponent(placeholderSvg);
+            const rawUrl = (data && data.catch && data.catch.imageUrl) || "";
+            const isValidUrl =
+              typeof rawUrl === "string" &&
+              (rawUrl.startsWith("http://") ||
+                rawUrl.startsWith("https://") ||
+                rawUrl.startsWith("data:") ||
+                rawUrl.startsWith("blob:"));
+            const imgTag = isValidUrl
+              ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src='${placeholder}'"/>`
+              : `<img src="${placeholder}" alt="No Image" class="thumb-img"/>`;
+
+            html += `<div class="catch-item" data-id="${docId}" tabindex="0" role="button">
+              <div class="img-thumb">${imgTag}</div>
+              <div class="meta compact">
+                <p class="title"><strong>${fish}</strong> <small class="date">${date}</small></p>
+                <p class="summary"><span class="label">サイズ:</span> ${size} cm</p>
+                <p class="summary"><span class="label">場所:</span> ${location}</p>
+              </div>
+            </div>`;
+          });
+          if (html === "") html = "<p>釣果がありません。</p>";
+          catchList.innerHTML = html;
+        } catch (err) {
+          console.error("loadFriendCatches error", err);
+          catchList.innerHTML = "<p>釣果の読み込みに失敗しました</p>";
+        }
+      }
+      // 全体をクリックしたら詳細ページへ遷移する（画像限定ではなくカード全体）
       document.getElementById("catchList").addEventListener("click", (e) => {
         const item =
           e.target && e.target.closest ? e.target.closest(".catch-item") : null;
-        const clickedImg =
-          e.target && e.target.matches && e.target.matches(".catch-item img");
-        if (item && clickedImg) {
+        if (item) {
           const id = item.getAttribute("data-id");
           if (id) {
             window.location.href = `fishing-log2-detail.html?id=${encodeURIComponent(
@@ -226,91 +368,75 @@
       });
     </script>
 
-    <style>
-      body {
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
-        position: relative;
-        overflow-x: hidden;
-      }
-      h2 {
-        text-align: center;
-        color: #fff;
-        margin-top: 40px;
-        text-shadow: 0 2px 8px #0e6ba8cc;
-        letter-spacing: 2px;
-      }
-      .catch-item {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 18px 18px 30px 30px;
-        padding: 18px 18px 28px 18px;
-        margin: 24px auto 32px auto;
-        max-width: 500px;
-        box-shadow: 0 4px 16px 0 #0e6ba84d;
-        border-bottom: 8px solid #4fc3f7;
-        border-top: 2px solid #b3e5fc;
-        position: relative;
-      }
-      .catch-item img {
-        box-shadow: 0 4px 16px #4fc3f7aa;
-        border: 3px solid #b3e5fc;
-        background: #e1f5fe;
-      }
-      #logout,
-      #toRegister {
-        padding: 10px 24px;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.1em;
-        font-weight: bold;
-        box-shadow: 0 2px 8px #0288d166;
-        transition: background 0.3s;
-        flex: 1;
-        margin: 0 8px;
-      }
-      #logout:hover {
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      #toRegister {
-        background: linear-gradient(90deg, #66bb6a 0%, #a5d6a7 100%);
-      }
-      #toRegister:hover {
-        background: linear-gradient(90deg, #a5d6a7 0%, #66bb6a 100%);
-      }
-      .action-row {
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        margin: 24px 0 0 0;
-        z-index: 2;
-        position: relative;
-      }
-      /* 波の装飾 */
-      .wave {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 120px;
-        pointer-events: none;
-        z-index: 0;
-      }
-      .wave.top {
-        top: 0;
-        transform: rotate(180deg);
-      }
-      .wave.bottom {
-        bottom: 0;
-      }
-    </style>
+    <!-- page-specific styles moved to stylesheet.css -->
   </head>
 
   <body>
+    <header>
+      <div class="container">
+        <div class="header-left">
+          <a class="logo" href="index.html" aria-label="ホーム">
+            <svg
+              width="40"
+              height="28"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="7" cy="12" r="1" fill="currentColor" />
+            </svg>
+          </a>
+        </div>
+        <div class="header-right">
+          <a href="index.html">ホーム</a>
+          <a href="fishing-log2.html">釣果一覧</a>
+          <a href="fishing-log.html">登録</a>
+          <div class="nav-tools">
+            <button
+              class="tools-btn"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              ツール ▾
+            </button>
+            <div class="submenu" role="menu">
+              <a role="menuitem" href="pe-converter.html">PE変換</a>
+              <a role="menuitem" href="pe(tanatoru4)-converter.html"
+                >タナトル4</a
+              >
+              <a role="menuitem" href="index.html">その他</a>
+            </div>
+          </div>
+          <a href="profile.html">プロフィール</a>
+        </div>
+        <button class="menu-icon" id="menuIcon" aria-label="メニュー">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
     <div class="wave top">
       <svg
         viewBox="0 0 1440 120"
@@ -324,20 +450,35 @@
         ></path>
       </svg>
     </div>
-    <h2>� 釣果リスト</h2>
-    <div id="catchList">読み込み中...</div>
+    <h2>
+      <svg
+        class="icon icon-fish"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
+        <circle cx="7" cy="12" r="1" fill="currentColor"></circle>
+      </svg>
+      釣果リスト
+    </h2>
+    <div id="ownerHeader" class="ownerHeader"></div>
+    <div id="catchList" class="catch-list" role="list">
+      <div class="empty-state">読み込み中...</div>
+    </div>
 
     <!-- Friends panel -->
-    <section
-      id="friendsPanel"
-      style="
-        max-width: 500px;
-        margin: 16px auto;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 12px;
-      "
-    >
+    <section id="friendsPanel" class="friends-panel">
       <h3 style="color: #0288d1">友だち管理</h3>
       <div
         style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px"
@@ -385,34 +526,44 @@
       </svg>
     </div>
     <!-- ホームへ戻るボタン -->
-    <button id="homeBtn" class="home-btn" title="ホームへ戻る">🏠</button>
-    <style>
-      .home-btn {
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 9999;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: none;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        cursor: pointer;
-      }
-      .home-btn:hover {
-        filter: brightness(1.05);
-      }
-    </style>
+    <button
+      id="homeBtn"
+      class="home-btn"
+      title="ホームへ戻る"
+      aria-label="ホームへ戻る"
+    >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="M3 10.5L12 4l9 6.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M5 10.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <!-- home button styling moved to stylesheet.css -->
     <script>
       document.getElementById("homeBtn").addEventListener("click", () => {
         window.location.href = "index.html";
       });
     </script>
+    <script src="scripts/header.js"></script>
   </body>
 </html>

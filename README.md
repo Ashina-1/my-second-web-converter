@@ -44,3 +44,35 @@ npx http-server -c-1 .
 ---
 
 必要であれば、サーバ側での `shortId` 発行用の Cloud Function テンプレートや、さらに `firebase-init.js` から Storage ヘルパを再エクスポートしてページ側の import をさらに簡潔にする変更も作成できます。ご希望を教えてください。
+
+## ルールテスト（ローカル実行 & CI）
+
+このリポジトリには Firestore セキュリティルールの簡易テストが含まれています（`tests/firestore.rules.test.js`）。ローカルでの実行方法と CI の説明は以下の通りです。
+
+ローカルでの手順（初回のみ Java が必要）:
+
+```bash
+# Java が必要です（macOS の場合、Homebrew + temurin などでインストール）
+# 例: brew install --cask temurin
+
+# (1) firebase-config を用意（開発用にコピー）
+cp firebase-config.example.js firebase-config.js
+# 編集: firebase-config.js にプロジェクトの設定を入れる
+
+# (2) 依存関係をインストール
+npm ci
+
+# (3) ルールテストをエミュレータで実行
+npx firebase emulators:exec "npm run test:rules" --only firestore
+```
+
+注意:
+
+- Firestore エミュレータは初回起動時に約 60MB の jar をダウンロードします。
+- エミュレータは Java 実行環境（JDK）が必要です。`~/.zshrc` 等に `JAVA_HOME` を設定しておくと便利です。
+
+CI（GitHub Actions）:
+
+- このリポジトリには `.github/workflows/firestore-rules.yml` を追加済みです。Push / PR 時に自動でルールテストが走ります（Ubuntu ランナー上で Node と Temurin Java をセットアップして実行します）。
+
+必要であれば、CI の Node バージョンや Java バージョンをプロジェクトのポリシーに合わせて調整します。

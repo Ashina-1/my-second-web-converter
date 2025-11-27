@@ -4,103 +4,94 @@
     <meta charset="UTF-8" />
     <title>釣果記録アプリ</title>
     <link rel="stylesheet" href="style.css" />
-    <style>
-      body {
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
-        position: relative;
-        overflow-x: hidden;
-      }
-      h1 {
-        color: #fff;
-        text-align: center;
-        background: #e1f5fe;
-      }
-      #catchForm button {
-        margin-top: 10px;
-        padding: 10px 24px;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        cursor: pointer;
-        font-size: 1.1em;
-        font-weight: bold;
-      }
-      #catchForm button:hover {
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      #loginBtn {
-        display: block;
-        margin: 32px auto 0 auto;
-        padding: 10px 24px;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.1em;
-        font-weight: bold;
-        box-shadow: 0 2px 8px #0288d166;
-        transition: background 0.3s;
-      }
-      #loginBtn:hover {
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      #footer {
-        text-align: center;
-        margin-top: 40px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.97);
-        border-radius: 18px 18px 30px 30px;
-        max-width: 500px;
-        box-shadow: 0 4px 16px 0 #0e6ba84d;
-        border-bottom: 8px solid #4fc3f7;
-        border-top: 2px solid #b3e5fc;
-        margin-left: auto;
-        margin-right: auto;
-        position: relative;
-        z-index: 1;
-      }
-      #footer button {
-        padding: 10px 24px;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.1em;
-        font-weight: bold;
-        box-shadow: 0 2px 8px #0288d166;
-        transition: background 0.3s;
-      }
-      #footer button:hover {
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      #footer p {
-        margin-top: 10px;
-        color: #555;
-      }
-      /* 波の装飾 */
-      .wave {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 120px;
-        pointer-events: none;
-        z-index: 0;
-      }
-      .wave.top {
-        top: 0;
-        transform: rotate(180deg);
-      }
-      .wave.bottom {
-        bottom: 0;
-      }
-    </style>
+    <link rel="stylesheet" href="stylesheet.css" />
   </head>
   <body>
+    <header role="banner" aria-label="サイトヘッダー">
+      <div class="container">
+        <div class="header-left">
+          <a class="logo" href="index.html" aria-label="ホーム">
+            <svg
+              width="40"
+              height="28"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="7" cy="12" r="1" fill="currentColor" />
+            </svg>
+          </a>
+          <h1
+            style="margin: 0; font-size: 1.1rem; color: #fff; font-weight: 600"
+          >
+            釣果記録アプリ
+          </h1>
+        </div>
+        <div
+          class="header-right"
+          role="navigation"
+          aria-label="メインナビゲーション"
+        >
+          <a href="index.html">ホーム</a>
+          <a href="fishing-log2.html">釣果一覧</a>
+          <a href="fishing-log.html">登録</a>
+          <div class="nav-tools">
+            <button
+              class="tools-btn"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="tools-submenu"
+            >
+              ツール ▾
+            </button>
+            <div
+              id="tools-submenu"
+              class="submenu"
+              role="menu"
+              aria-hidden="true"
+            >
+              <a role="menuitem" href="pe-converter.html">PE変換</a>
+              <a role="menuitem" href="pe(tanatoru4)-converter.html"
+                >タナトル4</a
+              >
+              <a role="menuitem" href="index.html">その他</a>
+            </div>
+          </div>
+          <a href="profile.html">プロフィール</a>
+        </div>
+        <button
+          class="menu-icon"
+          id="menuIcon"
+          aria-label="メニュー"
+          aria-expanded="false"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
     <div class="wave top">
       <svg
         viewBox="0 0 1440 120"
@@ -114,59 +105,107 @@
         ></path>
       </svg>
     </div>
-    <h1>釣果記録アプリ</h1>
-    <button id="loginBtn">Googleでログイン</button>
+    <div class="container">
+      <div class="site-card form-card">
+        <form id="catchForm">
+          <h2
+            style="
+              text-align: center;
+              color: #0288d1;
+              text-shadow: 0 2px 8px #b3e5fc;
+            "
+          >
+            釣果入力
+          </h2>
 
-    <form id="catchForm">
-      <h2
-        style="
-          text-align: center;
-          color: #0288d1;
-          text-shadow: 0 2px 8px #b3e5fc;
-        "
-      >
-        釣果入力
-      </h2>
-      <label>魚の名称：<input type="text" id="fish" /></label><br />
-      <label>サイズ(cm)：<input type="number" id="size" /></label><br />
-      <label>場所：<input type="text" id="location" /></label><br />
-      <label>日付：<input type="date" id="date" /></label><br />
-      <input type="file" id="catch-image" accept="image/*" /><br />
-      <label>使用したタックル</label><br />
-      <label
-        >ロッド：<input
-          type="text"
-          id="rod"
-          placeholder="例：シマノ コルトスナイパーS100MH" /></label
-      ><br />
-      <label
-        >リール：<input
-          type="text"
-          id="reel"
-          placeholder="例：シマノ ステラ4000XG" /></label
-      ><br />
-      <label
-        >ライン：<input
-          type="text"
-          id="line"
-          placeholder="例：PE 1.5号" /></label
-      ><br />
-      <label
-        >仕掛け or ルアー等：<input
-          type="text"
-          id="lure"
-          placeholder="例：メジャークラフト ジグパラ40g" /></label
-      ><br />
-      <label
-        >メモ：<input
-          type="text"
-          id="memo"
-          placeholder="例：晴れ、風弱、潮止まり" /></label
-      ><br />
-      <button type="submit">記録</button>
-    </form>
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="fish">魚の名称</label>
+              <input type="text" id="fish" />
+            </div>
+            <div style="width: 120px">
+              <label for="size">サイズ(cm)</label>
+              <input type="number" id="size" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="location">場所</label>
+              <input type="text" id="location" />
+            </div>
+            <div style="width: 180px">
+              <label for="date">日付</label>
+              <input type="date" id="date" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="catch-image">画像を選択</label>
+              <input type="file" id="catch-image" accept="image/*" />
+              <img id="preview" class="catch-preview" alt="プレビュー表示" />
+            </div>
+          </div>
+
+          <h3 style="margin-top: 12px; color: #235b72">使用したタックル</h3>
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="rod">ロッド</label>
+              <input
+                type="text"
+                id="rod"
+                placeholder="例：シマノ コルトスナイパーS100MH"
+              />
+            </div>
+            <div style="flex: 1">
+              <label for="reel">リール</label>
+              <input
+                type="text"
+                id="reel"
+                placeholder="例：シマノ ステラ4000XG"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="line">ライン</label>
+              <input type="text" id="line" placeholder="例：PE 1.5号" />
+            </div>
+            <div style="flex: 1">
+              <label for="lure">仕掛け / ルアー</label>
+              <input
+                type="text"
+                id="lure"
+                placeholder="例：メジャークラフト ジグパラ40g"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="memo">メモ</label>
+              <input
+                type="text"
+                id="memo"
+                placeholder="例：晴れ、風弱、潮止まり"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn">記録</button>
+        </form>
+      </div>
+    </div>
     <footer id="footer">
       <button>釣果一覧へ</button><br />
+      <button
+        id="logoutBtn"
+        class="btn secondary"
+        style="margin-top: 8px; display: none"
+      >
+        ログアウト
+      </button>
       <p>&copy; 2025 釣果記録アプリ</p>
     </footer>
     <div class="wave bottom">
@@ -183,35 +222,67 @@
       </svg>
     </div>
     <!-- ホームへ戻るボタン -->
-    <button id="homeBtn" class="home-btn" title="ホームへ戻る">🏠</button>
-    <style>
-      .home-btn {
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 9999;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        border: none;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        color: #fff;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        cursor: pointer;
-      }
-      .home-btn:hover {
-        filter: brightness(1.05);
-      }
-    </style>
+    <button
+      id="homeBtn"
+      class="home-btn"
+      title="ホームへ戻る"
+      aria-label="ホームへ戻る"
+    >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="M3 10.5L12 4l9 6.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M5 10.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <!-- home button styling moved to stylesheet.css -->
     <script>
       document.getElementById("homeBtn").addEventListener("click", () => {
         window.location.href = "index.html";
       });
     </script>
+    <script>
+      // image preview for catch image
+      (function () {
+        const fileInput = document.getElementById("catch-image");
+        const preview = document.getElementById("preview");
+        if (!fileInput || !preview) return;
+        fileInput.addEventListener("change", () => {
+          const f = fileInput.files && fileInput.files[0];
+          if (!f) {
+            preview.src = "";
+            preview.style.display = "none";
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            preview.src = ev.target.result;
+            preview.style.display = "block";
+          };
+          reader.readAsDataURL(f);
+        });
+      })();
+    </script>
+    <script src="scripts/header.js"></script>
 
     <script type="module">
       // Use centralized initializer module (firebase-init.js) which sets up
@@ -227,6 +298,7 @@
         getRedirectResult,
         onAuthStateChanged,
         signOut,
+        configValid,
       } from "./firebase-init.js";
 
       import {
@@ -248,7 +320,20 @@
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
       const provider = new GoogleAuthProvider();
-      const loginBtn = document.getElementById("loginBtn");
+      // If firebase-config.js is not filled, show a visible banner and stop.
+      if (!configValid) {
+        const banner = document.createElement("div");
+        banner.style.cssText =
+          "position:fixed;left:0;right:0;top:0;background:#ff5252;color:#fff;padding:12px;text-align:center;z-index:99999;font-weight:700;";
+        banner.textContent =
+          "Firebase 設定が未完です。firebase-config.js を作成して正しい値を入れてください (README を参照)。";
+        document.body.appendChild(banner);
+        console.error(
+          "Firebase config invalid — halting firebase usage on page."
+        );
+        // stop further initialization
+        throw new Error("Firebase config invalid");
+      }
       const catchForm = document.getElementById("catchForm");
       //ページ読み込み時にログイン状態を確認
       // If the app returned from a redirect sign-in, process the result first
@@ -268,10 +353,11 @@
       })();
 
       onAuthStateChanged(auth, (user) => {
+        const logoutBtn = document.getElementById("logoutBtn");
         if (user) {
           console.log("ログイン中:", user);
-          loginBtn.textContent = "ログアウト";
-          catchForm.style.display = "block"; // フォームを表示
+          if (logoutBtn) logoutBtn.style.display = "inline-block";
+          if (catchForm) catchForm.style.display = "block"; // フォームを表示
           // ユーザー情報を users コレクションに保存/更新（upsert）
           (async () => {
             try {
@@ -293,40 +379,11 @@
           loadMyCatches(user.uid); // ユーザーの釣果を読み込む関数を呼び出し
         } else {
           console.log("ログアウト中");
-          loginBtn.textContent = "Googleでログイン";
-          catchForm.style.display = "none"; // フォームを非表示
+          if (logoutBtn) logoutBtn.style.display = "none";
+          if (catchForm) catchForm.style.display = "none"; // フォームを非表示
         }
-        // ログインボタンのクリックイベント
-        loginBtn.addEventListener("click", async () => {
-          if (auth.currentUser) {
-            // ログアウト処理
-            await signOut(auth);
-            alert("ログアウトしました");
-          } else {
-            // ログイン処理 - try popup first, fallback to redirect when popup blocked or not allowed
-            try {
-              const result = await signInWithPopup(auth, provider);
-              const user = result.user;
-              alert("ログインしました: " + user.displayName);
-            } catch (error) {
-              console.warn(
-                "signInWithPopup failed, attempting redirect as fallback",
-                error
-              );
-              // Common popup failure codes: auth/popup-blocked, auth/cancelled-popup-request
-              try {
-                await signInWithRedirect(auth, provider);
-                // redirect will navigate away; result is handled on return via getRedirectResult
-              } catch (redirErr) {
-                console.error("Redirect sign-in also failed:", redirErr);
-                alert(
-                  "ログインに失敗しました。ブラウザのポップアップ設定やCookie設定を確認してください。"
-                );
-              }
-            }
-          }
-        });
       });
+
       //釣果を登録するボタンのイベント
       document
         .getElementById("catchForm")
@@ -390,19 +447,63 @@
 
       // ユーザーの釣果を読み込む関数
       async function loadMyCatches(uid) {
-        const querySnapshot = await getDocs(collection(db, "fishinglogs"));
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.uid === uid) {
-            console.log("釣果:", data.catch);
-            // ここで釣果を画面に表示する処理を追加可能
+        try {
+          // render a minimal list on the registration page for feedback
+          const container = document.querySelector(".site-card.form-card");
+          const q = query(
+            collection(db, "fishinglogs"),
+            where("uid", "==", uid)
+          );
+          const snaps = await getDocs(q);
+          const list = document.createElement("div");
+          list.style.marginTop = "12px";
+          if (snaps.empty) {
+            list.innerHTML = "<p>あなたの釣果はまだ登録されていません。</p>";
+          } else {
+            snaps.forEach((s) => {
+              const d = s.data();
+              const el = document.createElement("div");
+              el.className = "mini-catch";
+              el.style.padding = "8px 0";
+              el.innerHTML = `<div style="display:flex;gap:12px;align-items:center"><div style="width:72px;height:54px;overflow:hidden;border-radius:8px;background:#eee">${
+                d.catch.imageUrl
+                  ? `<img src="${d.catch.imageUrl}" style="width:100%;height:100%;object-fit:cover"/>`
+                  : ""
+              }</div><div><strong style="color:#024f6f">${
+                d.catch.fish || ""
+              }</strong><div style="color:#666;font-size:0.9rem">${
+                d.catch.date || ""
+              } — ${d.catch.size || ""} cm</div></div></div>`;
+              list.appendChild(el);
+            });
           }
-        });
+          // remove an existing summary if present
+          const prev = document.querySelector(".my-catches-summary");
+          if (prev) prev.remove();
+          list.className = "my-catches-summary";
+          container.appendChild(list);
+        } catch (err) {
+          console.error("loadMyCatches error", err);
+        }
       }
       // 釣果一覧へボタンで一覧ページへ遷移
       document.querySelector("#footer button").addEventListener("click", () => {
         window.location.href = "fishing-log2.html";
       });
+
+      // ログアウトボタンの処理
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+          try {
+            await signOut(auth);
+            alert("ログアウトしました");
+          } catch (err) {
+            console.error("Sign-out failed:", err);
+            alert("ログアウトに失敗しました: " + (err.message || err));
+          }
+        });
+      }
     </script>
   </body>
 </html>

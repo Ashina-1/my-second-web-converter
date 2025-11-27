@@ -4,213 +4,75 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>芦名の淵釣り人備忘録</title>
-    <link
-      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-      crossorigin="anonymous"
-    />
+    <!-- Font Awesome removed; icons are inline SVGs to avoid external dependency -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
-    <style>
-      body {
-        margin: 0;
-        font-family: "Hiragino Kaku Gothic ProN", Arial, sans-serif;
-        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
-        min-height: 100vh;
-      }
-      header {
-        background: rgba(34, 49, 52, 0.9);
-        width: 100%;
-        padding: auto 20px;
-        top: 0;
-        position: fixed;
-        /* ヘッダーを常に最前面に表示 */
-        z-index: 10;
-        box-shadow: 0 2px 8px #00000066;
-      }
-      .site-title {
-        margin: auto;
-      }
-      .site-title a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 1em;
-        letter-spacing: 2px;
-        text-shadow: 0 2px 8px #0e6ba8cc;
-      }
-      .main-nav {
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-      .main-nav li a {
-        color: #fff;
-        font-size: 1.1em;
-        padding: 18px 18px;
-        display: block;
-        border-radius: 8px 8px 0 0;
-        transition: background 0.3s;
-      }
-      .main-nav li a:hover {
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      .top-wrapper {
-        background: linear-gradient(135deg, #a2d4f7 0%, #0e6ba8 100%);
-        color: white;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        padding: 80px 20px 120px 20px;
-        top: 100px;
-      }
-      .top-wrapper h2 {
-        font-size: 2em;
-        margin-bottom: 16px;
-        text-shadow: 0 2px 8px #0e6ba8cc;
-      }
-      .top-wrapper p {
-        font-size: 1.1em;
-        margin-bottom: 40px;
-        text-shadow: 0 1px 4px #0e6ba8cc;
-      }
-      .btn-wrapper {
-        text-align: center;
-      }
-      .btn {
-        padding: 12px 32px;
-        color: white;
-        display: inline-block;
-        opacity: 0.9;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 1.1em;
-        margin: 0 10px;
-        background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
-        box-shadow: 0 2px 8px #0288d166;
-        border: none;
-        transition: background 0.3s, opacity 0.3s;
-        max-width: 420px;
-      }
-      .btn:hover {
-        opacity: 1;
-        background: linear-gradient(90deg, #26c6da 0%, #0288d1 100%);
-      }
-      .wave {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 120px;
-        pointer-events: none;
-        z-index: 0;
-      }
-      .wave.top {
-        top: 0;
-        transform: rotate(180deg);
-      }
-      .wave.bottom {
-        bottom: 0;
-      }
-      footer {
-        text-align: center;
-        margin-top: 40px;
-        color: #b3aeb5;
-        background: none;
-      }
-      main {
-        padding-top: 80px;
-      }
-      .menu-icon {
-        display: none;
-        position: fixed;
-        top: 18px;
-        right: 18px;
-        z-index: 20;
-        font-size: 2em;
-        color: #fff;
-        background: rgba(34, 49, 52, 0.9);
-        border-radius: 8px;
-        padding: 8px 12px;
-        cursor: pointer;
-      }
-      @media (max-width: 750px) {
-        .menu-icon {
-          display: block;
-        }
-        .main-nav {
-          position: fixed;
-          top: 0;
-          left: -260px;
-          width: 220px;
-          height: 100vh;
-          background: linear-gradient(135deg, #0e6ba8 0%, #4fc3f7 100%);
-          flex-direction: column;
-          gap: 0;
-          align-items: stretch;
-          box-shadow: 2px 0 12px #0003;
-          transition: left 0.3s;
-          z-index: 19;
-          padding-top: 80px;
-        }
-        .main-nav.open {
-          left: 0;
-        }
-        .main-nav li a {
-          font-size: 1em;
-          padding: 18px 24px;
-          border-radius: 0;
-          border-bottom: 1px solid #26c6da;
-        }
-        .main-nav li:last-child a {
-          border-bottom: none;
-        }
-        header {
-          position: static;
-        }
-        .site-title {
-          margin-top: 24px;
-        }
-        .top-wrapper {
-          padding-top: 70px;
-        }
-      }
-    </style>
   </head>
   <body>
     <header>
-      <span class="menu-icon" id="menuIcon"><i class="fa fa-bars"></i></span>
-      <h1 class="site-title"><a href="index.html">芦名の淵釣り人備忘録</a></h1>
-      <nav>
-        <ul class="main-nav" id="mainNav">
-          <li>
-            <a href="index.html"><i class="fa fa-home"></i> ホーム</a>
-          </li>
-          <li>
-            <a href="pe-converter.html"
-              ><i class="fa fa-exchange"></i> PEライン→リーダー変換</a
+      <div class="container">
+        <div class="header-left">
+          <a class="logo" href="index.html" aria-label="ホーム">
+            <svg
+              width="40"
+              height="28"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
             >
-          </li>
-          <li>
-            <a href="pe(tanatoru4)-converter.html"
-              ><i class="fa fa-exchange"></i> タナトル4専用変換</a
+              <path
+                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="7" cy="12" r="1" fill="currentColor" />
+            </svg>
+          </a>
+        </div>
+        <div class="header-right">
+          <a href="index.html">ホーム</a>
+          <a href="fishing-log2.html">釣果一覧</a>
+          <a href="fishing-log.html">登録</a>
+          <div class="nav-tools">
+            <button
+              class="tools-btn"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-          </li>
-          <li>
-            <a href="fishing-log.html"
-              ><i class="fa fa-pencil"></i> 釣果記録アプリ</a
-            >
-          </li>
-          <li>
-            <a href="fishing-log2.html"
-              ><i class="fa fa-list"></i> 釣果リスト</a
-            >
-          </li>
-          <li>
-            <a href="profile.html"><i class="fa fa-user"></i> プロフィール</a>
-          </li>
-        </ul>
+              ツール ▾
+            </button>
+            <div class="submenu" role="menu">
+              <a role="menuitem" href="pe-converter.html">PE変換</a>
+              <a role="menuitem" href="pe(tanatoru4)-converter.html"
+                >タナトル4</a
+              >
+              <a role="menuitem" href="index.html">その他</a>
+            </div>
+          </div>
+          <a href="profile.html">プロフィール</a>
+        </div>
+        <button class="menu-icon" id="menuIcon" aria-label="メニュー">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
       </nav>
     </header>
     <main>
@@ -230,14 +92,100 @@
         </div>
         <h2>海と釣りを愛する人のための便利ツール集</h2>
         <p>
-          PEライン換算や釣果記録など、釣り人のためのWebアプリをまとめています。
+          PEライン換算や釣果記録など、釣り人のためのツールをまとめています。
         </p>
+        
+        <!-- 天気情報セクション -->
+        <div class="weather-info">
+          <h3>今日の海況</h3>
+          
+          <!-- 潮汐グラフ -->
+          <div class="tide-graph-container">
+            <h4>潮汐グラフ（24時間）</h4>
+            <div class="tide-graph">
+              <svg id="tideChart" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- グラフはJavaScriptで描画 -->
+              </svg>
+              <div class="tide-legend">
+                <span class="current-tide" id="currentTideStatus"></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="weather-grid">
+            <div class="weather-card">
+              <div class="weather-icon">🌊</div>
+              <div class="weather-label">現在の潮位</div>
+              <div class="weather-value" id="tideInfo">読み込み中...</div>
+            </div>
+            <div class="weather-card">
+              <div class="weather-icon">🌊</div>
+              <div class="weather-label">波高</div>
+              <div class="weather-value" id="waveInfo">読み込み中...</div>
+            </div>
+            <div class="weather-card">
+              <div class="weather-icon">💨</div>
+              <div class="weather-label">風速</div>
+              <div class="weather-value" id="windInfo">読み込み中...</div>
+            </div>
+            <div class="weather-card">
+              <div class="weather-icon">🌙</div>
+              <div class="weather-label">月齢</div>
+              <div class="weather-value" id="moonInfo">読み込み中...</div>
+            </div>
+          </div>
+          <div class="weather-location">
+            <label for="locationSelect">地点: </label>
+            <select id="locationSelect">
+              <option value="35.6762,139.6503">東京湾</option>
+              <option value="34.6937,135.5023">大阪湾</option>
+              <option value="33.5904,130.4017">福岡</option>
+              <option value="43.0642,141.3469">札幌</option>
+            </select>
+          </div>
+        </div>
         <div class="btn-wrapper">
           <a class="btn signup" href="fishing-log.html"
-            ><i class="fa fa-pencil"></i> 釣果を記録する</a
+            ><svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style="vertical-align: middle; margin-right: 8px"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M3 21v-3l11-11 3 3L6 21H3zM18 6l-3-3 3 3z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            釣果を記録する</a
           >
           <a class="btn twitter" href="fishing-log2.html"
-            ><i class="fa fa-list"></i> 釣果リストを見る</a
+            ><svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style="vertical-align: middle; margin-right: 8px"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M3 6h18M3 12h18M3 18h18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            釣果リストを見る</a
           >
         </div>
         <div class="wave bottom">
@@ -258,19 +206,233 @@
     <footer>
       <p>&copy; 2025 芦名の淵釣り人備忘録</p>
     </footer>
+    <script src="scripts/header.js"></script>
     <script>
-      // サイドバー開閉
-      const menuIcon = document.getElementById("menuIcon");
-      const mainNav = document.getElementById("mainNav");
-      menuIcon.addEventListener("click", () => {
-        mainNav.classList.toggle("open");
-      });
-      // サイドバーリンククリックで自動的に閉じる
-      mainNav.querySelectorAll("a").forEach((a) => {
-        a.addEventListener("click", () => {
-          mainNav.classList.remove("open");
+      // 月齢計算
+      function getMoonPhase() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        
+        let c = 0, e = 0, jd = 0;
+        if (month < 3) {
+          year--;
+          month += 12;
+        }
+        
+        c = Math.floor(year / 100);
+        jd = Math.floor(365.25 * year) + Math.floor(30.6001 * (month + 1)) + day + 1720995;
+        jd += 2 - c + Math.floor(c / 4);
+        
+        const age = ((jd - 2451550.1) / 29.530588853) % 1;
+        const moonAge = age * 29.530588853;
+        
+        let phase = '';
+        if (moonAge < 1.84566) phase = '🌑 新月';
+        else if (moonAge < 5.53699) phase = '🌒 三日月';
+        else if (moonAge < 9.22831) phase = '🌓 上弦';
+        else if (moonAge < 12.91963) phase = '🌔 満ちていく';
+        else if (moonAge < 16.61096) phase = '🌕 満月';
+        else if (moonAge < 20.30228) phase = '🌖 欠けていく';
+        else if (moonAge < 23.99361) phase = '🌗 下弦';
+        else if (moonAge < 27.68493) phase = '🌘 三日月';
+        else phase = '🌑 新月';
+        
+        return `${phase}<br><small>月齢 ${moonAge.toFixed(1)}</small>`;
+      }
+
+      // 潮汐データを生成（正弦波で24時間分）
+      function generateTideData() {
+        const data = [];
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const currentTime = currentHour + currentMinute / 60;
+        
+        // 1日を2周期（約12時間周期×2）でシミュレート
+        for (let h = 0; h <= 24; h += 0.5) {
+          // 正弦波で潮位を計算（振幅100cm、周期12.42時間）
+          const tideHeight = 100 + 80 * Math.sin((h / 12.42) * 2 * Math.PI - Math.PI / 2);
+          data.push({ hour: h, height: tideHeight });
+        }
+        
+        return { data, currentTime };
+      }
+
+      // SVGで潮汐グラフを描画
+      function drawTideChart() {
+        const { data, currentTime } = generateTideData();
+        const svg = document.getElementById('tideChart');
+        svg.innerHTML = ''; // クリア
+        
+        const width = 600;
+        const height = 200;
+        const padding = { top: 20, right: 30, bottom: 30, left: 50 };
+        const chartWidth = width - padding.left - padding.right;
+        const chartHeight = height - padding.top - padding.bottom;
+        
+        // 背景
+        const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bg.setAttribute('width', width);
+        bg.setAttribute('height', height);
+        bg.setAttribute('fill', '#f0f9ff');
+        svg.appendChild(bg);
+        
+        // グリッドライン（横）
+        for (let i = 0; i <= 4; i++) {
+          const y = padding.top + (chartHeight / 4) * i;
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', padding.left);
+          line.setAttribute('y1', y);
+          line.setAttribute('x2', width - padding.right);
+          line.setAttribute('y2', y);
+          line.setAttribute('stroke', '#cbd5e1');
+          line.setAttribute('stroke-width', '1');
+          line.setAttribute('stroke-dasharray', '2,2');
+          svg.appendChild(line);
+        }
+        
+        // Y軸ラベル
+        const yLabels = [180, 135, 90, 45, 0];
+        for (let i = 0; i <= 4; i++) {
+          const y = padding.top + (chartHeight / 4) * i;
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', padding.left - 10);
+          text.setAttribute('y', y + 5);
+          text.setAttribute('text-anchor', 'end');
+          text.setAttribute('fill', '#64748b');
+          text.setAttribute('font-size', '12');
+          text.textContent = yLabels[i] + 'cm';
+          svg.appendChild(text);
+        }
+        
+        // X軸ラベル（時刻）
+        for (let h = 0; h <= 24; h += 3) {
+          const x = padding.left + (h / 24) * chartWidth;
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', height - 10);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', '#64748b');
+          text.setAttribute('font-size', '12');
+          text.textContent = h + '時';
+          svg.appendChild(text);
+        }
+        
+        // 潮位線を描画
+        let pathData = '';
+        data.forEach((point, index) => {
+          const x = padding.left + (point.hour / 24) * chartWidth;
+          const y = padding.top + chartHeight - ((point.height / 180) * chartHeight);
+          pathData += (index === 0 ? 'M' : 'L') + x + ',' + y + ' ';
         });
-      });
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', '#0ea5e9');
+        path.setAttribute('stroke-width', '3');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(path);
+        
+        // 現在時刻のマーカー
+        const currentX = padding.left + (currentTime / 24) * chartWidth;
+        const currentData = data.find(d => d.hour >= currentTime) || data[data.length - 1];
+        const currentY = padding.top + chartHeight - ((currentData.height / 180) * chartHeight);
+        
+        const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        marker.setAttribute('cx', currentX);
+        marker.setAttribute('cy', currentY);
+        marker.setAttribute('r', '6');
+        marker.setAttribute('fill', '#ef4444');
+        marker.setAttribute('stroke', 'white');
+        marker.setAttribute('stroke-width', '2');
+        svg.appendChild(marker);
+        
+        // 現在時刻の縦線
+        const currentLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        currentLine.setAttribute('x1', currentX);
+        currentLine.setAttribute('y1', padding.top);
+        currentLine.setAttribute('x2', currentX);
+        currentLine.setAttribute('y2', height - padding.bottom);
+        currentLine.setAttribute('stroke', '#ef4444');
+        currentLine.setAttribute('stroke-width', '2');
+        currentLine.setAttribute('stroke-dasharray', '4,4');
+        svg.appendChild(currentLine);
+        
+        // 現在の潮位を表示
+        const currentHeight = Math.round(currentData.height);
+        document.getElementById('tideInfo').innerHTML = `${currentHeight} cm`;
+        
+        // 満潮/干潮の状態
+        const trend = getTideTrend(data, currentTime);
+        document.getElementById('currentTideStatus').innerHTML = `現在: ${trend}`;
+      }
+
+      // 潮の満ち引き状態を判定
+      function getTideTrend(data, currentTime) {
+        const currentIdx = Math.floor(currentTime * 2);
+        const nextIdx = currentIdx + 1;
+        if (nextIdx >= data.length) return '満潮付近';
+        
+        const current = data[currentIdx].height;
+        const next = data[nextIdx].height;
+        
+        if (next > current) {
+          return '上げ潮（満潮へ）🌊↑';
+        } else {
+          return '下げ潮（干潮へ）🌊↓';
+        }
+      }
+
+      // 潮汐の簡易計算（実際のAPIがない場合のデモ）
+      function getTideInfo() {
+        const hour = new Date().getHours();
+        if (hour >= 0 && hour < 6) return '満潮 → 干潮';
+        else if (hour >= 6 && hour < 12) return '干潮';
+        else if (hour >= 12 && hour < 18) return '干潮 → 満潮';
+        else return '満潮';
+      }
+
+      // Open-Meteo API（無料）で天気情報を取得
+      async function updateWeatherInfo() {
+        const select = document.getElementById('locationSelect');
+        const [lat, lon] = select.value.split(',');
+        
+        // 潮汐グラフを描画
+        drawTideChart();
+        
+        try {
+          // 波と風の情報を取得
+          const response = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m&timezone=Asia/Tokyo`
+          );
+          const data = await response.json();
+          
+          // 風速
+          const windSpeed = data.current.wind_speed_10m;
+          document.getElementById('windInfo').innerHTML = `${windSpeed} m/s`;
+          
+          // 波高（簡易推定: 風速から）
+          const waveHeight = (windSpeed * 0.3).toFixed(1);
+          document.getElementById('waveInfo').innerHTML = `約 ${waveHeight} m`;
+          
+          // 月齢
+          document.getElementById('moonInfo').innerHTML = getMoonPhase();
+          
+        } catch (error) {
+          console.error('天気情報の取得に失敗:', error);
+          document.getElementById('windInfo').innerHTML = 'エラー';
+          document.getElementById('waveInfo').innerHTML = 'エラー';
+          document.getElementById('moonInfo').innerHTML = getMoonPhase();
+        }
+      }
+
+      // 初期読み込みと地点変更時
+      document.addEventListener('DOMContentLoaded', updateWeatherInfo);
+      document.getElementById('locationSelect').addEventListener('change', updateWeatherInfo);
     </script>
   </body>
 </html>

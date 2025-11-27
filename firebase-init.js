@@ -17,6 +17,7 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
   addDoc,
   doc,
   setDoc,
@@ -55,7 +56,16 @@ if (!configValid) {
 const app = configValid ? initializeApp(firebaseConfig) : null;
 let analytics = null;
 try {
-  if (app) analytics = getAnalytics(app);
+  // Avoid initializing analytics (and associated installations requests)
+  // when running on localhost/127.0.0.1 during local development because
+  // Firebase may block requests from these referers unless explicitly
+  // authorized in the console (which is fine for production but noisy locally).
+  const isLocalhost =
+    typeof window !== "undefined" &&
+    /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+  if (app && !isLocalhost) {
+    analytics = getAnalytics(app);
+  }
 } catch (e) {
   // analytics may fail in some environments (e.g., missing window), ignore
   analytics = null;
@@ -79,6 +89,7 @@ export {
   // re-export common firestore helpers for convenience
   collection,
   getDocs,
+  getDoc,
   addDoc,
   doc,
   setDoc,
