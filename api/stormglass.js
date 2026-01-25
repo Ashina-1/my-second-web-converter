@@ -4,7 +4,7 @@
  * APIキーはサーバー側で管理
  */
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS設定
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -28,12 +28,10 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       console.error("[StormGlass API] Missing API key");
-      return res
-        .status(503)
-        .json({
-          error:
-            "StormGlass API キーが設定されていません。管理者に連絡してください。",
-        });
+      return res.status(503).json({
+        error:
+          "StormGlass API キーが設定されていません。管理者に連絡してください。",
+      });
     }
 
     if (!lat || !lng) {
@@ -81,4 +79,4 @@ export default async function handler(req, res) {
       details: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
-}
+};

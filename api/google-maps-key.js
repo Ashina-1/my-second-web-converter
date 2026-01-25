@@ -3,7 +3,7 @@
  * APIキーはサーバー側で管理し、安全に供給
  */
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   // CORS設定
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -27,4 +27,4 @@ export default function handler(req, res) {
     console.error("Google Maps Key Error:", error);
     res.status(500).json({ error: error.message });
   }
-}
+};
