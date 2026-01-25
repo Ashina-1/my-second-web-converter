@@ -21,7 +21,6 @@ export async function initializeMap(
   zoom = 7,
 ) {
   const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
   const mapContainer = document.getElementById(mapContainerId);
   if (!mapContainer) {
@@ -32,7 +31,6 @@ export async function initializeMap(
   mapInstance = new Map(mapContainer, {
     zoom: zoom,
     center: { lat: initialLat, lng: initialLng },
-    mapId: "fishing_app_map",
     mapTypeControl: true,
     fullscreenControl: true,
     streetViewControl: true,
@@ -107,34 +105,23 @@ export async function addFishingSpotMarkers(fishingSpots) {
     return;
   }
 
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  const { Marker } = await google.maps.importLibrary("marker");
+  const { InfoWindow } = await google.maps.importLibrary("maps");
 
-  fishingSpots.forEach(async (spot) => {
-    const markerContent = document.createElement("div");
-    markerContent.style.cssText = `
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, #4db8ff, #0099ff);
-      border: 2px solid #fff;
-      border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      cursor: pointer;
-    `;
-    markerContent.textContent = "🎣";
-
-    const marker = new AdvancedMarkerElement({
+  fishingSpots.forEach((spot) => {
+    // 従来のマーカーを使用（Advanced Markersの代わり）
+    const marker = new google.maps.Marker({
       map: mapInstance,
       position: { lat: spot.latitude, lng: spot.longitude },
-      content: markerContent,
       title: `${spot.name} - ${spot.region}`,
-    });
-
-    marker.addListener("click", () => {
-      handleMapClick({ lat: () => spot.latitude, lng: () => spot.longitude });
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        fillColor: "#4db8ff",
+        fillOpacity: 0.9,
+        strokeColor: "#0099ff",
+        strokeWeight: 2,
+      },
     });
 
     const infoWindowContent = document.createElement("div");
@@ -151,15 +138,16 @@ export async function addFishingSpotMarkers(fishingSpots) {
       <small>${escapeHtml(spot.region)}</small>
     `;
 
-    const { InfoWindow } = await google.maps.importLibrary("maps");
     const infoWindow = new InfoWindow({
       content: infoWindowContent,
     });
 
     marker.addListener("click", () => {
       infoWindow.open(mapInstance, marker);
+      handleMapClick({ lat: () => spot.latitude, lng: () => spot.longitude });
     });
   });
+}
 }
 
 /**

@@ -360,9 +360,28 @@
           displayOceanData(oceanData, tideData, waveData);
         } catch (error) {
           console.error("海況データ取得エラー:", error);
-          showError(
-            "海況データの取得に失敗しました。別のAPIキーまたはサービスを確認してください。",
-          );
+
+          // エラーの原因を特定してユーザーフレンドリーなメッセージを表示
+          let errorMessage = "海況データの取得に失敗しました。";
+
+          if (error.message && error.message.includes("404")) {
+            errorMessage =
+              "ローカル開発環境ではバックエンド API が利用できません。<br>" +
+              "<strong>Vercel 開発サーバーを起動してください：</strong><br>" +
+              "1. <code>npm install -g vercel</code> でVercel CLIをインストール<br>" +
+              "2. <code>.env.local</code> に API キーを設定<br>" +
+              "3. <code>vercel dev</code> でサーバーを起動";
+          } else if (error.message && error.message.includes("503")) {
+            errorMessage =
+              "API キーが設定されていません。<br>" +
+              "<strong>.env.local ファイルを確認してください</strong>";
+          } else if (error.message && error.message.includes("401")) {
+            errorMessage =
+              "API キーが無効です。<br>" +
+              "<strong>.env.local のAPIキーを確認してください</strong>";
+          }
+
+          showError(errorMessage);
         }
       }
 
@@ -559,7 +578,11 @@
        */
       function showError(message) {
         const container = document.getElementById("oceanDataContainer");
-        container.innerHTML = `<div class="error-message">${escapeHtml(message)}</div>`;
+        // message に HTML が含まれている場合はそのまま表示（内部エラーメッセージのため安全）
+        container.innerHTML = `<div class="error-message" style="padding: 15px; border-radius: 4px; line-height: 1.6;">
+          <strong style="display: block; margin-bottom: 10px; color: #ff6b6b;">⚠️ エラーが発生しました</strong>
+          <div style="color: #ff8787; font-size: 0.95rem;">${message}</div>
+        </div>`;
       }
 
       /**
