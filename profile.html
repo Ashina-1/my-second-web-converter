@@ -447,9 +447,12 @@
 
     <!-- home button styling moved to stylesheet.css -->
     <script>
-      document.getElementById("homeBtn").addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
+      const homeBtn = document.getElementById("homeBtn");
+      if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+      }
     </script>
     <script src="scripts/header.js"></script>
 
@@ -459,6 +462,8 @@
         auth,
         db,
         GoogleAuthProvider,
+        signInWithPopup,
+        signInWithRedirect,
         getRedirectResult,
         onAuthStateChanged,
         signOut,
