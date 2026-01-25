@@ -48,10 +48,12 @@ export default async function handler(req, res) {
     }
 
     console.log("[StormGlass API] Fetching from:", url);
+    console.log("[StormGlass API] Auth header value length:", apiKey.length);
 
     const response = await fetch(url, {
       headers: {
         Authorization: apiKey,
+        "Content-Type": "application/json",
       },
     });
 
