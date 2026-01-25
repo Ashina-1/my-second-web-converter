@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -10,7 +10,8 @@
       /* プロフィール専用スタイル */
       body {
         background: #050404;
-        background-image: radial-gradient(
+        background-image:
+          radial-gradient(
             ellipse at 50% 0%,
             rgba(100, 150, 200, 0.05) 0%,
             transparent 50%
@@ -491,7 +492,7 @@
               "Firebase 設定が未完です。firebase-config.js を作成して正しい値を入れてください (README を参照)。";
             document.body.appendChild(banner);
             console.error(
-              "Firebase config invalid — halting firebase usage on page."
+              "Firebase config invalid — halting firebase usage on page.",
             );
             return;
           }
@@ -503,7 +504,7 @@
           // missing initial state errors can happen in some browsers; log for diagnosis
           console.warn(
             "profile: getRedirectResult error (may be missing initial state):",
-            err
+            err,
           );
         }
       })();
@@ -621,7 +622,7 @@
         .addEventListener("click", async () => {
           try {
             await navigator.clipboard.writeText(
-              document.getElementById("shortId").textContent || ""
+              document.getElementById("shortId").textContent || "",
             );
             setStatus("短いIDをコピーしました");
           } catch (e) {
@@ -637,12 +638,12 @@
         // try multiple times, using a query to check uniqueness
         for (let attempt = 0; attempt < 12; attempt++) {
           const candidate = String(
-            Math.floor(1000000000 + Math.random() * 9000000000)
+            Math.floor(1000000000 + Math.random() * 9000000000),
           );
           try {
             const q = query(
               collection(db, "users"),
-              where("shortId", "==", candidate)
+              where("shortId", "==", candidate),
             );
             const snaps = await getDocs(q);
             if (snaps.empty) {
@@ -689,7 +690,7 @@
           } catch (err) {
             console.warn(
               "profile: signInWithPopup failed, falling back to redirect",
-              err
+              err,
             );
             try {
               await signInWithRedirect(auth, provider);
@@ -697,7 +698,7 @@
               console.error("profile: redirect sign-in failed", redirErr);
               setStatus(
                 "ログインに失敗しました。ブラウザの設定を確認してください",
-                "error"
+                "error",
               );
             }
           }
