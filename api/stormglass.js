@@ -30,7 +30,10 @@ export default async function handler(req, res) {
       console.error("[StormGlass API] Missing API key");
       return res
         .status(503)
-        .json({ error: "StormGlass API キーが設定されていません。管理者に連絡してください。" });
+        .json({
+          error:
+            "StormGlass API キーが設定されていません。管理者に連絡してください。",
+        });
     }
 
     if (!lat || !lng) {
@@ -73,9 +76,9 @@ export default async function handler(req, res) {
     console.error("[StormGlass API] Error:", error);
     const statusCode = error.statusCode || 500;
     const errorMessage = error.message || "Internal Server Error";
-    res.status(statusCode).json({ 
+    res.status(statusCode).json({
       error: errorMessage,
-      details: process.env.NODE_ENV === "development" ? error.stack : undefined
+      details: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
 }
