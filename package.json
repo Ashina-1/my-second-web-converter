@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Fishing log app with ocean data checker",
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   }
 }
