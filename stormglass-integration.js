@@ -19,10 +19,15 @@ export async function getTideData(latitude, longitude) {
     );
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || `API Error: ${response.status}`;
+      
       if (response.status === 401) {
         throw new Error("StormGlass APIキーが無効です");
+      } else if (response.status === 503) {
+        throw new Error(errorMessage);
       }
-      throw new Error(`API Error: ${response.status}`);
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -46,10 +51,15 @@ export async function getWaveData(latitude, longitude) {
     );
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || `API Error: ${response.status}`;
+      
       if (response.status === 401) {
         throw new Error("StormGlass APIキーが無効です");
+      } else if (response.status === 503) {
+        throw new Error(errorMessage);
       }
-      throw new Error(`API Error: ${response.status}`);
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
