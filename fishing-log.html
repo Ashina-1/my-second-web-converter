@@ -1,40 +1,275 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>釣果記録アプリ</title>
+    <title>釣果記録 - AbyssAtlas</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='abyss' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%231a1413;stop-opacity:1' /><stop offset='50%' style='stop-color:%2316191e;stop-opacity:1' /><stop offset='100%' style='stop-color:%230d0a0a;stop-opacity:1' /></linearGradient><linearGradient id='metalGrad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23ffd700;stop-opacity:0.9' /><stop offset='50%' style='stop-color:%23d4af8c;stop-opacity:1' /><stop offset='100%' style='stop-color:%238b7500;stop-opacity:0.9' /></linearGradient></defs><rect width='100' height='100' fill='url(%23abyss)'/><polygon points='50,20 65,70 50,88 35,70' fill='url(%23metalGrad)' stroke='%23ffd700' stroke-width='1.5'/><polygon points='50,25 60,65 50,80 40,65' fill='none' stroke='%23ffffff' stroke-width='0.8' opacity='0.6'/><path d='M20 50 Q50 40 80 50 Q50 55 20 50' stroke='%238b7500' stroke-width='1.5' fill='none' opacity='0.6'/><path d='M15 60 Q50 50 85 60 Q50 65 15 60' stroke='%238b7500' stroke-width='1' fill='none' opacity='0.4'/></svg>"
+    />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="stylesheet.css" />
+    <link rel="stylesheet" href="stylesheet-darksoul.css" />
+    <style>
+      /* 釣果記録ページ用スタイル */
+      body {
+        background: #050404 !important;
+        background-image:
+          radial-gradient(
+            ellipse at 50% 0%,
+            rgba(100, 150, 200, 0.05) 0%,
+            transparent 50%
+          ),
+          linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%) !important;
+      }
+
+      h2 {
+        color: #c4d8f0 !important;
+        text-shadow: 0 0 20px rgba(196, 216, 240, 0.6) !important;
+        text-align: center !important;
+      }
+
+      .form-card {
+        background: linear-gradient(
+          135deg,
+          rgba(15, 20, 35, 0.95),
+          rgba(10, 25, 45, 0.95)
+        ) !important;
+        border: 2px solid #3a4d6b !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8) !important;
+      }
+
+      .form-row {
+        display: flex !important;
+        gap: 12px !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .form-row > div {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      label {
+        color: #a89560 !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.5rem !important;
+        font-size: 0.9rem !important;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="file"],
+      input[type="time"],
+      select {
+        padding: 0.75rem !important;
+        background: rgba(5, 4, 4, 0.6) !important;
+        border: 1px solid #506080 !important;
+        color: #c4d8f0 !important;
+        border-radius: 2px !important;
+        font-family: inherit !important;
+        transition: all 0.3s ease !important;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="date"]:focus,
+      input[type="file"]:focus,
+      input[type="time"]:focus,
+      select:focus {
+        outline: none !important;
+        border-color: #8099b8 !important;
+        box-shadow: 0 0 10px rgba(128, 153, 184, 0.3) !important;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #6b8fb0, #8099b8) !important;
+        color: white !important;
+        border: 2px solid #c4d8f0 !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 2px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+      }
+
+      .btn:hover {
+        background: linear-gradient(135deg, #8099b8, #a0afc8) !important;
+        box-shadow: 0 0 20px rgba(196, 216, 240, 0.4) !important;
+      }
+
+      .btn.secondary {
+        background: rgba(0, 0, 0, 0.3) !important;
+        color: #8099b8 !important;
+        border-color: #506080 !important;
+      }
+
+      .btn.secondary:hover {
+        background: rgba(0, 0, 0, 0.5) !important;
+        border-color: #8099b8 !important;
+        color: #c4d8f0 !important;
+      }
+
+      h3 {
+        color: #c4d8f0 !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        font-weight: 700 !important;
+      }
+
+      #footer {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+        padding: 2rem 1rem;
+        text-align: center;
+        color: #8099b8;
+      }
+
+      #footer button {
+        background: linear-gradient(135deg, #6b8fb0, #8099b8) !important;
+        color: white !important;
+        border: 2px solid #c4d8f0 !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 2px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+      }
+
+      #footer button:hover {
+        background: linear-gradient(135deg, #8099b8, #a0afc8) !important;
+        box-shadow: 0 0 20px rgba(196, 216, 240, 0.4) !important;
+      }
+
+      .catch-preview {
+        margin-top: 0.5rem !important;
+        max-width: 100% !important;
+        border: 2px solid #3a4d6b !important;
+        border-radius: 2px !important;
+      }
+
+      .mini-catch {
+        padding: 0.75rem !important;
+        background: rgba(77, 184, 255, 0.05) !important;
+        border-left: 4px solid #6bb3e8 !important;
+        border-radius: 2px !important;
+      }
+
+      #oceanMapContainer {
+        width: 100%;
+        height: 400px;
+        border: 2px solid #3a4d6b !important;
+        border-radius: 2px !important;
+        margin-top: 12px;
+        background: #1a1a1a;
+      }
+
+      .map-info {
+        margin-top: 12px;
+        padding: 12px;
+        background: rgba(77, 184, 255, 0.05) !important;
+        border: 1px solid #506080;
+        border-radius: 2px !important;
+        font-size: 0.9rem;
+        color: #a89560;
+      }
+
+      @media (max-width: 750px) {
+        .form-row {
+          flex-direction: column !important;
+        }
+
+        .form-row > div {
+          width: 100% !important;
+        }
+
+        #oceanMapContainer {
+          height: 300px;
+        }
+      }
+    </style>
   </head>
   <body>
     <header role="banner" aria-label="サイトヘッダー">
       <div class="container">
         <div class="header-left">
-          <a class="logo" href="index.html" aria-label="ホーム">
+          <a
+            class="logo"
+            href="index.html"
+            aria-label="ホーム"
+            title="ホームに戻る"
+          >
             <svg
               width="40"
-              height="28"
-              viewBox="0 0 24 24"
+              height="40"
+              viewBox="0 0 100 100"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               focusable="false"
             >
-              <path
-                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <defs>
+                <linearGradient
+                  id="abyss-logo"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1a1413; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #16191e; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #0d0a0a; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="metalGrad-logo"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #8099b8; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #506080; stop-opacity: 0.9"
+                  />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="50,20 65,70 50,88 35,70"
+                fill="url(#metalGrad-logo)"
+                stroke="#c4d8f0"
+                stroke-width="1.5"
               />
-              <circle cx="7" cy="12" r="1" fill="currentColor" />
+              <polygon
+                points="50,25 60,65 50,80 40,65"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="0.8"
+                opacity="0.6"
+              />
+              <path
+                d="M20 50 Q50 40 80 50 Q50 55 20 50"
+                stroke="#8099b8"
+                stroke-width="1.5"
+                fill="none"
+                opacity="0.6"
+              />
             </svg>
           </a>
-          <h1
-            style="margin: 0; font-size: 1.1rem; color: #fff; font-weight: 600"
-          >
-            釣果記録アプリ
-          </h1>
         </div>
         <div
           class="header-right"
@@ -59,10 +294,8 @@
               role="menu"
               aria-hidden="true"
             >
+              <a role="menuitem" href="ocean-checker.html">🌊 海況チェッカー</a>
               <a role="menuitem" href="pe-converter.html">PE変換</a>
-              <a role="menuitem" href="pe(tanatoru4)-converter.html"
-                >タナトル4</a
-              >
               <a role="menuitem" href="index.html">その他</a>
             </div>
           </div>
@@ -99,7 +332,7 @@
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill="#4fc3f7"
+          fill="#3a4d6b"
           fill-opacity="0.5"
           d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
         ></path>
@@ -108,15 +341,88 @@
     <div class="container">
       <div class="site-card form-card">
         <form id="catchForm">
-          <h2
+          <h2>釣果入力</h2>
+
+          <!-- 海況データ連動セクション -->
+          <div
             style="
-              text-align: center;
-              color: #0288d1;
-              text-shadow: 0 2px 8px #b3e5fc;
+              background: linear-gradient(
+                135deg,
+                rgba(107, 143, 176, 0.1),
+                rgba(77, 184, 255, 0.05)
+              );
+              border-radius: 2px;
+              padding: 12px;
+              margin-bottom: 16px;
+              border-left: 4px solid #6bb3e8;
             "
           >
-            釣果入力
-          </h2>
+            <h3 style="margin: 0 0 12px 0; color: #c4d8f0; font-size: 0.95rem">
+              海況データ連動
+            </h3>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button
+                type="button"
+                id="quickCapture"
+                class="btn"
+                style="flex: 1; min-width: 150px; font-size: 0.9rem"
+              >
+                📍 現在地から即座登録
+              </button>
+              <button
+                type="button"
+                id="selectCapture"
+                class="btn"
+                style="flex: 1; min-width: 150px; font-size: 0.9rem"
+              >
+                🎯 地点と時刻を選んで取得
+              </button>
+            </div>
+            <div
+              id="oceanDataDisplay"
+              style="
+                margin-top: 12px;
+                padding: 16px;
+                background: linear-gradient(
+                  135deg,
+                  rgba(15, 20, 35, 0.95),
+                  rgba(10, 25, 45, 0.95)
+                );
+                border: 2px solid #3a4d6b;
+                border-radius: 0;
+                min-height: 60px;
+                display: none;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+              "
+            >
+              <p
+                id="oceanDataText"
+                style="
+                  margin: 0 0 12px 0;
+                  color: #c4d8f0;
+                  font-size: 0.9rem;
+                  letter-spacing: 1px;
+                "
+              ></p>
+              <div id="tideGraphContainer" style="margin-top: 8px">
+                <svg
+                  id="tideGraphSvg"
+                  style="
+                    width: 100%;
+                    height: 200px;
+                    max-width: 350px;
+                    border: 1px solid #3a4d6b;
+                    border-radius: 0;
+                    background: linear-gradient(
+                      135deg,
+                      rgba(5, 4, 4, 0.8) 0%,
+                      rgba(10, 20, 35, 0.8) 100%
+                    );
+                  "
+                ></svg>
+              </div>
+            </div>
+          </div>
 
           <div class="form-row">
             <div style="flex: 1">
@@ -127,11 +433,40 @@
               <label for="size">サイズ(cm)</label>
               <input type="number" id="size" />
             </div>
+            <div style="width: 120px">
+              <label for="weight">グラム(g)</label>
+              <input type="number" id="weight" />
+            </div>
           </div>
 
           <div class="form-row">
             <div style="flex: 1">
-              <label for="location">場所</label>
+              <label for="locationSelect">釣り場を選択</label>
+              <select id="locationSelect">
+                <option value="">-- 釣り場を選択 --</option>
+              </select>
+            </div>
+            <button
+              type="button"
+              id="fetchOceanDataBtn"
+              style="
+                align-self: flex-end;
+                margin-bottom: 8px;
+                padding: 8px 16px;
+                background: #235b72;
+                color: #c4d8f0;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            >
+              海況取得
+            </button>
+          </div>
+
+          <div class="form-row">
+            <div style="flex: 1">
+              <label for="location">場所（手動入力）</label>
               <input type="text" id="location" />
             </div>
             <div style="width: 180px">
@@ -193,6 +528,14 @@
             </div>
           </div>
 
+          <!-- Googleマップセクション -->
+          <h3 style="margin-top: 1rem; color: #235b72">地図から地点を選択</h3>
+          <div class="map-info">
+            💡
+            クリックして地点を選択すると、その地点の海況データを自動取得します
+          </div>
+          <div id="oceanMapContainer"></div>
+
           <button type="submit" class="btn">記録</button>
         </form>
       </div>
@@ -206,7 +549,7 @@
       >
         ログアウト
       </button>
-      <p>&copy; 2025 釣果記録アプリ</p>
+      <p>&copy; 2025 AbyssAtlas</p>
     </footer>
     <div class="wave bottom">
       <svg
@@ -215,50 +558,21 @@
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill="#4fc3f7"
+          fill="#3a4d6b"
           fill-opacity="0.5"
           d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
         ></path>
       </svg>
     </div>
-    <!-- ホームへ戻るボタン -->
-    <button
-      id="homeBtn"
-      class="home-btn"
-      title="ホームへ戻る"
-      aria-label="ホームへ戻る"
-    >
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="M3 10.5L12 4l9 6.5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M5 10.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
+
     <!-- home button styling moved to stylesheet.css -->
     <script>
-      document.getElementById("homeBtn").addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
+      const homeBtn = document.getElementById("homeBtn");
+      if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+      }
     </script>
     <script>
       // image preview for catch image
@@ -310,6 +624,8 @@
         deleteDoc,
         updateDoc,
         getDoc,
+        query,
+        where,
         serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
       import {
@@ -329,7 +645,7 @@
           "Firebase 設定が未完です。firebase-config.js を作成して正しい値を入れてください (README を参照)。";
         document.body.appendChild(banner);
         console.error(
-          "Firebase config invalid — halting firebase usage on page."
+          "Firebase config invalid — halting firebase usage on page.",
         );
         // stop further initialization
         throw new Error("Firebase config invalid");
@@ -347,7 +663,7 @@
           // missing initial state errors may surface here; we'll log and continue
           console.warn(
             "getRedirectResult error (may be missing state in some browsers):",
-            err
+            err,
           );
         }
       })();
@@ -370,7 +686,7 @@
                   photoURL: user.photoURL || "",
                   lastSeen: serverTimestamp(),
                 },
-                { merge: true }
+                { merge: true },
               );
             } catch (err) {
               console.error("users collection upsert failed:", err);
@@ -383,6 +699,9 @@
           if (catchForm) catchForm.style.display = "none"; // フォームを非表示
         }
       });
+
+      // グローバル変数：海況データを格納
+      let currentOceanData = null;
 
       //釣果を登録するボタンのイベント
       document
@@ -415,32 +734,91 @@
             // 画像をFirebase Storageにアップロード
             const storageRef = ref(
               storage,
-              `catch-images/${user.uid}/${Date.now()}_${imageFile.name}`
+              `catch-images/${user.uid}/${Date.now()}_${imageFile.name}`,
             );
-            await uploadBytes(storageRef, imageFile);
-            imageUrl = await getDownloadURL(storageRef);
             try {
-              await addDoc(collection(db, "fishinglogs"), {
+              console.log("Uploading image:", {
+                fileName: imageFile.name,
+                fileSize: imageFile.size,
+                fileType: imageFile.type,
                 uid: user.uid,
-                catch: {
-                  fish: fish,
-                  size: size,
-                  location: location,
-                  date: date,
-                  imageUrl: imageUrl,
-                  rod: document.getElementById("rod").value,
-                  reel: document.getElementById("reel").value,
-                  line: document.getElementById("line").value,
-                  lure: document.getElementById("lure").value,
-                  memo: "", // メモ欄は空で初期化
-                },
               });
+              const metadata = {
+                contentType: imageFile.type || "image/jpeg",
+                customMetadata: {
+                  uploadedBy: user.uid,
+                  uploadedAt: new Date().toISOString(),
+                },
+              };
+              await uploadBytes(storageRef, imageFile, metadata);
+              imageUrl = await getDownloadURL(storageRef);
+              console.log("Image uploaded successfully:", imageUrl);
+            } catch (uploadErr) {
+              console.error("Storage upload error:", uploadErr);
+              console.error("Error code:", uploadErr.code);
+              console.error("Error message:", uploadErr.message);
+              console.error("Full error:", JSON.stringify(uploadErr, null, 2));
+              alert(
+                "画像アップロードに失敗しました。\nエラー: " +
+                  uploadErr.code +
+                  "\n詳細: " +
+                  uploadErr.message +
+                  "\n\nFirebase Console の Storage → Rules を確認してください。",
+              );
+              return;
+            }
+            try {
+              const memoValue = document.getElementById("memo").value;
+              const catchData = {
+                fish: fish,
+                size: size,
+                weight: document.getElementById("weight").value || "",
+                location: location,
+                date: date,
+                imageUrl: imageUrl,
+                rod: document.getElementById("rod").value,
+                reel: document.getElementById("reel").value,
+                line: document.getElementById("line").value,
+                lure: document.getElementById("lure").value,
+                memo: memoValue,
+              };
+
+              console.log("Saving catch data:", catchData);
+              console.log(
+                "All keys present:",
+                [
+                  "fish",
+                  "size",
+                  "location",
+                  "date",
+                  "imageUrl",
+                  "rod",
+                  "reel",
+                  "line",
+                  "lure",
+                  "memo",
+                ].every((k) => k in catchData),
+              );
+
+              // 海況データが取得されていれば保存
+              if (currentOceanData) {
+                catchData.oceanData = currentOceanData;
+              }
+
+              const docRef = await addDoc(collection(db, "fishinglogs"), {
+                uid: user.uid,
+                catch: catchData,
+              });
+              console.log("Document saved successfully with ID:", docRef.id);
               alert("釣果が保存されました！");
               // フォームをリセット
               catchForm.reset();
+              currentOceanData = null; // 海況データもリセット
             } catch (error) {
               console.error("Error adding document: ", error);
-              alert("釣果の保存に失敗しました");
+              console.error("Error code:", error.code);
+              console.error("Error message:", error.message);
+              alert("釣果の保存に失敗しました: " + error.message);
             }
           }
         });
@@ -452,7 +830,7 @@
           const container = document.querySelector(".site-card.form-card");
           const q = query(
             collection(db, "fishinglogs"),
-            where("uid", "==", uid)
+            where("uid", "==", uid),
           );
           const snaps = await getDocs(q);
           const list = document.createElement("div");
@@ -504,6 +882,757 @@
           }
         });
       }
+
+      // ================== 海況データ連動機能 ==================
+
+      // 釣り場データ（index.htmlから抽出）
+      const fishingLocations = [
+        // 神戸〜明石
+        { name: "垂水", lat: 34.73, lon: 135.03 },
+        { name: "明石港", lat: 34.67, lon: 135.1 },
+        { name: "江崎", lat: 34.69, lon: 135.14 },
+        { name: "魚住", lat: 34.66, lon: 135.21 },
+        { name: "岩屋", lat: 34.78, lon: 135.35 },
+        // 大阪湾
+        { name: "泉南", lat: 34.38, lon: 135.36 },
+        { name: "田尻", lat: 34.33, lon: 135.37 },
+        { name: "泉佐野", lat: 34.37, lon: 135.41 },
+        { name: "友ヶ島", lat: 34.26, lon: 135.44 },
+        // 和歌山
+        { name: "加太", lat: 34.21, lon: 135.36 },
+        { name: "由良", lat: 33.72, lon: 135.15 },
+        { name: "白浜", lat: 33.68, lon: 135.36 },
+        { name: "すさみ", lat: 33.6, lon: 135.55 },
+        { name: "串本", lat: 33.48, lon: 135.76 },
+        // 三重
+        { name: "尾鷲", lat: 34.06, lon: 136.23 },
+        { name: "熊野", lat: 33.9, lon: 136.24 },
+        { name: "鳥羽", lat: 34.48, lon: 136.83 },
+        { name: "志摩", lat: 34.31, lon: 136.82 },
+        // 京丹後〜福井
+        { name: "間人", lat: 35.67, lon: 135.14 },
+        { name: "伊根", lat: 35.68, lon: 135.31 },
+        { name: "舞鶴", lat: 35.48, lon: 135.37 },
+        { name: "小浜", lat: 35.53, lon: 135.76 },
+      ];
+
+      // ドロップダウンを初期化
+      function initLocationSelect() {
+        const select = document.getElementById("locationSelect");
+        fishingLocations.forEach((loc) => {
+          const option = document.createElement("option");
+          option.value = JSON.stringify({ lat: loc.lat, lon: loc.lon });
+          option.textContent = loc.name;
+          select.appendChild(option);
+        });
+      }
+
+      // ドロップダウン初期化を実行
+      initLocationSelect();
+
+      // 地点選択時のイベント
+      document
+        .getElementById("locationSelect")
+        .addEventListener("change", (e) => {
+          if (e.target.value) {
+            const loc = JSON.parse(e.target.value);
+            const selectedName = fishingLocations.find(
+              (l) => l.lat === loc.lat && l.lon === loc.lon,
+            ).name;
+            document.getElementById("location").value = selectedName;
+          }
+        });
+
+      // 海況取得ボタンのイベント
+      document
+        .getElementById("fetchOceanDataBtn")
+        .addEventListener("click", async () => {
+          const selectValue = document.getElementById("locationSelect").value;
+          if (!selectValue) {
+            alert("釣り場を選択してください");
+            return;
+          }
+
+          const loc = JSON.parse(selectValue);
+          const dateInput = document.getElementById("date").value;
+          if (!dateInput) {
+            alert("日付を入力してください");
+            return;
+          }
+
+          try {
+            const [year, month, day] = dateInput.split("-");
+            const dateStr = `${year}-${month}-${day}`;
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(
+              2,
+              "0",
+            )}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+            console.log(
+              `Fetching ocean data for: ${loc.lat}, ${loc.lon} on ${dateStr}`,
+            );
+            await fetchAndDisplayOceanData(loc.lat, loc.lon, dateStr, timeStr);
+          } catch (err) {
+            console.error("Error fetching ocean data:", err);
+            alert("海況データの取得に失敗しました: " + err.message);
+          }
+        });
+
+      // 現在地から最も近い釣り場を探す
+      function findNearestLocation(lat, lon) {
+        let nearest = fishingLocations[0];
+        let minDist = Infinity;
+
+        for (const loc of fishingLocations) {
+          const dlat = loc.lat - lat;
+          const dlon = loc.lon - lon;
+          const dist = Math.sqrt(dlat * dlat + dlon * dlon);
+          if (dist < minDist) {
+            minDist = dist;
+            nearest = loc;
+          }
+        }
+        return nearest;
+      }
+
+      // 海況データを取得して表示
+      async function fetchAndDisplayOceanData(lat, lon, dateStr, timeStr) {
+        const display = document.getElementById("oceanDataDisplay");
+        const displayText = document.getElementById("oceanDataText");
+
+        try {
+          display.style.display = "block";
+          displayText.textContent = "読み込み中...";
+
+          // Open-Meteo Weather APIから気象データ取得
+          const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,wind_direction_10m,pressure_msl,cloud_cover&timezone=Asia/Tokyo`;
+          const weatherRes = await fetch(weatherUrl);
+          const weatherData = await weatherRes.json();
+
+          // Open-Meteo Marine APIから海況データ取得（潮位、波高、水温を含む）
+          const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl,wave_height,wave_period&current=sea_surface_temperature&start_date=${dateStr}&end_date=${dateStr}&timezone=UTC`;
+          const marineRes = await fetch(marineUrl);
+          const marineData = await marineRes.json();
+
+          // 現在時刻のデータを抽出
+          const current = weatherData.current;
+          const temp = current.temperature_2m;
+          const wind = current.wind_speed_10m;
+          const windDir = current.wind_direction_10m;
+          const pressure = current.pressure_msl;
+          const cloud = current.cloud_cover;
+          const waterTemp = marineData.current?.sea_surface_temperature || "-";
+
+          // 潮位、波高を取得（指定時刻に最も近いデータ）
+          let tideHeight = "-";
+          let waveHeight = "-";
+          let wavePeriod = "-";
+          let tideHeightNum = 0;
+
+          if (marineData.hourly && marineData.hourly.time) {
+            const times = marineData.hourly.time;
+            const heights = marineData.hourly.sea_level_height_msl;
+            const waves = marineData.hourly.wave_height;
+            const periods = marineData.hourly.wave_period;
+
+            // 指定時刻に最も近いインデックスを探す
+            const [hour, min] = timeStr.split(":");
+            const targetMs = new Date(`${dateStr}T${timeStr}:00Z`).getTime();
+            let closestIdx = 0;
+            let minDiff = Infinity;
+
+            for (let i = 0; i < times.length; i++) {
+              const diff = Math.abs(new Date(times[i]).getTime() - targetMs);
+              if (diff < minDiff) {
+                minDiff = diff;
+                closestIdx = i;
+              }
+            }
+
+            tideHeightNum = heights[closestIdx] || 0;
+            tideHeight = heights[closestIdx]
+              ? (heights[closestIdx] * 100).toFixed(0) + " cm"
+              : "-";
+            waveHeight = waves[closestIdx]
+              ? waves[closestIdx].toFixed(1) + " m"
+              : "-";
+            wavePeriod = periods[closestIdx]
+              ? periods[closestIdx].toFixed(1) + " s"
+              : "-";
+          }
+
+          // 海況データを構造化データとして保存
+          currentOceanData = {
+            date: dateStr,
+            time: timeStr,
+            location: { lat, lon },
+            temperature: temp,
+            windSpeed: wind,
+            windDirection: windDir,
+            pressure: pressure,
+            cloudCover: cloud,
+            waterTemperature: waterTemp,
+            tideHeight: tideHeightNum,
+            waveHeight: waveHeight.replace(" m", ""),
+            wavePeriod: wavePeriod.replace(" s", ""),
+          };
+
+          // メモ欄に海況データを追加
+          const memoField = document.getElementById("memo");
+          const oceanInfo = `気温:${temp}°C 水温:${waterTemp}°C 風:${wind}m/s(${getWindDirStr(
+            windDir,
+          )}) 気圧:${pressure}hPa 潮位:${tideHeight} 波:${waveHeight} 周期:${wavePeriod}`;
+          memoField.value =
+            (memoField.value ? memoField.value + " / " : "") + oceanInfo;
+
+          // 表示を更新
+          displayText.innerHTML = `
+            <strong>取得済み海況データ (${dateStr} ${timeStr}):</strong><br>
+            気温: ${temp}°C | 水温: ${waterTemp}°C | 風速: ${wind}m/s (${getWindDirStr(
+              windDir,
+            )}) | 気圧: ${pressure}hPa<br>
+            潮位: ${tideHeight} | 波高: ${waveHeight} | 周期: ${wavePeriod}
+          `;
+
+          // 潮位グラフを描画
+          await drawTideGraphForLocation(lat, lon, dateStr, timeStr);
+        } catch (err) {
+          console.error("Ocean data fetch error:", err);
+          displayText.textContent =
+            "海況データ取得に失敗しました: " + err.message;
+        }
+      }
+
+      // 潮位グラフ描画関数
+      async function drawTideGraphForLocation(lat, lon, dateStr, timeStr) {
+        const svg = document.getElementById("tideGraphSvg");
+
+        if (!svg) {
+          console.error("SVG要素が見つかりません");
+          return;
+        }
+
+        try {
+          // Open-Meteo Marine API から1日間の潮位データを取得
+          const api = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl&timezone=Asia/Tokyo&forecast_days=1`;
+
+          console.log("潮位グラフAPIを呼び出し:", api);
+          const response = await fetch(api);
+          if (!response.ok) throw new Error("潮位データ取得エラー");
+
+          const json = await response.json();
+          const tideData = json.hourly.sea_level_height_msl;
+
+          console.log("潮位データ取得成功:", tideData.length, "データポイント");
+
+          if (!tideData || tideData.length === 0) {
+            console.warn("潮位データが空です");
+            return;
+          }
+
+          // グラフパラメータ
+          const width = 340;
+          const height = 160;
+          const padding = { top: 30, right: 15, bottom: 25, left: 35 };
+          const graphWidth = width - padding.left - padding.right;
+          const graphHeight = height - padding.top - padding.bottom;
+
+          // 潮位の最大・最小を計算
+          const minTide = Math.min(...tideData);
+          const maxTide = Math.max(...tideData);
+          const rangeTide = maxTide - minTide || 1;
+
+          console.log(`潮位範囲: ${minTide}m - ${maxTide}m`);
+
+          // SVG初期化
+          svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+          svg.innerHTML = "";
+
+          // 背景グリッド
+          const gridGroup = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "g",
+          );
+          gridGroup.setAttribute("stroke", "#6b5d3f");
+          gridGroup.setAttribute("stroke-width", "0.5");
+
+          for (let i = 0; i <= 4; i++) {
+            const y = padding.top + (graphHeight / 4) * i;
+            const line = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line",
+            );
+            line.setAttribute("x1", padding.left);
+            line.setAttribute("x2", width - padding.right);
+            line.setAttribute("y1", y);
+            line.setAttribute("y2", y);
+            gridGroup.appendChild(line);
+          }
+          svg.appendChild(gridGroup);
+
+          // 潮位曲線を描画
+          let pathData = `M ${padding.left} ${padding.top + graphHeight}`;
+          for (let i = 0; i < tideData.length; i++) {
+            const x = padding.left + (graphWidth / (tideData.length - 1)) * i;
+            const normalizedHeight = (tideData[i] - minTide) / rangeTide;
+            const y =
+              padding.top + graphHeight - normalizedHeight * graphHeight;
+            pathData += ` L ${x} ${y}`;
+          }
+
+          const path = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path",
+          );
+          path.setAttribute("d", pathData);
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "#d4af8c");
+          path.setAttribute("stroke-width", "2");
+          svg.appendChild(path);
+
+          // 登録時刻のマーカーを描画
+          if (dateStr && timeStr) {
+            // APIのタイムスタンプを直接パースして時刻を抽出
+            const apiStartStr = json.hourly.time[0]; // "2025-12-13T00:00"形式
+            const apiStartMatch = apiStartStr.match(/T(\d{2}):(\d{2})/);
+            const apiStartHour = parseInt(apiStartMatch[1], 10);
+            const apiStartMinute = parseInt(apiStartMatch[2], 10);
+            const apiStartHours = apiStartHour + apiStartMinute / 60;
+
+            // 登録時刻を時間値に変換
+            const [hourStr, minuteStr] = timeStr.split(":");
+            const captureHours =
+              parseInt(hourStr, 10) + parseInt(minuteStr, 10) / 60;
+
+            // 時間差を計算
+            let hoursDiff = captureHours - apiStartHours;
+            if (hoursDiff < 0) {
+              hoursDiff += 24;
+            }
+
+            console.log(
+              "マーカー計算 - 登録時刻:",
+              timeStr,
+              "| API開始:",
+              apiStartStr,
+              "| 計算時間差:",
+              hoursDiff,
+              "| データ長:",
+              tideData.length,
+            );
+
+            if (hoursDiff >= 0 && hoursDiff < tideData.length) {
+              const idx = Math.round(hoursDiff);
+              console.log("マーカーインデックス:", idx, "X位置計算...");
+              if (idx >= 0 && idx < tideData.length) {
+                const x =
+                  padding.left + (graphWidth / (tideData.length - 1)) * idx;
+                const normalizedHeight = (tideData[idx] - minTide) / rangeTide;
+                const y =
+                  padding.top + graphHeight - normalizedHeight * graphHeight;
+
+                const circle = document.createElementNS(
+                  "http://www.w3.org/2000/svg",
+                  "circle",
+                );
+                circle.setAttribute("cx", x);
+                circle.setAttribute("cy", y);
+                circle.setAttribute("r", "4");
+                circle.setAttribute("fill", "#ff6f00");
+                circle.setAttribute("stroke", "#fff");
+                circle.setAttribute("stroke-width", "2");
+                svg.appendChild(circle);
+
+                // 時刻ラベルを追加
+                const timeLabel = document.createElementNS(
+                  "http://www.w3.org/2000/svg",
+                  "text",
+                );
+                timeLabel.setAttribute("x", x);
+                timeLabel.setAttribute("y", y - 10);
+                timeLabel.setAttribute("font-size", "10");
+                timeLabel.setAttribute("fill", "#ff6f00");
+                timeLabel.setAttribute("font-weight", "bold");
+                timeLabel.setAttribute("text-anchor", "middle");
+                timeLabel.textContent = timeStr;
+                svg.appendChild(timeLabel);
+              }
+            }
+          }
+
+          // Y軸ラベル
+          const minLabel = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text",
+          );
+          minLabel.setAttribute("x", "2");
+          minLabel.setAttribute("y", padding.top + graphHeight + 4);
+          minLabel.setAttribute("font-size", "10");
+          minLabel.setAttribute("fill", "#a89560");
+          minLabel.setAttribute("text-anchor", "start");
+          minLabel.textContent = `${minTide.toFixed(1)}m`;
+          svg.appendChild(minLabel);
+
+          const maxLabel = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text",
+          );
+          maxLabel.setAttribute("x", "2");
+          maxLabel.setAttribute("y", padding.top + 12);
+          maxLabel.setAttribute("font-size", "10");
+          maxLabel.setAttribute("fill", "#a89560");
+          maxLabel.setAttribute("text-anchor", "start");
+          maxLabel.textContent = `${maxTide.toFixed(1)}m`;
+          svg.appendChild(maxLabel);
+
+          // X軸ラベル（開始・終了）
+          const startLabel = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text",
+          );
+          startLabel.setAttribute("x", padding.left);
+          startLabel.setAttribute("y", height - 8);
+          startLabel.setAttribute("font-size", "11");
+          startLabel.setAttribute("fill", "#a89560");
+          startLabel.setAttribute("text-anchor", "middle");
+          startLabel.textContent = "0h";
+          svg.appendChild(startLabel);
+
+          const endLabel = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text",
+          );
+          endLabel.setAttribute("x", width - padding.right);
+          endLabel.setAttribute("y", height - 8);
+          endLabel.setAttribute("font-size", "11");
+          endLabel.setAttribute("fill", "#a89560");
+          endLabel.setAttribute("text-anchor", "middle");
+          endLabel.textContent = "24h";
+          svg.appendChild(endLabel);
+
+          console.log("潮位グラフ描画完了");
+        } catch (error) {
+          console.error("潮位グラフ描画エラー:", error);
+        }
+      }
+
+      // 風向を日本語に変換
+      function getWindDirStr(degree) {
+        const dirs = [
+          "北",
+          "北北東",
+          "北東",
+          "東北東",
+          "東",
+          "東南東",
+          "南東",
+          "南南東",
+          "南",
+          "南南西",
+          "南西",
+          "西南西",
+          "西",
+          "西北西",
+          "北西",
+          "北北西",
+        ];
+        const idx = Math.round(degree / 22.5) % 16;
+        return dirs[idx] || "不定";
+      }
+
+      // 現在地から即座登録
+      document
+        .getElementById("quickCapture")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          if (!navigator.geolocation) {
+            alert("このブラウザは位置情報取得に対応していません");
+            return;
+          }
+
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+
+              // 最も近い釣り場を特定
+              const nearestLoc = findNearestLocation(lat, lon);
+              document.getElementById("location").value = nearestLoc.name;
+
+              // 現在時刻を入力
+              const now = new Date();
+              const dateStr = now.toISOString().split("T")[0];
+              const timeStr = `${String(now.getHours()).padStart(
+                2,
+                "0",
+              )}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+              document.getElementById("date").value = dateStr;
+
+              // 海況データ取得
+              await fetchAndDisplayOceanData(
+                nearestLoc.lat,
+                nearestLoc.lon,
+                dateStr,
+                timeStr,
+              );
+            },
+            (error) => {
+              alert("位置情報の取得に失敗しました: " + error.message);
+            },
+          );
+        });
+
+      // 地点と時刻を選んで取得
+      document
+        .getElementById("selectCapture")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // モーダルダイアログを作成
+          const modal = document.createElement("div");
+          modal.style.cssText = `
+          position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+          background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
+          z-index: 9999;
+        `;
+
+          const content = document.createElement("div");
+          content.style.cssText = `
+          background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95));
+          padding: 24px; border-radius: 2px; max-width: 400px;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+          border: 2px solid #3a4d6b;
+        `;
+
+          content.innerHTML = `
+          <h3 style="margin-top: 0; color: #c4d8f0;">海況データを取得</h3>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; margin-bottom: 6px; color: #a89560; font-weight: 500;">釣り場:</label>
+            <select id="modalLocation" style="width: 100%; padding: 8px; border: 1px solid #506080; border-radius: 2px; background: rgba(5, 4, 4, 0.6); color: #c4d8f0;">
+              ${fishingLocations
+                .map(
+                  (loc) =>
+                    `<option value="${loc.lat},${loc.lon}">${loc.name}</option>`,
+                )
+                .join("")}
+            </select>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; margin-bottom: 6px; color: #a89560; font-weight: 500;">日付:</label>
+            <input type="date" id="modalDate" style="width: 100%; padding: 8px; border: 1px solid #506080; border-radius: 2px; background: rgba(5, 4, 4, 0.6); color: #c4d8f0;">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; margin-bottom: 6px; color: #a89560; font-weight: 500;">時刻 (HH:MM):</label>
+            <input type="time" id="modalTime" style="width: 100%; padding: 8px; border: 1px solid #506080; border-radius: 2px; background: rgba(5, 4, 4, 0.6); color: #c4d8f0;">
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="modalSubmit" class="btn" style="flex: 1;">取得</button>
+            <button id="modalCancel" class="btn secondary" style="flex: 1;">キャンセル</button>
+          </div>
+        `;
+
+          modal.appendChild(content);
+          document.body.appendChild(modal);
+
+          // デフォルト値を設定
+          const now = new Date();
+          document.getElementById("modalDate").value = now
+            .toISOString()
+            .split("T")[0];
+          document.getElementById("modalTime").value = `${String(
+            now.getHours(),
+          ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+          // 取得ボタン
+          document
+            .getElementById("modalSubmit")
+            .addEventListener("click", async () => {
+              const locValue = document.getElementById("modalLocation").value;
+              const dateStr = document.getElementById("modalDate").value;
+              const timeStr = document.getElementById("modalTime").value;
+
+              if (!locValue || !dateStr || !timeStr) {
+                alert("すべて入力してください");
+                return;
+              }
+
+              const [lat, lon] = locValue.split(",").map(Number);
+              const locationName =
+                fishingLocations.find((l) => l.lat === lat && l.lon === lon)
+                  ?.name || "";
+
+              document.getElementById("location").value = locationName;
+              document.getElementById("date").value = dateStr;
+
+              await fetchAndDisplayOceanData(lat, lon, dateStr, timeStr);
+
+              modal.remove();
+            });
+
+          // キャンセルボタン
+          document
+            .getElementById("modalCancel")
+            .addEventListener("click", () => {
+              modal.remove();
+            });
+        });
+
+      // ================== Googleマップ統合 ==================
+
+      let googleMap = null;
+      let mapMarker = null;
+
+      // Googleマップを初期化
+      async function initGoogleMap() {
+        try {
+          const response = await fetch("/api/google-maps-key");
+          if (!response.ok) {
+            console.warn(
+              "Google Maps API key not available, map functionality disabled",
+            );
+            return;
+          }
+          const { apiKey } = await response.json();
+
+          return new Promise((resolve) => {
+            window.initGoogleMapsCallback = () => {
+              const container = document.getElementById("oceanMapContainer");
+              googleMap = new google.maps.Map(container, {
+                zoom: 10,
+                center: { lat: 34.73, lng: 135.03 }, // 垂水をデフォルト中心
+                mapTypeId: "roadmap",
+                styles: [
+                  { elementType: "geometry", stylers: [{ color: "#1a1a1a" }] },
+                  {
+                    elementType: "labels.text.stroke",
+                    stylers: [{ color: "#1a1a1a" }],
+                  },
+                  {
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#8099b8" }],
+                  },
+                  {
+                    featureType: "water",
+                    elementType: "geometry",
+                    stylers: [{ color: "#0b1b2f" }],
+                  },
+                  {
+                    featureType: "road",
+                    elementType: "geometry",
+                    stylers: [{ color: "#2a3a4a" }],
+                  },
+                ],
+              });
+
+              // クリックで地点を選択
+              googleMap.addListener("click", async (event) => {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+
+                // マーカーを設置
+                if (mapMarker) {
+                  mapMarker.setMap(null);
+                }
+                mapMarker = new google.maps.Marker({
+                  position: { lat, lng },
+                  map: googleMap,
+                  title: `${lat.toFixed(3)}, ${lng.toFixed(3)}`,
+                });
+
+                // 緯度経度を表示
+                const nearestLoc = findNearestLocation(lat, lng);
+                document.getElementById("location").value =
+                  `${nearestLoc.name} (${lat.toFixed(3)}, ${lng.toFixed(3)})`;
+
+                // 現在日時を入力
+                const now = new Date();
+                const dateStr = now.toISOString().split("T")[0];
+                const timeStr = `${String(now.getHours()).padStart(
+                  2,
+                  "0",
+                )}:${String(now.getMinutes()).padStart(2, "0")}`;
+                document.getElementById("date").value = dateStr;
+
+                // 海況データを取得
+                await fetchAndDisplayOceanData(lat, lng, dateStr, timeStr);
+              });
+
+              resolve(googleMap);
+            };
+
+            const script = document.createElement("script");
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=maps,marker&language=ja&loading=async&callback=initGoogleMapsCallback`;
+            script.async = true;
+            document.head.appendChild(script);
+          });
+        } catch (error) {
+          console.error("Google Maps initialization failed:", error);
+        }
+      }
+
+      // ページ読み込み時にマップを初期化
+      document.addEventListener("DOMContentLoaded", async () => {
+        await initGoogleMap();
+
+        // ocean-checkerからの遷移データを処理
+        const oceanDataStr = sessionStorage.getItem("oceanData");
+        if (oceanDataStr) {
+          try {
+            const oceanData = JSON.parse(oceanDataStr);
+            sessionStorage.removeItem("oceanData"); // 一度限り使用
+
+            // フォームに自動反映
+            if (oceanData.location) {
+              const nearestLoc = findNearestLocation(
+                oceanData.location.lat,
+                oceanData.location.lng,
+              );
+              document.getElementById("location").value = nearestLoc.name;
+
+              // マップの中心をそこに移動
+              if (googleMap) {
+                googleMap.setCenter({
+                  lat: oceanData.location.lat,
+                  lng: oceanData.location.lng,
+                });
+                if (mapMarker) mapMarker.setMap(null);
+                mapMarker = new google.maps.Marker({
+                  position: {
+                    lat: oceanData.location.lat,
+                    lng: oceanData.location.lng,
+                  },
+                  map: googleMap,
+                });
+              }
+            }
+
+            if (oceanData.date) {
+              document.getElementById("date").value = oceanData.date;
+            }
+
+            // メモフィールドに海況情報を追加
+            const oceanInfo = `気温:${oceanData.temperature}°C 水温:${
+              oceanData.waterTemperature
+            }°C 風:${oceanData.windSpeed}m/s(${getWindDirStr(
+              oceanData.windDirection,
+            )}) 気圧:${oceanData.pressure}hPa 潮位:${
+              oceanData.tideHeight
+                ? (oceanData.tideHeight * 100).toFixed(0) + " cm"
+                : "-"
+            } 波:${oceanData.waveHeight} 周期:${oceanData.wavePeriod}`;
+
+            const memoField = document.getElementById("memo");
+            memoField.value = oceanInfo;
+
+            currentOceanData = oceanData;
+          } catch (error) {
+            console.error("Failed to restore ocean data:", error);
+          }
+        }
+      });
     </script>
   </body>
 </html>

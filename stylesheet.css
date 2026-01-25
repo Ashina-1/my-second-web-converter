@@ -13,12 +13,6 @@ a {
   text-decoration: none;
 }
 
-.container {
-  width: 100%;
-  padding: 0 15px;
-  margin: 0 auto;
-}
-
 .top-wrapper {
   padding: 180px 0 100px 0;
   /* placeholder hero background (gradient) to replace missing top.png */
@@ -30,28 +24,6 @@ a {
   background-size: cover;
   color: white;
   text-align: center;
-}
-
-/* Hamburger bar animation (target separate path elements inside svg.hamburger) */
-.menu-icon .hamburger .bar {
-  transition: transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 200ms ease;
-  transform-origin: 50% 50%;
-}
-.menu-icon .hamburger .bar1 {
-  transform-origin: 6px 6px;
-}
-.menu-icon .hamburger .bar3 {
-  transform-origin: 18px 18px;
-}
-.menu-icon.open .hamburger .bar1 {
-  transform: translateY(6px) rotate(45deg);
-}
-.menu-icon.open .hamburger .bar2 {
-  opacity: 0;
-  transform: scaleX(0.6);
-}
-.menu-icon.open .hamburger .bar3 {
-  transform: translateY(-6px) rotate(-45deg);
 }
 
 /* Catch item: show image left + details right on wide screens */
@@ -282,6 +254,14 @@ header {
   align-items: center;
 }
 
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -289,7 +269,7 @@ header {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 0px;
 }
 
 .logo {
@@ -325,6 +305,15 @@ header {
   transform: translateY(-1px);
 }
 
+/* Prevent hover effects on menu icon */
+.menu-icon:hover,
+button.menu-icon:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  transform: none !important;
+  transform: translateY(-50%) !important;
+}
+
 /* menu icon (hamburger) - hidden on desktop, shown on small screens */
 .menu-icon {
   display: none;
@@ -333,6 +322,12 @@ header {
   color: white;
   padding: 8px;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-icon:hover {
+  background: transparent !important;
+  transform: none !important;
 }
 
 /* Tools dropdown inside header */
@@ -526,24 +521,27 @@ footer {
   padding-bottom: 20px;
 }
 
-.menu-icon {
-  color: white;
-  display: none;
-  position: absolute;
-  top: 50%;
-  right: 18px;
-  transform: translateY(-50%);
-  z-index: 20;
-  font-size: 1.6em;
-  padding: 8px 10px;
-  background: transparent;
-  border-radius: 8px;
-}
+/* Menu icon positioned version - overrides for mobile */
+@media all and (max-width: 750px) {
+  .menu-icon {
+    color: white;
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    z-index: 20;
+    font-size: 1.6em;
+    padding: 8px 10px;
+    background: transparent;
+    border-radius: 8px;
+  }
 
-/* menu icon animated state */
-.menu-icon.open {
-  transform: translateY(-50%) rotate(90deg) scale(0.98);
-  transition: transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  .menu-icon:hover,
+  button.menu-icon:hover {
+    background: transparent !important;
+    transform: translateY(-50%) !important;
+  }
 }
 
 /* subtle header touch targets */
@@ -846,5 +844,122 @@ button:hover {
 @media (max-width: 700px) {
   #catchForm .form-row {
     flex-direction: column;
+  }
+}
+
+/* 満潮・干潮情報セクション */
+.tide-extremes-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #cef4ff 100%);
+  border-radius: 12px;
+  border-left: 4px solid #0284c7;
+}
+
+.tide-extremes-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.tide-extremes-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.tide-extremes-header {
+  font-weight: 700;
+  font-size: 16px;
+  color: #0369a1;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #06b6d4;
+}
+
+.tide-extremes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tide-extremes-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  border-left: 3px solid #06b6d4;
+}
+
+.tide-time {
+  font-weight: 600;
+  color: #0369a1;
+  min-width: 70px;
+}
+
+.tide-height {
+  font-weight: 500;
+  color: #475569;
+  text-align: right;
+}
+
+/* 7日表示タブ */
+.tide-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tide-tab {
+  padding: 8px 14px;
+  border: 2px solid #d1e7f0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0369a1;
+  transition: all 200ms ease;
+}
+
+.tide-tab:hover {
+  border-color: #06b6d4;
+  background: #f0f9fc;
+}
+
+.tide-tab.active {
+  border-color: #0284c7;
+  background: #0284c7;
+  color: white;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+@media (max-width: 700px) {
+  #catchForm .form-row {
+    flex-direction: column;
+  }
+
+  .tide-extremes-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tide-extremes-item {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .tide-tabs {
+    gap: 6px;
+  }
+
+  .tide-tab {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }

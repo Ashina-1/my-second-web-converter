@@ -2,16 +2,247 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>PEライン → リーダー号数変換ツール （タナトル4専用）</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="stylesheet.css" />
+    <title>PEライン → リーダー変換ツール - AbyssAtlas</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="stylesheet-darksoul.css" />
+    <style>
+      /* タナトル4変換ツール専用スタイル */
+      body {
+        background: #050404;
+        background-image: 
+          radial-gradient(ellipse at 50% 0%, rgba(100, 150, 200, 0.05) 0%, transparent 50%),
+          linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%);
+      }
+
+      h2 {
+        color: #c4d8f0;
+        text-shadow: 0 0 20px rgba(196, 216, 240, 0.6);
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+      }
+
+      .top-wrapper p {
+        color: #a89560 !important;
+      }
+
+      .card {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95));
+        border: 2px solid #3a4d6b;
+        border-radius: 4px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+      }
+
+      .card label {
+        display: block;
+        color: #a89560;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .card input {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(5, 4, 4, 0.6);
+        border: 1px solid #506080;
+        color: #c4d8f0;
+        border-radius: 2px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      .card input:focus {
+        outline: none;
+        border-color: #8099b8;
+        box-shadow: 0 0 10px rgba(128, 153, 184, 0.3);
+      }
+
+      .card button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 2px;
+        border: 2px solid transparent;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      #convertBtn {
+        background: linear-gradient(135deg, #6b8fb0, #8099b8);
+        color: white;
+        border-color: #c4d8f0;
+      }
+
+      #convertBtn:hover {
+        background: linear-gradient(135deg, #8099b8, #a0afc8);
+        box-shadow: 0 0 20px rgba(196, 216, 240, 0.4);
+      }
+
+      #clearBtn {
+        background: rgba(0, 0, 0, 0.3);
+        color: #8099b8;
+        border-color: #506080;
+      }
+
+      #clearBtn:hover {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: #8099b8;
+        color: #c4d8f0;
+      }
+
+      #result {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-radius: 2px;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        min-height: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      #result:not(:empty) {
+        background: rgba(77, 184, 255, 0.1);
+        color: #4db8ff;
+        border-left: 4px solid #4db8ff;
+        padding-left: 1rem;
+      }
+
+      #result a {
+        color: #6bb3e8;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border: 1px solid #6bb3e8;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-top: 0.5rem;
+      }
+
+      #result a:hover {
+        background: rgba(107, 179, 232, 0.2);
+        color: #c4d8f0;
+        border-color: #c4d8f0;
+      }
+
+      footer {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+        padding: 2rem 1rem;
+        text-align: center;
+        color: #8099b8;
+      }
+
+      @media (max-width: 750px) {
+        .card {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.3rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <header>
       <div class="container">
         <div class="header-left">
           <a class="logo" href="index.html" aria-label="ホーム">
-            <svg width="40" height="28" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="12" r="1" fill="currentColor"/></svg>
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <defs>
+                <linearGradient
+                  id="abyss-logo-tanatoru"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1a2840; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #2a3d5b; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #050404; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="metalGrad-logo-tanatoru"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #8099b8; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #506080; stop-opacity: 0.9"
+                  />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="50,20 65,70 50,88 35,70"
+                fill="url(#metalGrad-logo-tanatoru)"
+                stroke="#c4d8f0"
+                stroke-width="1.5"
+              />
+              <polygon
+                points="50,25 60,65 50,80 40,65"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="0.8"
+                opacity="0.5"
+              />
+              <path
+                d="M20 50 Q50 40 80 50 Q50 55 20 50"
+                stroke="#8099b8"
+                stroke-width="1.5"
+                fill="none"
+                opacity="0.6"
+              />
+              <path
+                d="M15 60 Q50 50 85 60 Q50 65 15 60"
+                stroke="#8099b8"
+                stroke-width="1"
+                fill="none"
+                opacity="0.4"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="#8099b8"
+                stroke-width="0.5"
+                opacity="0.3"
+              />
+            </svg>
           </a>
         </div>
         <div class="header-right">
@@ -22,7 +253,6 @@
             <button class="tools-btn" aria-haspopup="true" aria-expanded="false">ツール ▾</button>
             <div class="submenu" role="menu">
               <a role="menuitem" href="pe-converter.html">PE変換</a>
-              <a role="menuitem" href="pe(tanatoru4)-converter.html">タナトル4</a>
               <a role="menuitem" href="index.html">その他</a>
             </div>
           </div>
@@ -41,97 +271,115 @@
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill="#4fc3f7"
+            fill="#8b7500"
             fill-opacity="0.5"
             d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
           ></path>
         </svg>
       </div>
-      <h2>タナトル４ → リーダー変換ツール</h2>
-      <p style="color:#fff;text-align:center;max-width:720px;margin:6px auto 18px;">タナトル4 の目安に合わせた変換を行います。<br>タナトル4の号数を入力して計算してください。<br></p>
+      <h2>PEライン → リーダー変換ツール</h2>
+      <p style="color:#fff;text-align:center;max-width:720px;margin:6px auto 18px;">PE号数からリーダー（lb）を計算します。タナトル4の公式データまたは一般的な計算から選択できます。<br></p>
 
     <section class="card">
+      <label for="system">PEラインシステムを選択</label>
+      <select id="system" style="width: 100%; padding: 0.75rem; background: rgba(5, 4, 4, 0.6); border: 1px solid #506080; color: #c4d8f0; border-radius: 2px; font-size: 1rem; margin-bottom: 1rem;">
+        <option value="tanatoru4">タナトル4</option>
+        <option value="general">一般的な計算（PE号数×16≒lb）</option>
+      </select>
+
       <label for="pe">号数を入力してください</label>
       <input type="number" id="pe" step="0.1" placeholder="例: 1.5" />
       <div
         style="display: flex; gap: 12px; margin-top: 12px; align-items: center"
       >
-        <button id="convertBtn" class="btn">計算する</button>
-        <button id="clearBtn" class="btn secondary">クリア</button>
+        <button id="convertBtn">計算する</button>
+        <button id="clearBtn">クリア</button>
       </div>
-      <p
-        id="result"
-        style="margin-top: 12px; color: #045; font-weight: 600"
-      ></p>
+      <div id="result"></div>
     </section>
 
-    <!-- 外部JS読み込み -->
-    <script src="Tanatoru4-script.js"></script>
+    <footer>
+      <p style="color:#dfe7ef;text-align:center;margin-top:28px">&copy; 2025 AbyssAtlas</p>
+    </footer>
 
-    <!-- ホームへ戻るボタン -->
-    <button
-      id="homeBtn"
-      class="home-btn"
-      title="ホームへ戻る"
-      aria-label="ホームへ戻る"
-    >
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="M3 10.5L12 4l9 6.5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M5 10.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
-
+ 
     <!-- page styles moved to stylesheet.css -->
 
     <script>
-      document.getElementById("homeBtn").addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
-      // If Tanatoru4-script exposes a convert function, call it; otherwise do a simple fallback
+      // タナトル4の公式データ
+      const tanatoru4Data = [
+        { pe: 0.6, peKg: 6.4, leaderNumber: 3.5, leaderKg: 6.4, leaderLb: 14 },
+        { pe: 0.8, peKg: 8.1, leaderNumber: 4, leaderKg: 7, leaderLb: 16 },
+        { pe: 1.0, peKg: 9.1, leaderNumber: 5, leaderKg: 9, leaderLb: 20 },
+        { pe: 1.5, peKg: 13.6, leaderNumber: 8, leaderKg: 13, leaderLb: 30 },
+        { pe: 2.0, peKg: 15.9, leaderNumber: 10, leaderKg: 16, leaderLb: 40 },
+        { pe: 3.0, peKg: 22.5, leaderNumber: 14, leaderKg: 22, leaderLb: 55 },
+        { pe: 4.0, peKg: 30.5, leaderNumber: 20, leaderKg: 30, leaderLb: 70 },
+        { pe: 5.0, peKg: 36.3, leaderNumber: 25, leaderKg: 35, leaderLb: 80 },
+      ];
+
+      const homeBtn = document.getElementById("homeBtn");
+      if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+      }
+
       document.getElementById("convertBtn").addEventListener("click", () => {
-        const pe = parseFloat(document.getElementById("pe").value);
+        const system = document.getElementById("system").value;
+        const peNum = parseFloat(document.getElementById("pe").value);
         const out = document.getElementById("result");
-        if (isNaN(pe) || pe <= 0) {
-          out.textContent = "正しい値を入力してください";
+        
+        if (isNaN(peNum) || peNum <= 0) {
+          out.innerHTML = "正しい値を入力してください";
           return;
         }
-        if (typeof window.tanatoruConvert === "function") {
-          try {
-            out.textContent =
-              window.tanatoruConvert(pe) || "計算結果を取得できませんでした";
-          } catch (e) {
-            console.error(e);
-            out.textContent = "計算中にエラーが発生しました";
+
+        if (system === "tanatoru4") {
+          // タナトル4のデータから完全一致を探す
+          const exactMatch = tanatoru4Data.find(d => d.pe === peNum);
+          
+          if (!exactMatch) {
+            const availableNumbers = tanatoru4Data.map(d => d.pe).join("、");
+            out.innerHTML = `${peNum}号はデータに登録されていません<br><small style="color: #8099b8;">対応: ${availableNumbers}号</small>`;
+            return;
           }
+          
+          const leaderNum = exactMatch.leaderNumber;
+          const leaderKg = exactMatch.leaderKg;
+          const leaderLb = exactMatch.leaderLb;
+          const peKg = exactMatch.peKg;
+          const peLb = Math.round(peKg * 2.20462 * 10) / 10;
+          
+          // Amazonの検索リンク
+          const amazonUrl = `https://www.amazon.co.jp/s?k=フロロカーボン${leaderNum}号 リーダー`;
+          
+          out.innerHTML = `
+            <div>
+              <div>PE強度：${peKg} kg ≒ ${peLb} lb</div>
+              <div style="font-size: 0.9rem; color: #8099b8; margin: 0.5rem 0;">推奨リーダー：${leaderNum}号（${leaderKg} kg ≒ ${leaderLb} lb）</div>
+              <a href="${amazonUrl}" target="_blank" rel="noopener noreferrer">Amazon で検索</a>
+            </div>
+          `;
         } else {
-          const lb = Math.round(pe * 20 * 10) / 10;
-          out.textContent = `推奨リーダー：約 ${lb} lb`;
+          // 一般的な計算：PE号数×16 ≒ lb
+          const lb = peNum * 16;
+          const leaderNumber = Math.round(lb / 4 * 10) / 10;
+          const amazonUrl = `https://www.amazon.co.jp/s?k=フロロカーボン${leaderNumber}号 リーダー`;
+          
+          out.innerHTML = `
+            <div>
+              <div>推奨リーダー：約 ${lb} lb</div>
+              <div style="font-size: 0.9rem; color: #8099b8; margin: 0.5rem 0;">（${leaderNumber}号相当）</div>
+              <a href="${amazonUrl}" target="_blank" rel="noopener noreferrer">Amazon で検索</a>
+            </div>
+          `;
         }
       });
+
       document.getElementById("clearBtn").addEventListener("click", () => {
         document.getElementById("pe").value = "";
-        document.getElementById("result").textContent = "";
+        document.getElementById("result").innerHTML = "";
       });
     </script>
     <script src="scripts/header.js"></script>

@@ -4,6 +4,35 @@
 
 このリポジトリは小さな釣果記録の静的ウェブアプリです。Firebase (Auth/Firestore/Storage) を使っています。
 
+**新機能:** 🌊 **海況チェッカー** - Google マップで選んだ地点からリアルタイムの海況情報（気温・風速・波高推定）を取得できます。
+
+## 🌊 海況チェッカーについて
+
+Google マップとリアルタイム API 連携により、釣り場の海況データを一瞬で取得できます。
+
+### 主な機能
+
+- **Google マップ連携** - 任意の地点をクリックして選択
+- **有名釣り場ボタン** - 日本の有名釣り場をワンクリック選択
+- **リアルタイム気象データ** - 気温、風速、湿度、波高推定
+- **釣り推奨度判定** - 風速に基づく釣り適性評価
+- **釣行記録連携** - 海況データを釣果記録に自動入力
+
+### クイックセットアップ
+
+1. **Google Maps API キーを取得** → [セットアップガイド](OCEAN_CHECKER_SETUP.md#step-1-google-maps-api-キーの取得) を参照
+2. **OpenWeatherMap API キーを取得** → [セットアップガイド](OCEAN_CHECKER_SETUP.md#step-2-openweathermap-api-キーの取得) を参照
+3. **API キーを設定** → 詳細は [OCEAN_CHECKER_SETUP.md](OCEAN_CHECKER_SETUP.md) を参照
+
+### 使用方法
+
+- **ツール > 🌊 海況チェッカー** からアクセス
+- または直接 `ocean-checker.html` を開く
+
+詳細は [OCEAN_CHECKER_SETUP.md](OCEAN_CHECKER_SETUP.md) を参照してください。
+
+---
+
 ## shortId（短い共有 ID）について
 
 - 各ユーザーには共有用に 10 桁の数字 (例: 0123456789) の `shortId` を付与できます。
@@ -40,6 +69,12 @@ npx http-server -c-1 .
 - `firebase-init.js` から Firestore のよく使う関数を再エクスポートするようにしました（`collection`, `getDocs`, `addDoc`, `doc`, `setDoc`, `updateDoc`, `deleteDoc`, `query`, `where`, `serverTimestamp`, `arrayUnion`, `arrayRemove`）。
 - `profile.html` にページ内ログインボタンを追加し、popup→redirect のフォールバックを追加しました（クロスブラウザの安定化）。
 - `fishing-log2.html` には既に redirect-result の処理を追加済みです。
+- **🌊 新機能: 海況チェッカーシステムを追加**
+  - `ocean-checker.html` - インタラクティブなマップベースの海況チェッカー
+  - `ocean-weather.js` - OpenWeatherMap API 統合による気象・波浪データ取得
+  - `google-maps-integration.js` - Google Maps API 統合
+  - `ocean-integration.js` - 釣果記録との連携スクリプト
+  - `OCEAN_CHECKER_SETUP.md` - セットアップと使用方法の完全ガイド
 
 ---
 

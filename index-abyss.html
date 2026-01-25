@@ -12,10 +12,10 @@
     <style>
       /* 深淵王風デザイン - グローバルスタイル（シルバー/プラチナ、冷徹な輝き） */
       html, body {
-        background: #050404 !important;
+        background: #050404;
         background-image: 
           radial-gradient(ellipse at 50% 0%, rgba(100, 150, 200, 0.05) 0%, transparent 50%),
-          linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%) !important;
+          linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%);
       }
 
       header {
@@ -293,7 +293,7 @@
         }
 
         .top-wrapper h2 {
-          font-size: 30px;
+          font-size: 20px;
           margin: 10px 0;
         }
 
@@ -381,57 +381,21 @@
         .weather-location label {
           font-size: 13px;
           min-width: fit-content;
-          color: #c4d8f0;
-          font-weight: 600;
-          text-shadow: 0 0 8px rgba(128, 153, 184, 0.3);
         }
 
         .weather-location select {
           flex: 1;
           min-width: 150px;
-          padding: 8px 12px;
+          padding: 6px 8px;
           font-size: 13px;
-          border-radius: 2px;
-          border: 2px solid #506080;
-          background: linear-gradient(135deg, rgba(5, 4, 4, 0.8), rgba(15, 25, 45, 0.8));
-          color: #c4d8f0;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 0 8px rgba(128, 153, 184, 0.05);
-          transition: all 0.3s ease;
-        }
-
-        .weather-location select:hover {
-          border-color: #8099b8;
-          box-shadow: 0 4px 16px rgba(128, 153, 184, 0.2), inset 0 0 8px rgba(128, 153, 184, 0.08);
-        }
-
-        .weather-location select:focus {
-          outline: none;
-          border-color: #c4d8f0;
-          box-shadow: 0 0 20px rgba(196, 216, 240, 0.3);
-        }
-
-        .weather-location select option {
-          background: #1a1413;
-          color: #c4d8f0;
+          border-radius: 4px;
+          border: 1px solid #ccc;
         }
 
         #useCurrentLocationBtn {
-          padding: 8px 12px !important;
+          padding: 6px 10px !important;
           font-size: 12px !important;
           white-space: nowrap;
-          background: linear-gradient(135deg, #506080, #6b8fb0) !important;
-          color: #c4d8f0 !important;
-          border: 2px solid #8099b8 !important;
-          border-radius: 2px !important;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3) !important;
-          cursor: pointer !important;
-          transition: all 0.3s ease !important;
-          font-weight: 600 !important;
-        }
-
-        #useCurrentLocationBtn:hover {
-          border-color: #c4d8f0 !important;
-          box-shadow: 0 4px 16px rgba(128, 153, 184, 0.4), 0 0 20px rgba(180, 200, 220, 0.2) !important;
         }
 
         /* 潮汐情報表示の最適化 */
@@ -610,26 +574,13 @@
           align-items: stretch;
         }
 
-        .weather-location label {
-          color: #c4d8f0;
-          text-shadow: 0 0 8px rgba(128, 153, 184, 0.3);
-        }
-
         .weather-location select {
           width: 100%;
           min-width: unset;
-          border-color: #506080;
-          background: linear-gradient(135deg, rgba(5, 4, 4, 0.8), rgba(15, 25, 45, 0.8));
-          color: #c4d8f0;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 0 8px rgba(128, 153, 184, 0.05);
         }
 
         #useCurrentLocationBtn {
           width: 100%;
-          background: linear-gradient(135deg, #506080, #6b8fb0) !important;
-          color: #c4d8f0 !important;
-          border-color: #8099b8 !important;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3) !important;
         }
 
         .tide-tabs {
@@ -688,24 +639,13 @@
           flex-wrap: wrap;
         }
 
-        .weather-location label {
-          color: #c4d8f0;
-          text-shadow: 0 0 8px rgba(128, 153, 184, 0.3);
-        }
-
         .weather-location select {
           flex: 0 1 calc(50% - 5px);
           min-width: 180px;
-          border-color: #506080;
-          background: linear-gradient(135deg, rgba(5, 4, 4, 0.8), rgba(15, 25, 45, 0.8));
-          color: #c4d8f0;
         }
 
         #useCurrentLocationBtn {
           flex: 0 1 auto;
-          background: linear-gradient(135deg, #506080, #6b8fb0) !important;
-          color: #c4d8f0 !important;
-          border-color: #8099b8 !important;
         }
 
         .tide-graph {
@@ -754,90 +694,21 @@
           <a class="logo" href="index.html" aria-label="ホーム">
             <svg
               width="40"
-              height="40"
-              viewBox="0 0 100 100"
+              height="28"
+              viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               focusable="false"
             >
-              <defs>
-                <linearGradient
-                  id="abyss-logo-main"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style="stop-color: #1a2840; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="50%"
-                    style="stop-color: #2a3d5b; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="100%"
-                    style="stop-color: #050404; stop-opacity: 1"
-                  />
-                </linearGradient>
-                <linearGradient
-                  id="metalGrad-logo-main"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
-                  />
-                  <stop
-                    offset="50%"
-                    style="stop-color: #8099b8; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="100%"
-                    style="stop-color: #506080; stop-opacity: 0.9"
-                  />
-                </linearGradient>
-              </defs>
-              <polygon
-                points="50,20 65,70 50,88 35,70"
-                fill="url(#metalGrad-logo-main)"
-                stroke="#c4d8f0"
-                stroke-width="1.5"
-              />
-              <polygon
-                points="50,25 60,65 50,80 40,65"
-                fill="none"
-                stroke="#ffffff"
-                stroke-width="0.8"
-                opacity="0.5"
-              />
               <path
-                d="M20 50 Q50 40 80 50 Q50 55 20 50"
-                stroke="#8099b8"
-                stroke-width="1.5"
+                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
                 fill="none"
-                opacity="0.6"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
-              <path
-                d="M15 60 Q50 50 85 60 Q50 65 15 60"
-                stroke="#8099b8"
-                stroke-width="1"
-                fill="none"
-                opacity="0.4"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="#8099b8"
-                stroke-width="0.5"
-                opacity="0.3"
-              />
+              <circle cx="7" cy="12" r="1" fill="currentColor" />
             </svg>
           </a>
         </div>
@@ -854,8 +725,10 @@
               ツール ▾
             </button>
             <div class="submenu" role="menu">
-              <a role="menuitem" href="ocean-checker.html">🌊 海況チェッカー</a>
               <a role="menuitem" href="pe-converter.html">PE変換</a>
+              <a role="menuitem" href="pe(tanatoru4)-converter.html"
+                >タナトル4</a
+              >
               <a role="menuitem" href="index.html">その他</a>
             </div>
           </div>
@@ -947,11 +820,11 @@
             <div id="tideExtremesContainer" class="tide-extremes-section" style="display: none;">
               <div class="tide-extremes-row">
                 <div class="tide-extremes-column">
-                  <div class="tide-extremes-header">満潮（高潮）</div>
+                  <div class="tide-extremes-header">🌊 満潮（高潮）</div>
                   <div id="highTidesInfo" class="tide-extremes-list"></div>
                 </div>
                 <div class="tide-extremes-column">
-                  <div class="tide-extremes-header">干潮（低潮）</div>
+                  <div class="tide-extremes-header">⬇️ 干潮（低潮）</div>
                   <div id="lowTidesInfo" class="tide-extremes-list"></div>
                 </div>
               </div>
@@ -1103,7 +976,7 @@
                 <option value="35.52,135.78">小浜</option>
               </optgroup>
             </select>
-            <button id="useCurrentLocationBtn" style="padding:8px 12px; background:linear-gradient(135deg, #506080, #6b8fb0); color:#c4d8f0; border:2px solid #8099b8; border-radius:2px; cursor:pointer; font-size:0.9rem; font-weight:600; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3); transition: all 0.3s ease;">📍 現在地</button>
+            <button id="useCurrentLocationBtn" style="padding:6px 12px; background:#0ea5e9; color:white; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem;">📍 現在地</button>
           </div>
           <div class="cache-controls" style="margin-top:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
             <div style="font-size:0.9rem; color:#666;">
@@ -1125,8 +998,8 @@
         <!-- 最近の釣果セクション -->
         <div class="recent-catches">
           <h3>最近の釣果</h3>
-          <div id="recentCatchesList" class="catches-list" style="background: linear-gradient(135deg, rgba(5, 4, 4, 0.95), rgba(15, 25, 45, 0.95)); border: 2px solid #506080; border-radius: 2px; padding: 16px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(128, 153, 184, 0.02);">
-            <p style="text-align: center; color: #8099b8;">読み込み中...</p>
+          <div id="recentCatchesList" class="catches-list">
+            <p style="text-align: center; color: #666;">読み込み中...</p>
           </div>
           <div style="text-align: center; margin-top: 20px;">
             <a href="fishing-log2.html" class="btn twitter">すべての釣果を見る</a>
@@ -1200,8 +1073,8 @@
       // 月齢計算
       function getMoonPhase() {
         const now = new Date();
-        let year = now.getFullYear();
-        let month = now.getMonth() + 1;
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
         const day = now.getDate();
         
         let c = 0, e = 0, jd = 0;
@@ -1897,18 +1770,25 @@
         // 現在時刻のマーカー（今日の場合のみ）
         if (dayOffset === 0) {
           // dayOffset=0の場合、複数日データ内での現在時刻の絶対位置を計算する必要がある
-          // 現在時刻をJST当日 0時からの経過時間で計算
+          // referenceTime（データ開始時刻）から現在時刻までのミリ秒差を計算
           const nowMs = Date.now();
           const totalHoursSinceReference = (nowMs - referenceTime) / (1000 * 60 * 60);
           
-          // グラフ表示は「指定日の0時から24時」
-          // displayCurrentTime = 指定日内での現在時刻
+          // グラフ表示は「今日の0時から24時」だが、データ内での位置は異なる
+          // displayCurrentTime = 当日内での現在時刻（dayOffset で指定された日の0時からの経過時間）
+          // totalHoursSinceReference から dayOffset * 24 時間を差し引く
           let displayCurrentTime = totalHoursSinceReference - (dayOffset * 24);
+          
+          const nowUTC = new Date();
+          const nowUTCHours = nowUTC.getUTCHours() + nowUTC.getUTCMinutes() / 60;
+          const jstCurrentHour = (nowUTCHours + 9) % 24;
           
           console.log('=== Marker calculation ===');
           console.log('referenceTime:', referenceTime, 'nowMs:', nowMs);
           console.log('totalHoursSinceReference:', totalHoursSinceReference, 'dayOffset:', dayOffset);
-          console.log('displayCurrentTime (day-relative):', displayCurrentTime);
+          console.log('displayCurrentTime (adjusted):', displayCurrentTime);
+          console.log('nowUTC:', nowUTC, 'nowUTCHours:', nowUTCHours);
+          console.log('jstCurrentHour:', jstCurrentHour);
           
           // グラフの表示範囲（0-24）内にあるか確認
           if (displayCurrentTime >= 0 && displayCurrentTime <= 24) {
@@ -2288,22 +2168,15 @@
           const now = new Date();
           const todayAtMidnightJST = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
           const referenceTime = todayAtMidnightJST.getTime();
-          console.log('JST Today at midnight:', todayAtMidnightJST.toISOString(), 'referenceTime:', referenceTime);
-          console.log('API times[0]:', times[0], 'times[1]:', times[1], 'times[24]:', times[24]);
-          
-          // 各データポイントを時刻付きで変換し、JST現在時刻から相対時間を計算
+
           heights.forEach((point, idx) => {
-            const pointTimestamp = new Date(times[idx]).getTime();
-            const hoursFromReference = (pointTimestamp - referenceTime) / (1000 * 60 * 60);
-            converted.push({ hour: hoursFromReference, height: point });
+            const hrs = idx; // インデックスが時間数
+            converted.push({ hour: hrs, height: point });
           });
 
           console.log(`Converted ${heights.length} points`);
           if (converted.length > 0) {
-            const hourValues = converted.map(d => d.hour);
-            console.log('Hour range:', Math.min(...hourValues).toFixed(2), 'to', Math.max(...hourValues).toFixed(2));
-            console.log('Sample hours [0-5]:', converted.slice(0, 6).map(d => d.hour.toFixed(2)));
-            console.log('Sample hours [24-29]:', converted.slice(24, 30).map(d => d.hour.toFixed(2)));
+            console.log('Hour range:', Math.min(...converted.map(d => d.hour)).toFixed(2), 'to', Math.max(...converted.map(d => d.hour)).toFixed(2));
           }
 
           if (converted.length === 0) throw new Error('Open-Meteo Marine API returned no usable points');
@@ -2311,7 +2184,6 @@
           // 現在時刻を計算（当日の0時からの経過時間）
           const nowMs = Date.now();
           const currentHour = (nowMs - referenceTime) / (1000 * 60 * 60);
-          console.log('Current time calculation: nowMs=', nowMs, ', currentHour=', currentHour.toFixed(2), 'hours since JST midnight');
 
           const normalized = {
             data: converted,
@@ -2799,7 +2671,7 @@
           const recentCatches = catches.slice(0, 5);
           
           if (recentCatches.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #8099b8;">まだ釣果がありません</p>';
+            container.innerHTML = '<p style="text-align: center; color: #666;">まだ釣果がありません</p>';
             return;
           }
 
@@ -2813,25 +2685,25 @@
             const location = catchData.location || '';
             
             html += `
-              <div class="recent-catch-item" style="display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: center; min-height: 80px; padding: 8px; cursor: pointer; transition: all 0.2s; border-radius: 2px; border: 2px solid #506080; background: linear-gradient(135deg, rgba(5, 4, 4, 0.8), rgba(15, 25, 45, 0.8));" onclick="window.location.href='fishing-log2-detail.html?id=${item.id}'" onmouseover="this.style.borderColor='#8099b8'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3)';" onmouseout="this.style.borderColor='#506080'; this.style.boxShadow='none';">
-                <div class="catch-thumbnail" style="width: 80px; height: 80px; overflow: hidden; border-radius: 2px; border: 1px solid #506080;">
+              <div class="recent-catch-item" style="display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: center; min-height: 80px; padding: 8px; cursor: pointer; transition: background-color 0.2s;" onclick="window.location.href='fishing-log2-detail.html?id=${item.id}'" onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor='transparent'">
+                <div class="catch-thumbnail" style="width: 80px; height: 80px; overflow: hidden; border-radius: 4px;">
                   ${imageUrl ? `<img src="${imageUrl}" alt="${fish}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'; this.parentElement.querySelector('.no-thumb-fallback').style.display='flex'">` : ``}
                   <div class="no-thumb-fallback" style="display: ${imageUrl ? 'none' : 'flex'}; align-items: center; justify-content: center; height: 100%; font-size: 2rem; opacity: 0.4;">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H5.17L6.59 4.59C6.86 4.21 7.3 4 7.77 4H16.23C16.7 4 17.14 4.21 17.41 4.59L18.83 7H20C21.1 7 22 7.9 22 9V19C22 20.1 21.1 21 20 21H4C2.9 21 2 20.1 2 19V9C2 7.9 2.9 7 4 7Z" fill="#8099b8"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H5.17L6.59 4.59C6.86 4.21 7.3 4 7.77 4H16.23C16.7 4 17.14 4.21 17.41 4.59L18.83 7H20C21.1 7 22 7.9 22 9V19C22 20.1 21.1 21 20 21H4C2.9 21 2 20.1 2 19V9C2 7.9 2.9 7 4 7Z" fill="#90caf9"/></svg>
                   </div>
                 </div>
-                <div class="catch-info-inline" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                  <span class="catch-fish" style="font-weight: bold; color: #c4d8f0; font-size: 1.1rem; text-shadow: 0 0 8px rgba(180, 200, 220, 0.3);">${fish}</span>
-                  <span class="catch-meta" style="color: #8099b8; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
-                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10H17V7H7V10Z" fill="#8099b8"/><path d="M19 4H18V2H16V4H8V2H6V4H5C3.9 4 3 4.9 3 6V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4Z" fill="#506080" opacity="0.6"/></svg>
+<div class="catch-info-inline" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                  <span class="catch-fish" style="font-weight: bold; color: #0277bd; font-size: 1.1rem;">${fish}</span>
+                  <span class="catch-meta" style="color: #666; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
+                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10H17V7H7V10Z" fill="#666"/><path d="M19 4H18V2H16V4H8V2H6V4H5C3.9 4 3 4.9 3 6V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4Z" fill="#ccc" opacity="0.6"/></svg>
                     ${date}
                   </span>
-                  <span class="catch-meta" style="color: #8099b8; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
-                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 3H5V5H3V3ZM7 3H9V5H7V3ZM11 3H13V5H11V3ZM15 3H17V5H15V3Z" fill="#8099b8"/><path d="M5 7H19V21H5V7Z" stroke="#506080" stroke-width="0" fill="#506080"/></svg>
+                  <span class="catch-meta" style="color: #666; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
+                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 3H5V5H3V3ZM7 3H9V5H7V3ZM11 3H13V5H11V3ZM15 3H17V5H15V3Z" fill="#666"/><path d="M5 7H19V21H5V7Z" stroke="#666" stroke-width="0" fill="#e0e0e0"/></svg>
                     ${size}cm
                   </span>
-                  <span class="catch-meta" style="color: #8099b8; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
-                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#8099b8"/></svg>
+                  <span class="catch-meta" style="color: #666; font-size: 0.9rem; display: inline-flex; align-items: center; gap:6px;">
+                    <svg class="icon-sm" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#666"/></svg>
                     ${location}
                   </span>
                 </div>

@@ -3,9 +3,137 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>釣果一覧</title>
+    <title>釣果一覧 - AbyssAtlas</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22abyss%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 style=%22stop-color:%231a1413;stop-opacity:1%22 /><stop offset=%2250%25%22 style=%22stop-color:%2316191e;stop-opacity:1%22 /><stop offset=%22100%25%22 style=%22stop-color:%230d0a0a;stop-opacity:1%22 /></linearGradient><linearGradient id=%22metalGrad%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 style=%22stop-color:%23ffd700;stop-opacity:0.9%22 /><stop offset=%2250%25%22 style=%22stop-color:%23d4af8c;stop-opacity:1%22 /><stop offset=%22100%25%22 style=%22stop-color:%238b7500;stop-opacity:0.9%22 /></linearGradient></defs><rect width=%22100%22 height=%22100%22 fill=%22url(%23abyss)%22/><polygon points=%2250,20 65,70 50,88 35,70%22 fill=%22url(%23metalGrad)%22 stroke=%22%23ffd700%22 stroke-width=%221.5%22/><polygon points=%2250,25 60,65 50,80 40,65%22 fill=%22none%22 stroke=%22%23ffffff%22 stroke-width=%220.8%22 opacity=%220.6%22/><path d=%22M20 50 Q50 40 80 50 Q50 55 20 50%22 stroke=%22%238b7500%22 stroke-width=%221.5%22 fill=%22none%22 opacity=%220.6%22/><path d=%22M15 60 Q50 50 85 60 Q50 65 15 60%22 stroke=%22%238b7500%22 stroke-width=%221%22 fill=%22none%22 opacity=%220.4%22/></svg>"
+    />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="stylesheet.css" />
+    <link rel="stylesheet" href="stylesheet-darksoul.css" />
+    <style>
+      /* 釣果一覧ページ用スタイル */
+      body {
+        background: #050404 !important;
+        background-image: radial-gradient(
+            ellipse at 50% 0%,
+            rgba(100, 150, 200, 0.05) 0%,
+            transparent 50%
+          ),
+          linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%) !important;
+        padding: 85px 20px 20px 0px !important;
+      }
+
+      .catch-item {
+        background: linear-gradient(
+          135deg,
+          rgba(5, 4, 4, 0.95),
+          rgba(15, 25, 45, 0.95)
+        );
+        border: 2px solid #506080;
+        border-radius: 2px;
+        padding: 1rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9),
+          inset 0 0 20px rgba(128, 153, 184, 0.02);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #8099b8;
+      }
+
+      .catch-item:hover {
+        border-color: #8099b8;
+        box-shadow: 0 8px 40px rgba(128, 153, 184, 0.3),
+          inset 0 0 20px rgba(128, 153, 184, 0.05);
+        background: linear-gradient(
+          135deg,
+          rgba(5, 4, 4, 0.95),
+          rgba(20, 35, 55, 0.95)
+        );
+      }
+
+      .img-thumb {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 2px;
+        margin-bottom: 0.75rem;
+        border: 2px solid #506080;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6),
+          inset 0 0 8px rgba(128, 153, 184, 0.05);
+      }
+
+      .thumb-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .meta {
+        color: #8099b8;
+      }
+
+      .meta.compact p {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        color: #8099b8;
+      }
+
+      .meta.compact p.title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        color: #c4d8f0;
+        text-shadow: 0 0 8px rgba(180, 200, 220, 0.3);
+      }
+
+      .meta.compact p.title strong {
+        color: #c4d8f0;
+        text-shadow: 0 0 10px rgba(180, 200, 220, 0.4);
+      }
+
+      .meta.compact p.title small {
+        color: #6b7b82;
+        margin-left: 0.5rem;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+      }
+
+      .meta.compact .label {
+        color: #a89560;
+        font-weight: 600;
+      }
+
+      .meta.compact p.summary {
+        color: #8099b8;
+      }
+
+      .friend-item {
+        background: linear-gradient(
+          135deg,
+          rgba(5, 4, 4, 0.8),
+          rgba(15, 25, 45, 0.8)
+        );
+        border: 2px solid #506080;
+        padding: 0.75rem;
+        border-radius: 2px;
+        margin-bottom: 0.5rem;
+        color: #8099b8;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6),
+          inset 0 0 6px rgba(128, 153, 184, 0.03);
+        transition: all 0.2s ease;
+      }
+
+      .friend-item:hover {
+        border-color: #8099b8;
+        box-shadow: 0 2px 12px rgba(128, 153, 184, 0.2),
+          inset 0 0 6px rgba(128, 153, 184, 0.06);
+      }
+
+      .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: #8099b8;
+        padding: 2rem;
+        font-size: 1.1rem;
+      }
+    </style>
     <script type="module">
       import {
         auth,
@@ -38,8 +166,8 @@
         if (!hdr) return;
         const backBtn = isSelf
           ? ""
-          : `<button id='backToMeBtn' style='margin-right:8px;'>自分に戻る</button>`;
-        hdr.innerHTML = `<div style='display:flex;align-items:center;gap:12px;justify-content:space-between'><div><strong style='color:#0288d1'>${escapeHtml(
+          : `<button id='backToMeBtn' style='background: linear-gradient(135deg, #6b8fb0, #8099b8); color: white; border: 2px solid #c4d8f0; padding: 0.5rem 1rem; border-radius: 2px; cursor: pointer; font-weight: 600;'>自分に戻る</button>`;
+        hdr.innerHTML = `<div style='display:flex;align-items:center;gap:12px;justify-content:space-between'><div><strong style='color:#4db8ff'>${escapeHtml(
           name
         )}</strong></div><div>${backBtn}</div></div>`;
         const btn = document.getElementById("backToMeBtn");
@@ -68,10 +196,10 @@
               // clear owner header and show login hint
               const hdr = document.getElementById("ownerHeader");
               if (hdr)
-                hdr.innerHTML = `<div class='subtle'>ログインして自分の釣果を表示してください</div>`;
+                hdr.innerHTML = `<div class='subtle' style='color: #8099b8;'>ログインして自分の釣果を表示してください</div>`;
               const catchList = document.getElementById("catchList");
               if (catchList)
-                catchList.innerHTML = `<p>ログインすると自分と友だちの釣果を閲覧できます。</p>`;
+                catchList.innerHTML = `<p style='color: #8099b8; text-align: center;'>ログインすると自分と友だちの釣果を閲覧できます。</p>`;
             }
           };
           if (document.readyState === "loading") {
@@ -107,7 +235,8 @@
       // --- 釣果を読み込む関数 ---
       async function loadMyCatches(uid) {
         const catchList = document.getElementById("catchList");
-        catchList.innerHTML = "読み込み中...";
+        catchList.innerHTML =
+          "<p style='grid-column: 1 / -1; text-align: center; color: #8099b8; padding: 2rem;'>読み込み中...</p>";
         // Firestoreから現在のユーザーの釣果のみを取得（最適化）
         const q = query(collection(db, "fishinglogs"), where("uid", "==", uid));
         const querySnapshot = await getDocs(q);
@@ -124,6 +253,9 @@
           const size = escapeHtml(
             String((data && data.catch && data.catch.size) || "")
           );
+          const weight = escapeHtml(
+            String((data && data.catch && data.catch.weight) || "")
+          );
           const location = escapeHtml(
             (data && data.catch && data.catch.location) || ""
           );
@@ -137,6 +269,7 @@
           const placeholder =
             "data:image/svg+xml;utf8," + encodeURIComponent(placeholderSvg);
           const rawUrl = (data && data.catch && data.catch.imageUrl) || "";
+          console.log(`Fish: ${fish}, rawUrl: ${rawUrl}, type: ${typeof rawUrl}`);
           const isValidUrl =
             typeof rawUrl === "string" &&
             (rawUrl.startsWith("http://") ||
@@ -144,7 +277,7 @@
               rawUrl.startsWith("data:") ||
               rawUrl.startsWith("blob:"));
           const imgTag = isValidUrl
-            ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src='${placeholder}'"/>`
+            ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src=&quot;${placeholder}&quot;"/>`
             : `<img src="${placeholder}" alt="No Image" class="thumb-img"/>`;
 
           // simplified card with thumbnail on left and meta on right
@@ -152,13 +285,16 @@
             <div class="img-thumb">${imgTag}</div>
              <div class="meta compact">
               <p class="title"><strong>${fish}</strong> <small class="date">${date}</small></p>
-              <p class="summary"><span class="label">サイズ:</span> ${size} cm</p>
+              <p class="summary"><span class="label">サイズ:</span> ${size} cm${
+            weight ? " / " + weight + " g" : ""
+          }</p>
               <p class="summary"><span class="label">場所:</span> ${location}</p>
             </div>
           </div>`;
         });
         if (html === "") {
-          html = "<p>まだ釣果がありません。</p>";
+          html =
+            "<p style='grid-column: 1 / -1; text-align: center; color: #8099b8; padding: 2rem;'>まだ釣果がありません。</p>";
         }
         catchList.innerHTML = html;
       }
@@ -168,13 +304,14 @@
         const friendsPanel = document.getElementById("friendsPanel");
         const friendsList = document.getElementById("friendsList");
         const input = document.getElementById("friendUidInput");
-        friendsList.innerHTML = "読み込み中...";
+        friendsList.innerHTML = "<p style='color: #8099b8;'>読み込み中...</p>";
         try {
           const userDocRef = doc(db, "users", uid);
           const userSnap = await getDoc(userDocRef);
           const friends = (userSnap.exists() && userSnap.data().friends) || [];
           if (friends.length === 0) {
-            friendsList.innerHTML = "<p>友だちがいません。</p>";
+            friendsList.innerHTML =
+              "<p style='color: #8099b8;'>友だちがいません。</p>";
           } else {
             friendsList.innerHTML = "";
             // fetch each friend's public profile to show displayName/shortId
@@ -216,7 +353,8 @@
           }
         } catch (err) {
           console.error("loadFriends error", err);
-          friendsList.innerHTML = "<p>友だちの読み込みに失敗しました</p>";
+          friendsList.innerHTML =
+            "<p style='color: #8099b8;'>友だちの読み込みに失敗しました</p>";
         }
         // add handler for add button
         const addBtn = document.getElementById("addFriendBtn");
@@ -278,7 +416,8 @@
       // --- 他ユーザー（フレンド）の釣果を読み込む関数 ---
       async function loadFriendCatches(friendUid) {
         const catchList = document.getElementById("catchList");
-        catchList.innerHTML = "読み込み中...";
+        catchList.innerHTML =
+          "<p style='grid-column: 1 / -1; text-align: center; color: #8099b8; padding: 2rem;'>読み込み中...</p>";
         try {
           // fetch friend's profile for display name
           let display = friendUid;
@@ -311,6 +450,9 @@
             const size = escapeHtml(
               String((data && data.catch && data.catch.size) || "")
             );
+            const weight = escapeHtml(
+              String((data && data.catch && data.catch.weight) || "")
+            );
             const location = escapeHtml(
               (data && data.catch && data.catch.location) || ""
             );
@@ -330,23 +472,28 @@
                 rawUrl.startsWith("data:") ||
                 rawUrl.startsWith("blob:"));
             const imgTag = isValidUrl
-              ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src='${placeholder}'"/>`
+              ? `<img src="${rawUrl}" alt="Catch Image" class="thumb-img" onerror="this.onerror=null;this.src=&quot;${placeholder}&quot;"/>`
               : `<img src="${placeholder}" alt="No Image" class="thumb-img"/>`;
 
             html += `<div class="catch-item" data-id="${docId}" tabindex="0" role="button">
               <div class="img-thumb">${imgTag}</div>
               <div class="meta compact">
                 <p class="title"><strong>${fish}</strong> <small class="date">${date}</small></p>
-                <p class="summary"><span class="label">サイズ:</span> ${size} cm</p>
+                <p class="summary"><span class="label">サイズ:</span> ${size} cm${
+              weight ? " / " + weight + " g" : ""
+            }</p>
                 <p class="summary"><span class="label">場所:</span> ${location}</p>
               </div>
             </div>`;
           });
-          if (html === "") html = "<p>釣果がありません。</p>";
+          if (html === "")
+            html =
+              "<p style='grid-column: 1 / -1; text-align: center; color: #8099b8; padding: 2rem;'>釣果がありません。</p>";
           catchList.innerHTML = html;
         } catch (err) {
           console.error("loadFriendCatches error", err);
-          catchList.innerHTML = "<p>釣果の読み込みに失敗しました</p>";
+          catchList.innerHTML =
+            "<p style='grid-column: 1 / -1; text-align: center; color: #8099b8; padding: 2rem;'>釣果の読み込みに失敗しました</p>";
         }
       }
       // 全体をクリックしたら詳細ページへ遷移する（画像限定ではなくカード全体）
@@ -375,24 +522,82 @@
     <header>
       <div class="container">
         <div class="header-left">
-          <a class="logo" href="index.html" aria-label="ホーム">
+          <a
+            class="logo"
+            href="index.html"
+            aria-label="ホーム"
+            title="ホームに戻る"
+          >
             <svg
               width="40"
-              height="28"
-              viewBox="0 0 24 24"
+              height="40"
+              viewBox="0 0 100 100"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               focusable="false"
             >
-              <path
-                d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <defs>
+                <linearGradient
+                  id="abyss-logo2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1a1413; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #16191e; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #0d0a0a; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="metalGrad-logo2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #8099b8; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #506080; stop-opacity: 0.9"
+                  />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="50,20 65,70 50,88 35,70"
+                fill="url(#metalGrad-logo2)"
+                stroke="#c4d8f0"
+                stroke-width="1.5"
               />
-              <circle cx="7" cy="12" r="1" fill="currentColor" />
+              <polygon
+                points="50,25 60,65 50,80 40,65"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="0.8"
+                opacity="0.6"
+              />
+              <path
+                d="M20 50 Q50 40 80 50 Q50 55 20 50"
+                stroke="#8099b8"
+                stroke-width="1.5"
+                fill="none"
+                opacity="0.6"
+              />
             </svg>
           </a>
         </div>
@@ -409,10 +614,8 @@
               ツール ▾
             </button>
             <div class="submenu" role="menu">
+              <a role="menuitem" href="ocean-checker.html">🌊 海況チェッカー</a>
               <a role="menuitem" href="pe-converter.html">PE変換</a>
-              <a role="menuitem" href="pe(tanatoru4)-converter.html"
-                >タナトル4</a
-              >
               <a role="menuitem" href="index.html">その他</a>
             </div>
           </div>
@@ -444,22 +647,22 @@
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill="#4fc3f7"
+          fill="#3a4d6b"
           fill-opacity="0.5"
           d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
         ></path>
       </svg>
     </div>
-    <h2>
-      <svg
-        class="icon icon-fish"
-        width="28"
-        height="28"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
-      >
+    <h2
+      style="
+        color: #c4d8f0;
+        text-shadow: 0 0 20px rgba(196, 216, 240, 0.6);
+        text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      "
+    >
+
         <path
           d="M22 12c0 0-4-2-8-2s-8 2-8 2S2 14 2 18s3 4 7 4 6-2 8-4 5-4 5-6-1-2-1-2z"
           fill="none"
@@ -470,16 +673,53 @@
         ></path>
         <circle cx="7" cy="12" r="1" fill="currentColor"></circle>
       </svg>
-      釣果リスト
+      釣果一覧
     </h2>
-    <div id="ownerHeader" class="ownerHeader"></div>
-    <div id="catchList" class="catch-list" role="list">
+    <div
+      id="ownerHeader"
+      class="ownerHeader"
+      style="
+        text-align: center;
+        color: #c4d8f0;
+        margin: 1rem 0;
+        font-size: 1.1rem;
+      "
+    ></div>
+    <div
+      id="catchList"
+      class="catch-list"
+      role="list"
+      style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem auto;
+        max-width: 1200px;
+        padding: 0 1rem;
+      "
+    >
       <div class="empty-state">読み込み中...</div>
     </div>
 
     <!-- Friends panel -->
-    <section id="friendsPanel" class="friends-panel">
-      <h3 style="color: #0288d1">友だち管理</h3>
+    <section
+      id="friendsPanel"
+      class="friends-panel"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(15, 20, 35, 0.95),
+          rgba(10, 25, 45, 0.95)
+        );
+        border: 2px solid #3a4d6b;
+        border-radius: 2px;
+        padding: 1.5rem;
+        margin: 2rem auto;
+        max-width: 900px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+      "
+    >
+      <h3 style="color: #c4d8f0; margin-top: 0">友だち管理</h3>
       <div
         style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px"
       >
@@ -489,28 +729,71 @@
           style="
             flex: 1;
             padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #b3e5fc;
+            border-radius: 2px;
+            border: 1px solid #506080;
+            background: rgba(5, 4, 4, 0.6);
+            color: #c4d8f0;
           "
         />
         <button
           id="addFriendBtn"
           style="
             padding: 8px 12px;
-            border-radius: 6px;
-            background: #66bb6a;
-            color: #fff;
-            border: none;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #6b8fb0, #8099b8);
+            color: white;
+            border: 2px solid #c4d8f0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
           "
         >
           追加
         </button>
       </div>
-      <div id="friendsList">読み込み中...</div>
+      <div id="friendsList" style="color: #c4d8f0">読み込み中...</div>
     </section>
-    <div class="action-row">
-      <button id="toRegister">釣果登録へ</button>
-      <button id="logout">ログアウト</button>
+    <div
+      class="action-row"
+      style="
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin: 2rem auto;
+        max-width: 900px;
+        padding: 1rem;
+      "
+    >
+      <button
+        id="toRegister"
+        style="
+          background: linear-gradient(135deg, #6b8fb0, #8099b8);
+          color: white;
+          border: 2px solid #c4d8f0;
+          padding: 0.75rem 1.5rem;
+          border-radius: 2px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        "
+      >
+        釣果登録へ
+      </button>
+      <button
+        id="logout"
+        style="
+          background: rgba(0, 0, 0, 0.3);
+          color: #8099b8;
+          border: 1px solid #506080;
+          padding: 0.75rem 1.5rem;
+          border-radius: 2px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        "
+      >
+        ログアウト
+      </button>
     </div>
     <div class="wave bottom">
       <svg
@@ -519,50 +802,20 @@
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill="#4fc3f7"
+          fill="#3a4d6b"
           fill-opacity="0.5"
           d="M0,80 C360,160 1080,0 1440,80 L1440,120 L0,120 Z"
         ></path>
       </svg>
     </div>
-    <!-- ホームへ戻るボタン -->
-    <button
-      id="homeBtn"
-      class="home-btn"
-      title="ホームへ戻る"
-      aria-label="ホームへ戻る"
-    >
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="M3 10.5L12 4l9 6.5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M5 10.5v7a1 1 0 0 0 1 1h3v-5h6v5h3a1 1 0 0 0 1-1v-7"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </button>
     <!-- home button styling moved to stylesheet.css -->
     <script>
-      document.getElementById("homeBtn").addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
+      const homeBtn = document.getElementById("homeBtn");
+      if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+      }
     </script>
     <script src="scripts/header.js"></script>
   </body>

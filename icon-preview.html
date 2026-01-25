@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AbyssAtlas アイコンプレビュー</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0d0a0a 0%,
+          #1a1413 25%,
+          #16191e 50%,
+          #0f1419 75%,
+          #0d0a0a 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cinzel", serif;
+        color: #c4d8f0;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 32px;
+        margin-bottom: 40px;
+        text-shadow: 0 0 20px rgba(196, 216, 240, 0.6);
+        letter-spacing: 2px;
+      }
+
+      .preview-section {
+        display: flex;
+        gap: 60px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+
+      .preview-item {
+        background: linear-gradient(
+          135deg,
+          rgba(26, 20, 19, 0.8),
+          rgba(22, 25, 30, 0.7)
+        );
+        padding: 30px;
+        border: 2px solid #506080;
+        border-radius: 0;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      }
+
+      .preview-item h3 {
+        margin-bottom: 20px;
+        font-size: 16px;
+        color: #c4d8f0;
+        letter-spacing: 1px;
+      }
+
+      .preview-icon {
+        display: inline-block;
+      }
+
+      .preview-icon svg {
+        filter: drop-shadow(0 0 8px rgba(196, 216, 240, 0.4));
+      }
+
+      .size-small svg {
+        width: 80px;
+        height: 80px;
+      }
+
+      .size-medium svg {
+        width: 150px;
+        height: 150px;
+      }
+
+      .size-large svg {
+        width: 300px;
+        height: 300px;
+      }
+
+      .description {
+        margin-top: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+        background: rgba(128, 153, 184, 0.1);
+        border-left: 4px solid #506080;
+        text-align: left;
+        line-height: 1.8;
+        font-size: 14px;
+      }
+
+      .description h4 {
+        margin-bottom: 12px;
+        color: #c4d8f0;
+      }
+
+      .description p {
+        margin-bottom: 8px;
+      }
+
+      .back-link {
+        margin-top: 40px;
+      }
+
+      .back-link a {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid #506080;
+        color: #c4d8f0;
+        text-decoration: none;
+        transition: all 200ms ease;
+      }
+
+      .back-link a:hover {
+        background: linear-gradient(
+          90deg,
+          rgba(128, 153, 184, 0.3),
+          rgba(128, 153, 184, 0.1)
+        );
+        box-shadow: 0 0 12px rgba(196, 216, 240, 0.5);
+        text-shadow: 0 0 8px rgba(196, 216, 240, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>⚔ AbyssAtlas Icon Preview</h1>
+
+      <div class="preview-section">
+        <div class="preview-item">
+          <h3>ファビコンサイズ</h3>
+          <div class="preview-icon size-small">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="abyss" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1a1413; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #16191e; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #0d0a0a; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="metalGrad"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #8099b8; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #506080; stop-opacity: 0.9"
+                  />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="50,20 65,70 50,88 35,70"
+                fill="url(#metalGrad)"
+                stroke="#c4d8f0"
+                stroke-width="1.5"
+              />
+              <polygon
+                points="50,25 60,65 50,80 40,65"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="0.8"
+                opacity="0.6"
+              />
+              <path
+                d="M20 50 Q50 40 80 50 Q50 55 20 50"
+                stroke="#8099b8"
+                stroke-width="1.5"
+                fill="none"
+                opacity="0.6"
+              />
+              <path
+                d="M15 60 Q50 50 85 60 Q50 65 15 60"
+                stroke="#8099b8"
+                stroke-width="1"
+                fill="none"
+                opacity="0.4"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="#8099b8"
+                stroke-width="0.5"
+                opacity="0.3"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="preview-item">
+          <h3>中サイズ</h3>
+          <div class="preview-icon size-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="abyss2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1a1413; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #16191e; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #0d0a0a; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="metalGrad2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                  />
+                  <stop
+                    offset="50%"
+                    style="stop-color: #8099b8; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #506080; stop-opacity: 0.9"
+                  />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="50,20 65,70 50,88 35,70"
+                fill="url(#metalGrad2)"
+                stroke="#c4d8f0"
+                stroke-width="1.5"
+              />
+              <polygon
+                points="50,25 60,65 50,80 40,65"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="0.8"
+                opacity="0.6"
+              />
+              <path
+                d="M20 50 Q50 40 80 50 Q50 55 20 50"
+                stroke="#8099b8"
+                stroke-width="1.5"
+                fill="none"
+                opacity="0.6"
+              />
+              <path
+                d="M15 60 Q50 50 85 60 Q50 65 15 60"
+                stroke="#8099b8"
+                stroke-width="1"
+                fill="none"
+                opacity="0.4"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="#8099b8"
+                stroke-width="0.5"
+                opacity="0.3"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="preview-item"
+        style="display: inline-block; margin-bottom: 40px"
+      >
+        <h3>大サイズ（詳細表示）</h3>
+        <div class="preview-icon size-large">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="abyss3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style="stop-color: #1a1413; stop-opacity: 1"
+                />
+                <stop
+                  offset="50%"
+                  style="stop-color: #16191e; stop-opacity: 1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color: #0d0a0a; stop-opacity: 1"
+                />
+              </linearGradient>
+              <linearGradient
+                id="metalGrad3"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop
+                  offset="0%"
+                  style="stop-color: #c4d8f0; stop-opacity: 0.9"
+                />
+                <stop
+                  offset="50%"
+                  style="stop-color: #8099b8; stop-opacity: 1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color: #506080; stop-opacity: 0.9"
+                />
+              </linearGradient>
+            </defs>
+            <polygon
+              points="50,20 65,70 50,88 35,70"
+              fill="url(#metalGrad3)"
+              stroke="#c4d8f0"
+              stroke-width="1.5"
+            />
+            <polygon
+              points="50,25 60,65 50,80 40,65"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="0.8"
+              opacity="0.6"
+            />
+            <path
+              d="M20 50 Q50 40 80 50 Q50 55 20 50"
+              stroke="#8099b8"
+              stroke-width="1.5"
+              fill="none"
+              opacity="0.6"
+            />
+            <path
+              d="M15 60 Q50 50 85 60 Q50 65 15 60"
+              stroke="#8099b8"
+              stroke-width="1"
+              fill="none"
+              opacity="0.4"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke="#8099b8"
+              stroke-width="0.5"
+              opacity="0.3"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="description">
+        <h4>� デザイン解説</h4>
+        <p>
+          <strong>背景グラデーション:</strong>
+          深淵の海を表現する暗い黒紫から濃紺へのグラデーション
+        </p>
+        <p>
+          <strong>メタルジグ:</strong>
+          金色のグラデーションで表現された光沢あるメタルジグが深淵へ沈んでいく様を表現
+        </p>
+        <p>
+          <strong>反射光:</strong>
+          ジグの中央に白い反射光を加え、メタリックな質感を強調
+        </p>
+        <p>
+          <strong>内側の波紋:</strong>
+          古い金（#8b7500）の透明な波線で、ルアーの周りの水の動きを表現
+        </p>
+        <p>
+          <strong>外側の円:</strong>
+          より薄い金色で淡く描かれた同心円が、エネルギーの拡散や深淵への広がりを示唆
+        </p>
+        <p>
+          <strong>世界観:</strong>
+          ダークソウルの不気味で深い雰囲気と、メタルジグで狙う大物との邂逅が融合したアイコン
+        </p>
+      </div>
+
+      <div class="back-link">
+        <a href="index.html">← ホームに戻る</a>
+      </div>
+    </div>
+  </body>
+</html>

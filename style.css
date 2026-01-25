@@ -3,22 +3,30 @@ body {
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
   text-align: center;
   margin: 0;
-  padding: 50px 20px;
-  background: linear-gradient(135deg, #cdefff, #f0faff);
+  padding: 85px 20px 0px 0px;
+  background: #050404 !important;
+  background-image: radial-gradient(
+      ellipse at 50% 0%,
+      rgba(100, 150, 200, 0.05) 0%,
+      transparent 50%
+    ),
+    linear-gradient(to bottom, rgba(30, 50, 80, 0.1) 0%, transparent 50%) !important;
   min-height: 100vh;
 }
 
 /* 見出し */
 h1 {
-  color: #0077b6;
+  color: #c4d8f0;
   margin-bottom: 10px;
   font-size: 2rem;
+  text-shadow: 0 0 15px rgba(180, 200, 220, 0.6),
+    0 0 30px rgba(100, 150, 200, 0.3);
 }
 
 /* 説明文 */
 p {
   font-size: 1.1rem;
-  color: #333;
+  color: #8099b8;
 }
 
 /* 入力欄 */
@@ -26,33 +34,46 @@ input {
   padding: 10px;
   margin: 15px;
   font-size: 1rem;
-  border-radius: 8px;
-  border: 2px solid #0096c7;
+  border-radius: 2px;
+  border: 2px solid #506080;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 4, 4, 0.8),
+    rgba(15, 25, 45, 0.8)
+  );
+  color: #c4d8f0;
   outline: none;
   transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 0 8px rgba(128, 153, 184, 0.05);
 }
 input:focus {
-  border-color: #023e8a;
-  box-shadow: 0 0 8px rgba(0, 150, 199, 0.3);
+  border-color: #8099b8;
+  box-shadow: 0 4px 16px rgba(128, 153, 184, 0.3),
+    inset 0 0 8px rgba(128, 153, 184, 0.1);
 }
 
 /* ボタン */
 button {
   padding: 10px 20px;
   font-size: 1rem;
-  background: #00b4d8;
-  color: white;
-  border: none;
-  border-radius: 25px;
+  background: linear-gradient(135deg, #506080, #6b8fb0);
+  color: #c4d8f0;
+  border: 2px solid #8099b8;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3);
   position: relative;
   overflow: hidden;
 }
 button:hover {
-  background: #0096c7;
+  background: linear-gradient(135deg, #6b8fb0, #8099b8);
+  border-color: #c4d8f0;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 150, 199, 0.3);
+  box-shadow: 0 6px 20px rgba(128, 153, 184, 0.4),
+    0 0 20px rgba(180, 200, 220, 0.2);
 }
 
 /* ボタンに釣り糸っぽい動き */
@@ -63,9 +84,6 @@ button::after {
   left: 50%;
   width: 2px;
   height: 20px;
-  background: white;
-  transform: translateX(-50%);
-  transition: height 0.3s ease;
 }
 button:hover::after {
   height: 40px;
@@ -76,7 +94,8 @@ button:hover::after {
   margin-top: 20px;
   font-weight: bold;
   font-size: 1.3rem;
-  color: #023e8a;
+  color: #c4d8f0;
+  text-shadow: 0 0 10px rgba(180, 200, 220, 0.4);
 }
 
 /* Responsive tweaks for small screens */
@@ -121,34 +140,48 @@ button:hover::after {
 
 /* 天気情報セクション */
 .weather-info {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 4, 4, 0.95) 0%,
+    rgba(15, 25, 45, 0.95) 100%
+  );
+  border-radius: 2px;
+  border: 2px solid #506080;
   padding: 24px;
   margin: 32px auto;
   max-width: 800px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9),
+    inset 0 0 20px rgba(128, 153, 184, 0.02);
 }
 
 .weather-info h3 {
-  color: #0077b6;
+  color: #c4d8f0;
   margin-bottom: 20px;
   font-size: 1.5rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 15px rgba(180, 200, 220, 0.5);
 }
 
 .weather-info h4 {
-  color: #0277bd;
+  color: #d4af8c;
   margin-bottom: 12px;
   font-size: 1.2rem;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
 /* 潮汐グラフ */
 .tide-graph-container {
-  background: white;
-  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(13, 10, 10, 0.8) 0%,
+    rgba(22, 25, 30, 0.7) 100%
+  );
+  border-radius: 0;
+  border: 2px solid #8b7500;
   padding: 20px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .tide-graph {
@@ -156,65 +189,98 @@ button:hover::after {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  background: linear-gradient(
+    135deg,
+    rgba(13, 10, 10, 0.6) 0%,
+    rgba(22, 25, 30, 0.5) 100%
+  );
+  padding: 12px;
+  border-radius: 0;
 }
 
 .tide-graph svg {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 .tide-legend {
   margin-top: 12px;
   text-align: center;
   font-size: 1rem;
-  color: #0277bd;
+  color: #d4af8c;
   font-weight: 600;
 }
 
 .current-tide {
   display: inline-block;
   padding: 8px 16px;
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-  border-radius: 20px;
-  border: 2px solid #0ea5e9;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 20, 19, 0.9) 0%,
+    rgba(22, 25, 30, 0.85) 100%
+  );
+  border-radius: 0;
+  border: 2px solid #8b7500;
+  color: #d4af8c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .weather-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 20px;
 }
 
 .weather-card {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 20, 19, 0.9) 0%,
+    rgba(22, 25, 30, 0.85) 100%
+  );
+  border-radius: 0;
+  border: 2px solid #8b7500;
   padding: 20px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .weather-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0, 119, 182, 0.2);
+  box-shadow: 0 12px 32px rgba(139, 117, 0, 0.4);
+  border-color: #d4af8c;
 }
 
 .weather-icon {
-  font-size: 2.5rem;
   margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+}
+
+.weather-icon svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease;
+}
+
+.weather-card:hover .weather-icon svg {
+  transform: scale(1.1);
 }
 
 .weather-label {
-  color: #0277bd;
+  color: #d4af8c;
   font-weight: bold;
   font-size: 0.9rem;
   margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .weather-value {
-  color: #01579b;
+  color: #b8a477;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -247,6 +313,18 @@ button:hover::after {
   outline: none;
 }
 
+@media (max-width: 1024px) {
+  .weather-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .weather-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 600px) {
   .weather-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -261,7 +339,12 @@ button:hover::after {
   }
 
   .weather-icon {
-    font-size: 2rem;
+    height: 48px;
+  }
+
+  .weather-icon svg {
+    width: 40px;
+    height: 40px;
   }
 
   .tide-graph-container {
@@ -270,5 +353,140 @@ button:hover::after {
 
   .weather-info h4 {
     font-size: 1rem;
+  }
+}
+
+/* 最近の釣果セクション */
+.recent-catches {
+  background: rgba(040, 050, 0 91, 0.9);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 32px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: #506080 2px solid;
+}
+
+.recent-catches h3 {
+  color: #c9d6dc;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.catches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.recent-catch-item {
+  display: grid !important;
+  grid-template-columns: 80px 1fr !important;
+  gap: 12px !important;
+  align-items: center !important;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 80px;
+}
+
+.recent-catch-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.15);
+}
+
+.catch-thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.catch-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.no-thumb {
+  font-size: 2rem;
+  opacity: 0.4;
+}
+
+.catch-info-inline {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.catch-fish {
+  font-weight: bold;
+  color: #0277bd;
+  font-size: 1.1rem;
+  min-width: 100px;
+}
+
+.catch-meta {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* AI 釣りやすさ指数スタイル */
+.ai-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.ai-score strong {
+  font-size: 1.4rem;
+  color: #2e7d32;
+  display: block;
+}
+.ai-desc {
+  font-size: 0.85rem;
+  color: #556;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .recent-catches {
+    padding: 16px;
+  }
+
+  .recent-catch-item {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .catch-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .catch-info-inline {
+    gap: 8px;
+  }
+
+  .catch-fish {
+    min-width: auto;
+    flex-basis: 100%;
   }
 }

@@ -9,13 +9,13 @@ import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBk4qQ8E0qDUHcsLXcvjIVtJCAruSUuOwM",
-  authDomain: "fishing-log-app-5bea9.firebaseapp.com",
-  projectId: "fishing-log-app-5bea9",
-  storageBucket: "fishing-log-app-5bea9.firebasestorage.app",
-  messagingSenderId: "730868295976",
-  appId: "1:730868295976:web:c745939c9f9b3936c7c81d",
-  measurementId: "G-5XT73YG2RP",
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET.firebasestorage.app",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID",
 };
 
 // Initialize Firebase (uncomment in your local `firebase-config.js`):

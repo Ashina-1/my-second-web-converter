@@ -1,0 +1,773 @@
+/* ===================================
+   釣り × ダークソウル テーマ CSS
+   Fishing × Dark Souls Theme
+   =================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Cinzel", "Hiragino Kaku Gothic ProN", serif;
+  background: linear-gradient(
+    135deg,
+    #0d0a0a 0%,
+    #1a1413 25%,
+    #16191e 50%,
+    #0f1419 75%,
+    #0d0a0a 100%
+  );
+  background-attachment: fixed;
+  color: #d4af8c;
+  position: relative;
+}
+
+/* 背景にフォグエフェクト */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+a {
+  text-decoration: none;
+  color: #d4af8c;
+}
+
+.container {
+  width: 100%;
+  padding: 0;
+  margin: 0 auto;
+}
+
+/* ===== ヘッダー ===== */
+header {
+  height: 65px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 4, 4, 0.98) 0%,
+    rgba(20, 30, 50, 0.98) 50%,
+    rgba(5, 4, 4, 0.98) 100%
+  );
+  border-bottom: 2px solid #8099b8;
+  position: fixed;
+  top: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.95),
+    inset 0 0 20px rgba(128, 153, 184, 0.08);
+}
+
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.logo {
+  height: 37px;
+  display: inline-flex;
+  align-items: center;
+  color: #d4af8c;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(212, 175, 140, 0.5);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-right a {
+  line-height: normal;
+  padding: 14px 12px;
+  color: #d4af8c;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0;
+  transition: all 200ms ease;
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.header-right a:hover {
+  background-color: rgba(139, 117, 0, 0.1);
+  border-bottom: 2px solid #8b7500;
+  text-shadow: 0 0 10px rgba(212, 175, 140, 0.8);
+}
+
+.menu-icon {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #d4af8c;
+  padding: 8px;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.menu-icon:hover {
+  background: transparent !important;
+  transform: none !important;
+  text-shadow: 0 0 8px rgba(212, 175, 140, 0.6);
+}
+
+/* Tools dropdown */
+.nav-tools {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-tools .tools-btn {
+  background: transparent;
+  border: none;
+  color: #d4af8c;
+  padding: 0 16px;
+  font-weight: 700;
+  line-height: 65px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.nav-tools .submenu {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: rgba(26, 20, 19, 0.98);
+  border: 2px solid #8b7500;
+  border-radius: 0;
+  padding: 8px 0;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.nav-tools .submenu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-tools .submenu a {
+  display: block;
+  padding: 8px 16px;
+  color: #d4af8c;
+  transition: all 150ms ease;
+}
+
+.nav-tools .submenu a:hover {
+  background: rgba(139, 117, 0, 0.15);
+  text-shadow: 0 0 8px rgba(212, 175, 140, 0.6);
+}
+
+/* ===== トップラッパー（ヒーロー） ===== */
+.top-wrapper {
+  padding: 180px 0 100px 0;
+  background: linear-gradient(
+    180deg,
+    rgba(13, 10, 10, 0.95) 0%,
+    rgba(26, 20, 19, 0.9) 40%,
+    rgba(22, 25, 30, 0.85) 100%
+  );
+  background-size: cover;
+  color: #d4af8c;
+  text-align: center;
+  position: relative;
+}
+
+.top-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+.top-wrapper h1 {
+  font-size: 48px;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(212, 175, 140, 0.6),
+    0 0 40px rgba(139, 117, 0, 0.4);
+  margin: 20px 0;
+  font-weight: 700;
+}
+
+.top-wrapper p {
+  font-size: 16px;
+  margin-bottom: 40px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  opacity: 0.9;
+}
+
+/* ===== カード ===== */
+.site-card,
+.card {
+  max-width: 520px;
+  margin: 24px auto;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 20, 19, 0.9) 0%,
+    rgba(22, 25, 30, 0.85) 100%
+  );
+  border-radius: 0;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(212, 175, 140, 0.1);
+  border: 2px solid #8b7500;
+  border-bottom: 4px solid #8b7500;
+  position: relative;
+}
+
+.site-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 140, 0.3),
+    transparent
+  );
+}
+
+/* ===== キャッチアイテム ===== */
+.catch-item {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 20, 19, 0.95) 0%,
+    rgba(22, 25, 30, 0.9) 100%
+  );
+  border-radius: 0;
+  padding: 18px;
+  margin: 24px auto 32px auto;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(212, 175, 140, 0.1);
+  border: 2px solid #8b7500;
+  border-bottom: 4px solid #8b7500;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.catch-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 140, 0.2),
+    transparent
+  );
+}
+
+.catch-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(139, 117, 0, 0.3),
+    inset 0 1px 0 rgba(212, 175, 140, 0.15);
+  border-color: #d4af8c;
+}
+
+.catch-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+  border: 1px solid rgba(212, 175, 140, 0.2);
+}
+
+.catch-item .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.catch-item .meta p {
+  margin: 0;
+  color: #d4af8c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.catch-item .meta h2 {
+  color: #d4af8c;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 8px 0 4px 0;
+  text-shadow: 0 0 8px rgba(212, 175, 140, 0.4);
+}
+
+/* ===== リスト ===== */
+.catch-list {
+  max-width: 980px;
+  margin: 18px auto 36px auto;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  padding: 0 12px;
+}
+
+/* ===== ボタン ===== */
+.btn,
+button.btn,
+button {
+  padding: 10px 18px;
+  border-radius: 0;
+  border: 2px solid #8b7500;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 117, 0, 0.3) 0%,
+    rgba(139, 117, 0, 0.1) 100%
+  );
+  color: #d4af8c;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 200ms ease;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn:hover,
+button:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 117, 0, 0.5) 0%,
+    rgba(139, 117, 0, 0.3) 100%
+  );
+  box-shadow: 0 0 12px rgba(212, 175, 140, 0.5),
+    inset 0 0 8px rgba(212, 175, 140, 0.1);
+  text-shadow: 0 0 8px rgba(212, 175, 140, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn.secondary,
+button.secondary {
+  background: linear-gradient(
+    90deg,
+    rgba(96, 125, 139, 0.3) 0%,
+    rgba(96, 125, 139, 0.1) 100%
+  );
+  border-color: #607d8b;
+  color: #b0bec5;
+}
+
+.btn.secondary:hover,
+button.secondary:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(96, 125, 139, 0.5) 0%,
+    rgba(96, 125, 139, 0.3) 100%
+  );
+  border-color: #cfd8dc;
+}
+
+/* ===== フォーム ===== */
+#catchForm {
+  display: none;
+  max-width: 720px;
+  margin: 24px auto;
+}
+
+#catchForm .form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+#catchForm label {
+  display: block;
+  font-weight: 600;
+  color: #d4af8c;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+#catchForm input[type="text"],
+#catchForm input[type="number"],
+#catchForm input[type="date"],
+#catchForm input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 0;
+  border: 1px solid #8b7500;
+  background: rgba(26, 20, 19, 0.8);
+  color: #d4af8c;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 150ms ease;
+}
+
+#catchForm input[type="text"]:focus,
+#catchForm input[type="number"]:focus,
+#catchForm input[type="date"]:focus,
+#catchForm input[type="file"]:focus {
+  border-color: #d4af8c;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 8px rgba(212, 175, 140, 0.3);
+  background: rgba(26, 20, 19, 0.95);
+}
+
+.catch-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid #8b7500;
+}
+
+/* ===== 満潮・干潮情報セクション ===== */
+.tide-extremes-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 20, 19, 0.9) 0%,
+    rgba(22, 25, 30, 0.85) 100%
+  );
+  border-radius: 0;
+  border-left: 4px solid #8b7500;
+  border: 2px solid #8b7500;
+}
+
+.tide-extremes-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.tide-extremes-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.tide-extremes-header {
+  font-weight: 700;
+  font-size: 16px;
+  color: #d4af8c;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #8b7500;
+  letter-spacing: 1px;
+}
+
+.tide-extremes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tide-extremes-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(22, 25, 30, 0.8);
+  border-radius: 0;
+  font-size: 14px;
+  color: #d4af8c;
+  border-left: 3px solid #8b7500;
+}
+
+.tide-time {
+  font-weight: 600;
+  color: #d4af8c;
+  min-width: 70px;
+}
+
+.tide-height {
+  font-weight: 500;
+  color: #b8a477;
+  text-align: right;
+}
+
+/* ===== 7日表示タブ ===== */
+.tide-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tide-tab {
+  padding: 8px 14px;
+  border: 2px solid #8b7500;
+  background: rgba(26, 20, 19, 0.8);
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d4af8c;
+  transition: all 200ms ease;
+  letter-spacing: 1px;
+}
+
+.tide-tab:hover {
+  border-color: #d4af8c;
+  background: rgba(139, 117, 0, 0.2);
+  text-shadow: 0 0 6px rgba(212, 175, 140, 0.5);
+}
+
+.tide-tab.active {
+  border-color: #d4af8c;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 117, 0, 0.4) 0%,
+    rgba(139, 117, 0, 0.2) 100%
+  );
+  color: #ffd700;
+  box-shadow: 0 0 12px rgba(212, 175, 140, 0.4),
+    inset 0 0 8px rgba(212, 175, 140, 0.1);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* ===== ホームボタン ===== */
+.home-btn {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 0;
+  border: 2px solid #8b7500;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 117, 0, 0.3) 0%,
+    rgba(139, 117, 0, 0.1) 100%
+  );
+  color: #d4af8c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(212, 175, 140, 0.1);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.home-btn:hover {
+  box-shadow: 0 8px 20px rgba(212, 175, 140, 0.3),
+    inset 0 1px 0 rgba(212, 175, 140, 0.2);
+  text-shadow: 0 0 8px rgba(212, 175, 140, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ===== Wave (波パターン) ===== */
+.wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.wave.top {
+  top: 0;
+  transform: rotate(180deg);
+}
+
+.wave.bottom {
+  bottom: 0;
+}
+
+/* ===== その他 ===== */
+.text-muted {
+  color: #8a7a6b;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: #8a7a6b;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 700px) {
+  .top-wrapper {
+    padding: 120px 0 60px 0;
+  }
+
+  .top-wrapper h1 {
+    font-size: 32px;
+    letter-spacing: 2px;
+  }
+
+  .top-wrapper p {
+    font-size: 14px;
+  }
+
+  .card,
+  .site-card,
+  .catch-item {
+    margin: 12px;
+    padding: 14px;
+  }
+
+  .home-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  #catchForm .form-row {
+    flex-direction: column;
+  }
+
+  .tide-extremes-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tide-extremes-item {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .tide-tabs {
+    gap: 6px;
+  }
+
+  .tide-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media all and (max-width: 670px) {
+  .header-right {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+
+  header.open::after {
+    content: "";
+    position: fixed;
+    inset: 65px 0 0 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    transition: opacity 220ms ease;
+  }
+
+  header.open .header-right {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 65px;
+    right: 12px;
+    width: calc(100% - 24px);
+    background: linear-gradient(
+      135deg,
+      rgba(26, 20, 19, 0.98) 0%,
+      rgba(22, 25, 30, 0.98) 100%
+    );
+    padding: 12px;
+    border-radius: 0;
+    gap: 8px;
+    z-index: 120;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+    border: 2px solid #8b7500;
+    transform-origin: top right;
+    animation: menuOpen 240ms ease both;
+  }
+
+  @keyframes menuOpen {
+    from {
+      transform: translateY(-6px) scale(0.98);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  header.open .header-right a,
+  header.open .header-right .tools-btn {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 0;
+  }
+
+  header.open .nav-tools .submenu {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .top-wrapper {
+    padding: 100px 12px 40px 12px;
+  }
+
+  .top-wrapper h1 {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  header {
+    height: 56px;
+  }
+
+  .logo {
+    width: 100px;
+    margin-top: 12px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+}
