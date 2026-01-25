@@ -24,7 +24,14 @@ module.exports = function handler(req, res) {
 
     res.status(200).json({ apiKey });
   } catch (error) {
-    console.error("Google Maps Key Error:", error);
-    res.status(500).json({ error: error.message });
+    console.error("[Google Maps API] Error:", error);
+    console.error("[Google Maps API] Error details:", {
+      name: error.name,
+      message: error.message,
+    });
+    res.status(500).json({
+      error: error.message,
+      type: error.name,
+    });
   }
 };

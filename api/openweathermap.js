@@ -40,7 +40,15 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
-    console.error("OpenWeatherMap API Error:", error);
-    res.status(500).json({ error: error.message });
+    console.error("[OpenWeatherMap API] Error:", error);
+    console.error("[OpenWeatherMap API] Error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    });
+    res.status(500).json({
+      error: error.message,
+      type: error.name,
+    });
   }
 };

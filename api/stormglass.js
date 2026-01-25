@@ -51,31 +51,56 @@ module.exports = async function handler(req, res) {
     console.log("[StormGlass API] Fetching from:", url);
     console.log("[StormGlass API] Auth header value length:", apiKey.length);
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: apiKey,
-        "Content-Type": "application/json",
-      },
-    });
+    let response;
+    try {
+      response = await fetch(url, {
+        headers: {
+          Authorization: apiKey,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (fetchError) {
+      console.error("[StormGlass API] Fetch error:", fetchError);
+      throw new Error(`Fetch failed: ${fetchError.message}`);
+    }
 
     console.log("[StormGlass API] Response status:", response.status);
 
     if (!response.ok) {
-      const errorText = await response.text();
+      let errorText = "";
+      try {
+        errorText = await response.text();
+      } catch (textError) {
+        errorText = `Unable to read response: ${textError.message}`;
+      }
       console.error("[StormGlass API] Error response:", errorText);
       throw new Error(
         `StormGlass API Error: ${response.status} - ${errorText}`,
       );
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (jsonError) {
+      console.error("[StormGlass API] JSON parse error:", jsonError);
+      throw new Error(`Failed to parse JSON response: ${jsonError.message}`);
+    }
+
     res.status(200).json(data);
   } catch (error) {
     console.error("[StormGlass API] Error:", error);
+    console.error("[StormGlass API] Error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    });
+
     const statusCode = error.statusCode || 500;
     const errorMessage = error.message || "Internal Server Error";
     res.status(statusCode).json({
       error: errorMessage,
+      type: error.name,
       details: process.env.NODE_ENV === "development" ? error.stack : undefined,
     });
   }
