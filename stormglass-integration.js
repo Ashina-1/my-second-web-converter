@@ -162,14 +162,14 @@ function parseWaveData(hoursArray) {
     getValueFromSources([
       current.waveHeight,
       current.windWaveHeight,
-      current.swellWaveHeight,
+      current.swellHeight,
     ]) || 0;
 
   const currentWavePeriod =
     getValueFromSources([
       current.wavePeriod,
       current.windWavePeriod,
-      current.swellWavePeriod,
+      current.swellPeriod,
     ]) || 0;
 
   return {
@@ -178,7 +178,7 @@ function parseWaveData(hoursArray) {
       wavePeriod: currentWavePeriod,
       waveDirection: current.waveDirection?.[0]?.value || null,
       windWaveHeight: current.windWaveHeight?.[0]?.value || null,
-      swellWaveHeight: current.swellWaveHeight?.[0]?.value || null,
+      swellHeight: current.swellHeight?.[0]?.value || null,
       windSpeed: current.windSpeed?.[0]?.value || null,
       windDirection: current.windDirection?.[0]?.value || null,
     },
@@ -187,7 +187,7 @@ function parseWaveData(hoursArray) {
         getValueFromSources([
           hour.waveHeight,
           hour.windWaveHeight,
-          hour.swellWaveHeight,
+          hour.swellHeight,
         ]) || 0;
 
       return {

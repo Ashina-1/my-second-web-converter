@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
     // type が tide の場合は潮汐データ、wave の場合は波浪データを取得
     let url;
     if (type === "wave") {
-      url = `https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lng}&params=waveHeight,windWaveHeight,swellWaveHeight`;
+      url = `https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lng}&params=waveHeight,windWaveHeight,swellHeight,swellPeriod,windWavePeriod`;
     } else {
       url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&datum=MLLW`;
     }
