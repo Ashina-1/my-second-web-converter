@@ -48,8 +48,17 @@ module.exports = async function handler(req, res) {
       url = `https://api.stormglass.io/v2/tide?lat=${lat}&lng=${lng}&datum=msl`;
     }
 
-    console.log("[StormGlass API] Fetching from:", url);
-    console.log("[StormGlass API] Auth header value length:", apiKey.length);
+    console.log("[StormGlass API] Request details:", {
+      url: url,
+      type: type,
+      apiKeyLength: apiKey.length,
+      apiKeyPrefix: apiKey.substring(0, 10) + "...",
+      method: "GET",
+      headers: {
+        Authorization: apiKey.substring(0, 10) + "...",
+        "Content-Type": "application/json",
+      },
+    });
 
     let response;
     try {
@@ -65,6 +74,10 @@ module.exports = async function handler(req, res) {
     }
 
     console.log("[StormGlass API] Response status:", response.status);
+    console.log("[StormGlass API] Response headers:", {
+      contentType: response.headers.get("content-type"),
+      contentLength: response.headers.get("content-length"),
+    });
 
     if (!response.ok) {
       let errorText = "";
@@ -73,7 +86,12 @@ module.exports = async function handler(req, res) {
       } catch (textError) {
         errorText = `Unable to read response: ${textError.message}`;
       }
-      console.error("[StormGlass API] Error response:", errorText);
+      console.error("[StormGlass API] Error response body:", errorText);
+      console.error("[StormGlass API] Error details:", {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+      });
       throw new Error(
         `StormGlass API Error: ${response.status} - ${errorText}`,
       );
