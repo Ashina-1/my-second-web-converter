@@ -57,11 +57,11 @@ export async function handleMapClick(latLng) {
 
   // 既存のマーカーを削除
   if (markerInstance) {
-    markerInstance.map = null;
+    markerInstance.setMap(null);
   }
 
-  // 新しいマーカーを配置
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  // 新しいマーカーを配置（従来のマーカーを使用）
+  const { Marker } = await google.maps.importLibrary("marker");
 
   const markerContent = document.createElement("div");
   markerContent.style.cssText = `
@@ -78,11 +78,18 @@ export async function handleMapClick(latLng) {
   `;
   markerContent.textContent = "📍";
 
-  markerInstance = new AdvancedMarkerElement({
+  markerInstance = new google.maps.Marker({
     map: mapInstance,
     position: { lat, lng },
-    content: markerContent,
     title: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 8,
+      fillColor: "#ff6b6b",
+      fillOpacity: 0.9,
+      strokeColor: "#ffffff",
+      strokeWeight: 3,
+    },
   });
 
   // イベント発火

@@ -45,7 +45,7 @@ module.exports = async function handler(req, res) {
     if (type === "wave") {
       url = `https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lng}&params=waveHeight,windWaveHeight,swellWaveHeight`;
     } else {
-      url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&datum=msl`;
+      url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&datum=MLLW`;
     }
 
     console.log("[StormGlass API] Request details:", {
