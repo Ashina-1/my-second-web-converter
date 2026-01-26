@@ -148,7 +148,6 @@ export async function addFishingSpotMarkers(fishingSpots) {
     });
   });
 }
-}
 
 /**
  * マップをズームしてマーカーを表示
