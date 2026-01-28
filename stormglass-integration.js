@@ -214,13 +214,24 @@ function parseWaveData(hoursArray) {
       windSpeed: current.windSpeed?.[0]?.value || null,
       windDirection: current.windDirection?.[0]?.value || null,
     },
-    trend24h: next24Hours.map((hour) => {
+    trend24h: next24Hours.map((hour, index) => {
       const waveHeight =
         getValueFromSources([
           hour.waveHeight,
           hour.windWaveHeight,
           hour.swellHeight,
         ]) || 0;
+
+      // 最初の3つのデータをデバッグログに出力
+      if (index < 3) {
+        console.log(`trend24h[${index}]:`, {
+          time: hour.time,
+          waveHeight: hour.waveHeight,
+          windWaveHeight: hour.windWaveHeight,
+          swellHeight: hour.swellHeight,
+          calculatedWaveHeight: waveHeight,
+        });
+      }
 
       return {
         time: new Date(hour.time),
