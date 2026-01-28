@@ -1159,6 +1159,35 @@
       }
 
       /**
+       * 保存されたtideDataを復元（日付をDateオブジェクトに変換）
+       */
+      function restoreTideData(tideData) {
+        if (!tideData) return null;
+
+        return {
+          current: tideData.current
+            ? {
+                ...tideData.current,
+                time: new Date(tideData.current.time),
+              }
+            : null,
+          next: tideData.next
+            ? {
+                ...tideData.next,
+                time: new Date(tideData.next.time),
+              }
+            : null,
+          range: tideData.range || null,
+          predictions: tideData.predictions
+            ? tideData.predictions.map((p) => ({
+                ...p,
+                time: new Date(p.time),
+              }))
+            : [],
+        };
+      }
+
+      /**
        * Firebaseから履歴データを読み込んで表示
        */
       window.loadHistoryData = async function (docId) {
@@ -1194,14 +1223,15 @@
             timestamp: new Date(historyData.savedAt),
           };
 
-          window.currentTideData = historyData.tideData;
+          // tideData と waveData を復元（日付をDateオブジェクトに変換）
+          window.currentTideData = restoreTideData(historyData.tideData);
           window.currentWaveData = historyData.waveData;
 
           // UIに表示
           displayOceanData(
             window.currentOceanData,
-            historyData.tideData,
-            historyData.waveData,
+            window.currentTideData,
+            window.currentWaveData,
           );
         } catch (error) {
           console.error("履歴データ読み込みエラー:", error);
