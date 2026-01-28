@@ -1097,12 +1097,19 @@
 
         try {
           const historyCollection = collection(db, "oceanCheckerHistory");
+          // インデックス不要のシンプルなクエリ（uidのみで絞り込み）
           const q = query(
             historyCollection,
             where("uid", "==", currentUser.uid),
-            orderBy("savedAt", "desc"),
           );
           const snapshot = await getDocs(q);
+
+          // クライアント側でソート（新しい順）
+          const docs = snapshot.docs.sort((a, b) => {
+            const dateA = new Date(a.data().savedAt);
+            const dateB = new Date(b.data().savedAt);
+            return dateB - dateA;
+          });
 
           const historyContainer = document.getElementById("historyContainer");
 
@@ -1114,7 +1121,7 @@
 
           let historyHtml =
             '<div style="display: flex; flex-direction: column; gap: 8px;">';
-          snapshot.forEach((doc) => {
+          docs.forEach((doc) => {
             const data = doc.data();
             const savedDate = new Date(data.savedAt).toLocaleString("ja-JP");
             const locationName = data.location.name || "不明な地点";
