@@ -822,8 +822,9 @@
             "http://www.w3.org/2000/svg",
             "g",
           );
-          gridGroup.setAttribute("stroke", "#6b5d3f");
-          gridGroup.setAttribute("stroke-width", "0.5");
+          gridGroup.setAttribute("stroke", "#4a7a9a");
+          gridGroup.setAttribute("stroke-width", "1");
+          gridGroup.setAttribute("opacity", "0.5");
 
           for (let i = 0; i <= 4; i++) {
             const y = padding.top + (graphHeight / 4) * i;
@@ -859,7 +860,8 @@
           path.setAttribute("d", pathData);
           path.setAttribute("fill", "none");
           path.setAttribute("stroke", "#ff9944");
-          path.setAttribute("stroke-width", "2");
+          path.setAttribute("stroke-width", "2.5");
+          path.setAttribute("stroke-linecap", "round");
           svg.appendChild(path);
 
           // 軸ラベル
@@ -867,10 +869,11 @@
             "http://www.w3.org/2000/svg",
             "text",
           );
-          yAxisLabel.setAttribute("x", 5);
-          yAxisLabel.setAttribute("y", padding.top + 10);
-          yAxisLabel.setAttribute("font-size", "10");
-          yAxisLabel.setAttribute("fill", "#8099b8");
+          yAxisLabel.setAttribute("x", 2);
+          yAxisLabel.setAttribute("y", padding.top + 8);
+          yAxisLabel.setAttribute("font-size", "11");
+          yAxisLabel.setAttribute("font-weight", "bold");
+          yAxisLabel.setAttribute("fill", "#ff9944");
           yAxisLabel.textContent = `${maxWave.toFixed(1)}m`;
           svg.appendChild(yAxisLabel);
 
@@ -878,10 +881,11 @@
             "http://www.w3.org/2000/svg",
             "text",
           );
-          yAxisLabelMin.setAttribute("x", 5);
-          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 10);
-          yAxisLabelMin.setAttribute("font-size", "10");
-          yAxisLabelMin.setAttribute("fill", "#8099b8");
+          yAxisLabelMin.setAttribute("x", 2);
+          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 12);
+          yAxisLabelMin.setAttribute("font-size", "11");
+          yAxisLabelMin.setAttribute("font-weight", "bold");
+          yAxisLabelMin.setAttribute("fill", "#ff9944");
           yAxisLabelMin.textContent = `${minWave.toFixed(1)}m`;
           svg.appendChild(yAxisLabelMin);
 
@@ -947,8 +951,9 @@
             "http://www.w3.org/2000/svg",
             "g",
           );
-          gridGroup.setAttribute("stroke", "#6b5d3f");
-          gridGroup.setAttribute("stroke-width", "0.5");
+          gridGroup.setAttribute("stroke", "#4a7a9a");
+          gridGroup.setAttribute("stroke-width", "1");
+          gridGroup.setAttribute("opacity", "0.5");
 
           for (let i = 0; i <= 4; i++) {
             const y = padding.top + (graphHeight / 4) * i;
@@ -982,7 +987,8 @@
           path.setAttribute("d", pathData);
           path.setAttribute("fill", "none");
           path.setAttribute("stroke", "#6fb8ff");
-          path.setAttribute("stroke-width", "2");
+          path.setAttribute("stroke-width", "2.5");
+          path.setAttribute("stroke-linecap", "round");
           svg.appendChild(path);
 
           // 軸ラベル
@@ -990,10 +996,11 @@
             "http://www.w3.org/2000/svg",
             "text",
           );
-          yAxisLabel.setAttribute("x", 5);
-          yAxisLabel.setAttribute("y", padding.top + 10);
-          yAxisLabel.setAttribute("font-size", "10");
-          yAxisLabel.setAttribute("fill", "#8099b8");
+          yAxisLabel.setAttribute("x", 2);
+          yAxisLabel.setAttribute("y", padding.top + 8);
+          yAxisLabel.setAttribute("font-size", "11");
+          yAxisLabel.setAttribute("font-weight", "bold");
+          yAxisLabel.setAttribute("fill", "#6fb8ff");
           yAxisLabel.textContent = `${maxWind.toFixed(1)}m/s`;
           svg.appendChild(yAxisLabel);
 
@@ -1001,10 +1008,11 @@
             "http://www.w3.org/2000/svg",
             "text",
           );
-          yAxisLabelMin.setAttribute("x", 5);
-          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 10);
-          yAxisLabelMin.setAttribute("font-size", "10");
-          yAxisLabelMin.setAttribute("fill", "#8099b8");
+          yAxisLabelMin.setAttribute("x", 2);
+          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 12);
+          yAxisLabelMin.setAttribute("font-size", "11");
+          yAxisLabelMin.setAttribute("font-weight", "bold");
+          yAxisLabelMin.setAttribute("fill", "#6fb8ff");
           yAxisLabelMin.textContent = `${minWind.toFixed(1)}m/s`;
           svg.appendChild(yAxisLabelMin);
 
