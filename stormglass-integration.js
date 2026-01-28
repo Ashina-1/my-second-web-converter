@@ -222,17 +222,20 @@ function parseWaveData(hoursArray) {
           hour.swellHeight,
         ]) || 0;
 
-      // 最初の3つのデータをデバッグログに出力
-      if (index < 3) {
-        console.log(`trend24h[${index}]:`, {
-          time: hour.time,
-          waveHeight_structure: hour.waveHeight,
-          waveHeight_isArray: Array.isArray(hour.waveHeight),
-          waveHeight_toString: JSON.stringify(hour.waveHeight),
-          windWaveHeight_structure: hour.windWaveHeight,
-          swellHeight_structure: hour.swellHeight,
-          calculatedWaveHeight: waveHeight,
-        });
+      // 最初の1つのデータを詳細にデバッグログに出力
+      if (index === 0) {
+        console.log(`=== trend24h[0] 詳細情報 ===`);
+        console.log("hour:", hour);
+        console.log("hour.waveHeight:", hour.waveHeight);
+        console.log("hour.waveHeight JSON:", JSON.stringify(hour.waveHeight));
+        console.log("hour.windWaveHeight:", hour.windWaveHeight);
+        console.log(
+          "hour.windWaveHeight JSON:",
+          JSON.stringify(hour.windWaveHeight),
+        );
+        console.log("hour.swellHeight:", hour.swellHeight);
+        console.log("hour.swellHeight JSON:", JSON.stringify(hour.swellHeight));
+        console.log("calculatedWaveHeight:", waveHeight);
       }
 
       return {
