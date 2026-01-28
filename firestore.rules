@@ -66,7 +66,7 @@ service cloud.firestore {
       // Create: must be signed in and the uid field matches auth.uid
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
 
-      // Read: owner only
+      // Read: owner only - list and get documents
       allow read: if request.auth != null && resource.data.uid == request.auth.uid;
 
       // Update: owner only

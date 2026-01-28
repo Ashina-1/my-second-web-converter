@@ -1009,6 +1009,33 @@
       }
 
       /**
+       * オブジェクトから未定義フィールドを除外
+       */
+      function cleanUndefinedFields(obj) {
+        if (obj === null || obj === undefined) {
+          return null;
+        }
+        if (typeof obj !== "object") {
+          return obj;
+        }
+        if (Array.isArray(obj)) {
+          return obj.map((item) => cleanUndefinedFields(item));
+        }
+
+        const cleaned = {};
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            const value = obj[key];
+            if (value !== undefined && value !== null) {
+              cleaned[key] =
+                typeof value === "object" ? cleanUndefinedFields(value) : value;
+            }
+          }
+        }
+        return cleaned;
+      }
+
+      /**
        * 海況情報をFirebaseの履歴に保存
        */
       window.saveToHistory = async function () {
@@ -1024,7 +1051,9 @@
 
         try {
           const historyCollection = collection(db, "oceanCheckerHistory");
-          const docRef = await addDoc(historyCollection, {
+
+          // 未定義フィールドをフィルタリング
+          const historyData = cleanUndefinedFields({
             uid: currentUser.uid,
             location: window.currentOceanData.location,
             weather: window.currentOceanData.weather,
@@ -1037,11 +1066,26 @@
             savedAt: new Date().toISOString(),
           });
 
+          const docRef = await addDoc(historyCollection, historyData);
+
           alert("履歴に保存しました");
           loadOceanCheckerHistory();
         } catch (error) {
           console.error("履歴保存エラー:", error);
-          alert("履歴の保存に失敗しました");
+          if (
+            error.message &&
+            error.message.includes("Unsupported field value: undefined")
+          ) {
+            alert(
+              "データにエラーがあります。ページをリロードして再度試してください。",
+            );
+          } else if (error.code === "permission-denied") {
+            alert(
+              "保存権限がありません。管理者に Firestore ルールの設定を確認してもらってください。",
+            );
+          } else {
+            alert("履歴の保存に失敗しました: " + error.message);
+          }
         }
       };
 
@@ -1096,6 +1140,14 @@
           }
         } catch (error) {
           console.error("履歴読み込みエラー:", error);
+          const historyContainer = document.getElementById("historyContainer");
+          if (error.code === "permission-denied") {
+            historyContainer.innerHTML =
+              '<div class="no-data" style="padding: 10px; color: #ff8787;">Firestore ルールの設定を確認してください。管理者に連絡してください。</div>';
+          } else {
+            historyContainer.innerHTML =
+              '<div class="no-data" style="padding: 10px;">履歴の読み込みに失敗しました</div>';
+          }
         }
       }
 
