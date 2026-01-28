@@ -226,9 +226,11 @@ function parseWaveData(hoursArray) {
       if (index < 3) {
         console.log(`trend24h[${index}]:`, {
           time: hour.time,
-          waveHeight: hour.waveHeight,
-          windWaveHeight: hour.windWaveHeight,
-          swellHeight: hour.swellHeight,
+          waveHeight_structure: hour.waveHeight,
+          waveHeight_isArray: Array.isArray(hour.waveHeight),
+          waveHeight_toString: JSON.stringify(hour.waveHeight),
+          windWaveHeight_structure: hour.windWaveHeight,
+          swellHeight_structure: hour.swellHeight,
           calculatedWaveHeight: waveHeight,
         });
       }
