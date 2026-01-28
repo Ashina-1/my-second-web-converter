@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="stylesheet-darksoul.css" />
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -636,14 +638,14 @@
                 : ""
             }
 
-            <div id="waveGraphContainer" style="margin-top: 15px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px;">
+            <div id="waveGraphContainer" style="margin-top: 15px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px; position: relative; height: 250px;">
               <p id="waveGraphPlaceholder" style="text-align: center; color: #8099b8; margin: 20px 0;">波高グラフを読み込み中...</p>
-              <svg id="waveGraphSvg" style="width: 100%; height: 160px; display: none; background: linear-gradient(135deg, rgba(5, 4, 4, 0.9) 0%, rgba(15, 20, 35, 0.85) 100%);"></svg>
+              <canvas id="waveGraphSvg" style="display: none;"></canvas>
             </div>
 
-            <div id="windGraphContainer" style="margin-top: 12px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px;">
+            <div id="windGraphContainer" style="margin-top: 12px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px; position: relative; height: 250px;">
               <p id="windGraphPlaceholder" style="text-align: center; color: #8099b8; margin: 20px 0;">風速グラフを読み込み中...</p>
-              <svg id="windGraphSvg" style="width: 100%; height: 160px; display: none; background: linear-gradient(135deg, rgba(5, 4, 4, 0.9) 0%, rgba(15, 20, 35, 0.85) 100%);"></svg>
+              <canvas id="windGraphSvg" style="display: none;"></canvas>
             </div>
           </div>
           `
@@ -817,19 +819,22 @@
       /**
        * 波高の24時間推移グラフを描画
        */
+      /**
+       * 波高の24時間推移グラフを描画（Chart.js）
+       */
       function drawWaveGraph(waveData) {
         console.log("*** drawWaveGraph が呼ばれました ***");
         console.log("waveData:", waveData);
 
         try {
-          const svg = document.getElementById("waveGraphSvg");
+          const canvas = document.getElementById("waveGraphSvg");
           const placeholder = document.getElementById("waveGraphPlaceholder");
 
-          console.log("SVG要素:", svg);
+          console.log("Canvas要素:", canvas);
           console.log("Placeholder要素:", placeholder);
 
-          if (!svg) {
-            console.error("waveGraphSvg要素が見つかりません");
+          if (!canvas) {
+            console.error("waveGraphSvg Canvas要素が見つかりません");
             return;
           }
 
@@ -843,106 +848,88 @@
               placeholder.textContent = "波高データが利用できません";
               placeholder.style.display = "block";
             }
-            svg.style.display = "none";
+            canvas.style.display = "none";
             return;
           }
 
-          const width = 340;
-          const height = 150;
-          const padding = { top: 20, right: 15, bottom: 25, left: 35 };
-          const graphWidth = width - padding.left - padding.right;
-          const graphHeight = height - padding.top - padding.bottom;
-
-          // 波高の最大・最小を計算
-          const waveHeights = waveData.trend24h.map((d) => d.waveHeight);
-          const minWave = Math.min(...waveHeights);
-          const maxWave = Math.max(...waveHeights);
-          const rangeWave = maxWave - minWave || 1;
-
-          console.log("波高範囲:", { minWave, maxWave, rangeWave });
-
-          // SVG初期化
-          svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-          svg.innerHTML = "";
-          console.log("SVG初期化完了");
-
-          // 背景グリッド
-          const gridGroup = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "g",
-          );
-          gridGroup.setAttribute("stroke", "#4a7a9a");
-          gridGroup.setAttribute("stroke-width", "1");
-          gridGroup.setAttribute("opacity", "0.5");
-
-          for (let i = 0; i <= 4; i++) {
-            const y = padding.top + (graphHeight / 4) * i;
-            const line = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "line",
-            );
-            line.setAttribute("x1", padding.left);
-            line.setAttribute("x2", width - padding.right);
-            line.setAttribute("y1", y);
-            line.setAttribute("y2", y);
-            gridGroup.appendChild(line);
-          }
-          svg.appendChild(gridGroup);
-
-          // 波高曲線を描画
-          let pathData = `M ${padding.left} ${padding.top + graphHeight}`;
-          for (let i = 0; i < waveData.trend24h.length; i++) {
-            const x =
-              padding.left +
-              (graphWidth / (waveData.trend24h.length - 1 || 1)) * i;
-            const normalizedHeight =
-              (waveData.trend24h[i].waveHeight - minWave) / rangeWave;
-            const y =
-              padding.top + graphHeight - normalizedHeight * graphHeight;
-            pathData += ` L ${x} ${y}`;
+          // グローバル変数でチャートを管理（複数作成を防ぐ）
+          if (window.waveChart) {
+            window.waveChart.destroy();
           }
 
-          const path = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path",
-          );
-          path.setAttribute("d", pathData);
-          path.setAttribute("fill", "none");
-          path.setAttribute("stroke", "#ff9944");
-          path.setAttribute("stroke-width", "2.5");
-          path.setAttribute("stroke-linecap", "round");
-          svg.appendChild(path);
+          // データの時間と波高を抽出
+          const labels = waveData.trend24h.map((d) => {
+            const date = new Date(d.time);
+            return date.getHours() + ":00";
+          });
+          const dataPoints = waveData.trend24h.map((d) => d.waveHeight);
 
-          // 軸ラベル
-          const yAxisLabel = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text",
-          );
-          yAxisLabel.setAttribute("x", 2);
-          yAxisLabel.setAttribute("y", padding.top + 8);
-          yAxisLabel.setAttribute("font-size", "11");
-          yAxisLabel.setAttribute("font-weight", "bold");
-          yAxisLabel.setAttribute("fill", "#ff9944");
-          yAxisLabel.textContent = `${maxWave.toFixed(1)}m`;
-          svg.appendChild(yAxisLabel);
+          console.log("グラフデータ:", { labels, dataPoints });
 
-          const yAxisLabelMin = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text",
-          );
-          yAxisLabelMin.setAttribute("x", 2);
-          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 12);
-          yAxisLabelMin.setAttribute("font-size", "11");
-          yAxisLabelMin.setAttribute("font-weight", "bold");
-          yAxisLabelMin.setAttribute("fill", "#ff9944");
-          yAxisLabelMin.textContent = `${minWave.toFixed(1)}m`;
-          svg.appendChild(yAxisLabelMin);
+          // Chart.js チャート作成
+          const ctx = canvas.getContext("2d");
+          window.waveChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "波高 (m)",
+                  data: dataPoints,
+                  borderColor: "#ff9944",
+                  backgroundColor: "rgba(255, 153, 68, 0.1)",
+                  borderWidth: 2.5,
+                  fill: true,
+                  tension: 0.4,
+                  pointBackgroundColor: "#ff9944",
+                  pointBorderColor: "#fff",
+                  pointBorderWidth: 2,
+                  pointRadius: 4,
+                  pointHoverRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    color: "#8099b8",
+                    font: {
+                      size: 12,
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: "#8099b8",
+                  },
+                  grid: {
+                    color: "rgba(74, 122, 154, 0.3)",
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: "#8099b8",
+                  },
+                  grid: {
+                    color: "rgba(74, 122, 154, 0.3)",
+                  },
+                },
+              },
+            },
+          });
 
           console.log("波高グラフ描画完了");
           if (placeholder) {
             placeholder.style.display = "none";
           }
-          svg.style.display = "block";
+          canvas.style.display = "block";
           console.log("波高グラフを表示しました（display: block）");
         } catch (error) {
           console.error("波高グラフの描画エラー:", error);
@@ -953,20 +940,23 @@
       /**
        * 風速の24時間推移グラフを描画
        */
+      /**
+       * 風速の24時間推移グラフを描画（Chart.js）
+       */
       function drawWindGraph(oceanData) {
         console.log("*** drawWindGraph が呼ばれました ***");
         console.log("oceanData:", oceanData);
         console.log("oceanData?.windTrend24h:", oceanData?.windTrend24h);
 
         try {
-          const svg = document.getElementById("windGraphSvg");
+          const canvas = document.getElementById("windGraphSvg");
           const placeholder = document.getElementById("windGraphPlaceholder");
 
-          console.log("風速グラフSVG要素:", svg);
+          console.log("風速グラフCanvas要素:", canvas);
           console.log("風速グラフPlaceholder要素:", placeholder);
 
-          if (!svg) {
-            console.error("windGraphSvg要素が見つかりません");
+          if (!canvas) {
+            console.error("windGraphSvg Canvas要素が見つかりません");
             return;
           }
 
@@ -976,7 +966,7 @@
               placeholder.textContent = "風速データが利用できません";
               placeholder.style.display = "block";
             }
-            svg.style.display = "none";
+            canvas.style.display = "none";
             return;
           }
 
@@ -987,101 +977,88 @@
               placeholder.textContent = "風速データが利用できません";
               placeholder.style.display = "block";
             }
-            svg.style.display = "none";
+            canvas.style.display = "none";
             return;
           }
 
-          const width = 340;
-          const height = 150;
-          const padding = { top: 20, right: 15, bottom: 25, left: 35 };
-          const graphWidth = width - padding.left - padding.right;
-          const graphHeight = height - padding.top - padding.bottom;
-
-          // 風速の最大・最小を計算
-          const windSpeeds = windData.map((d) => d.windSpeed);
-          const minWind = Math.min(...windSpeeds);
-          const maxWind = Math.max(...windSpeeds);
-          const rangeWind = maxWind - minWind || 1;
-
-          // SVG初期化
-          svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-          svg.innerHTML = "";
-
-          // 背景グリッド
-          const gridGroup = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "g",
-          );
-          gridGroup.setAttribute("stroke", "#4a7a9a");
-          gridGroup.setAttribute("stroke-width", "1");
-          gridGroup.setAttribute("opacity", "0.5");
-
-          for (let i = 0; i <= 4; i++) {
-            const y = padding.top + (graphHeight / 4) * i;
-            const line = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "line",
-            );
-            line.setAttribute("x1", padding.left);
-            line.setAttribute("x2", width - padding.right);
-            line.setAttribute("y1", y);
-            line.setAttribute("y2", y);
-            gridGroup.appendChild(line);
-          }
-          svg.appendChild(gridGroup);
-
-          // 風速曲線を描画
-          let pathData = `M ${padding.left} ${padding.top + graphHeight}`;
-          for (let i = 0; i < windData.length; i++) {
-            const x =
-              padding.left + (graphWidth / (windData.length - 1 || 1)) * i;
-            const normalizedSpeed =
-              (windData[i].windSpeed - minWind) / rangeWind;
-            const y = padding.top + graphHeight - normalizedSpeed * graphHeight;
-            pathData += ` L ${x} ${y}`;
+          // グローバル変数でチャートを管理（複数作成を防ぐ）
+          if (window.windChart) {
+            window.windChart.destroy();
           }
 
-          const path = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path",
-          );
-          path.setAttribute("d", pathData);
-          path.setAttribute("fill", "none");
-          path.setAttribute("stroke", "#6fb8ff");
-          path.setAttribute("stroke-width", "2.5");
-          path.setAttribute("stroke-linecap", "round");
-          svg.appendChild(path);
+          // データの時間と風速を抽出
+          const labels = windData.map((d) => {
+            const date = new Date(d.time);
+            return date.getHours() + ":00";
+          });
+          const dataPoints = windData.map((d) => d.windSpeed);
 
-          // 軸ラベル
-          const yAxisLabel = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text",
-          );
-          yAxisLabel.setAttribute("x", 2);
-          yAxisLabel.setAttribute("y", padding.top + 8);
-          yAxisLabel.setAttribute("font-size", "11");
-          yAxisLabel.setAttribute("font-weight", "bold");
-          yAxisLabel.setAttribute("fill", "#6fb8ff");
-          yAxisLabel.textContent = `${maxWind.toFixed(1)}m/s`;
-          svg.appendChild(yAxisLabel);
+          console.log("風速グラフデータ:", { labels, dataPoints });
 
-          const yAxisLabelMin = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text",
-          );
-          yAxisLabelMin.setAttribute("x", 2);
-          yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 12);
-          yAxisLabelMin.setAttribute("font-size", "11");
-          yAxisLabelMin.setAttribute("font-weight", "bold");
-          yAxisLabelMin.setAttribute("fill", "#6fb8ff");
-          yAxisLabelMin.textContent = `${minWind.toFixed(1)}m/s`;
-          svg.appendChild(yAxisLabelMin);
+          // Chart.js チャート作成
+          const ctx = canvas.getContext("2d");
+          window.windChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "風速 (m/s)",
+                  data: dataPoints,
+                  borderColor: "#6fb8ff",
+                  backgroundColor: "rgba(111, 184, 255, 0.1)",
+                  borderWidth: 2.5,
+                  fill: true,
+                  tension: 0.4,
+                  pointBackgroundColor: "#6fb8ff",
+                  pointBorderColor: "#fff",
+                  pointBorderWidth: 2,
+                  pointRadius: 4,
+                  pointHoverRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    color: "#8099b8",
+                    font: {
+                      size: 12,
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: "#8099b8",
+                  },
+                  grid: {
+                    color: "rgba(74, 122, 154, 0.3)",
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: "#8099b8",
+                  },
+                  grid: {
+                    color: "rgba(74, 122, 154, 0.3)",
+                  },
+                },
+              },
+            },
+          });
 
           console.log("風速グラフ描画完了");
           if (placeholder) {
             placeholder.style.display = "none";
           }
-          svg.style.display = "block";
+          canvas.style.display = "block";
           console.log("風速グラフを表示しました（display: block）");
         } catch (error) {
           console.error("風速グラフの描画エラー:", error);
