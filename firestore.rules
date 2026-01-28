@@ -13,9 +13,6 @@ service cloud.firestore {
       function isSignedIn() {
         return request.auth != null;
       }
-      function isOwner(uid) {
-        return uid == request.auth.uid;
-      }
       function hasCatchShape(c) {
         // require key set and simple type checks + length limits
         return c.keys().hasAll(['fish', 'size', 'location', 'date', 'imageUrl', 'rod', 'reel', 'line', 'lure', 'memo'])

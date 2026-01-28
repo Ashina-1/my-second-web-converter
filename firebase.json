@@ -1,4 +1,7 @@
 {
+  "projects": {
+    "default": "fishing-log-app-5bea9"
+  },
   "firestore": {
     "rules": "firestore.rules"
   },
