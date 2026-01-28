@@ -60,6 +60,21 @@ service cloud.firestore {
                     ));
       allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
     }
+
+    // oceanCheckerHistory: owner-only access for ocean checker data
+    match /oceanCheckerHistory/{historyId} {
+      // Create: must be signed in and the uid field matches auth.uid
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+
+      // Read: owner only
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      // Update: owner only
+      allow update: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      // Delete: owner only
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
   }
 }
 

@@ -309,11 +309,24 @@
           </h3>
           <div class="fishing-spots" id="fishingSpots"></div>
         </div>
+
+        <!-- 海況チェック履歴セクション -->
+        <div
+          class="section"
+          style="margin-top: 20px; border: 1px solid #506080"
+        >
+          <h3 style="color: #c4d8f0; margin-top: 0; font-size: 1rem">
+            <i data-lucide="history"></i> 過去のチェック履歴
+          </h3>
+          <div id="historyContainer" class="no-data" style="padding: 10px">
+            ログインして地点をチェックすると、履歴が保存されます
+          </div>
+        </div>
       </div>
 
       <!-- 海況情報セクション -->
       <div class="section">
-        <h2 id="oceanInfoTitle">🌊 海況情報</h2>
+        <h2 id="oceanInfoTitle"><i data-lucide="waves"></i> 海況情報</h2>
         <div id="oceanDataContainer">
           <div class="no-data">
             地点を選択して、その地点の海況情報を取得してください。
@@ -337,6 +350,23 @@
         getWaveData,
         evaluateOverallCondition,
       } from "./stormglass-integration.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        query,
+        where,
+        getDocs,
+        deleteDoc,
+        doc,
+        orderBy,
+      } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+      import { firebaseConfig } from "./firebase-config.js";
 
       // Googleマップスクリプトの動的読み込み
       async function loadGoogleMapsAPI() {
@@ -362,9 +392,31 @@
         }
       }
 
+      // Firebase初期化とグローバル変数
+      let firebaseApp;
+      let auth;
+      let db;
+      let currentUser = null;
+
       // 初期化
       async function init() {
         try {
+          // Firebase初期化
+          firebaseApp = initializeApp(firebaseConfig);
+          auth = getAuth(firebaseApp);
+          db = getFirestore(firebaseApp);
+
+          // ユーザー認証状態を監視
+          onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+              loadOceanCheckerHistory();
+            } else {
+              document.getElementById("historyContainer").innerHTML =
+                '<div class="no-data" style="padding: 10px;">ログインして海況チェックを保存してください</div>';
+            }
+          });
+
           // Googleマップの読み込みと初期化
           await loadGoogleMapsAPI();
           await initializeMap("mapContainer", 36.2048, 138.2529, 6);
@@ -412,6 +464,11 @@
             );
             // StormGlass APIが失敗してもOpenWeatherMapのデータで続行
           }
+
+          // グローバル変数に保存（履歴保存用）
+          window.currentOceanData = oceanData;
+          window.currentTideData = tideData;
+          window.currentWaveData = waveData;
 
           displayOceanData(oceanData, tideData, waveData);
         } catch (error) {
@@ -590,6 +647,7 @@
 
           <div class="button-group">
             <button onclick="copyLocationToClipboard()"><i data-lucide="copy"></i> 座標をコピー</button>
+            <button onclick="saveToHistory()"><i data-lucide="bookmark"></i> 履歴に保存</button>
             <button onclick="saveFishingLocation()"><i data-lucide="save"></i> 釣行記録に使用</button>
           </div>
         `;
@@ -949,6 +1007,164 @@
         }
         return `<span style="font-size: ${size}px; vertical-align: middle; margin-right: 4px;">?</span>`;
       }
+
+      /**
+       * 海況情報をFirebaseの履歴に保存
+       */
+      window.saveToHistory = async function () {
+        if (!currentUser) {
+          alert("ログインして履歴を保存してください");
+          return;
+        }
+
+        if (!window.currentOceanData) {
+          alert("海況データを取得してから保存してください");
+          return;
+        }
+
+        try {
+          const historyCollection = collection(db, "oceanCheckerHistory");
+          const docRef = await addDoc(historyCollection, {
+            uid: currentUser.uid,
+            location: window.currentOceanData.location,
+            weather: window.currentOceanData.weather,
+            waves: window.currentOceanData.waves,
+            windTrend24h: window.currentOceanData.windTrend24h,
+            sunrise: window.currentOceanData.sunrise.toISOString(),
+            sunset: window.currentOceanData.sunset.toISOString(),
+            tideData: window.currentTideData || null,
+            waveData: window.currentWaveData || null,
+            savedAt: new Date().toISOString(),
+          });
+
+          alert("履歴に保存しました");
+          loadOceanCheckerHistory();
+        } catch (error) {
+          console.error("履歴保存エラー:", error);
+          alert("履歴の保存に失敗しました");
+        }
+      };
+
+      /**
+       * Firebaseから海況チェック履歴を取得して表示
+       */
+      async function loadOceanCheckerHistory() {
+        if (!currentUser || !db) return;
+
+        try {
+          const historyCollection = collection(db, "oceanCheckerHistory");
+          const q = query(
+            historyCollection,
+            where("uid", "==", currentUser.uid),
+            orderBy("savedAt", "desc"),
+          );
+          const snapshot = await getDocs(q);
+
+          const historyContainer = document.getElementById("historyContainer");
+
+          if (snapshot.empty) {
+            historyContainer.innerHTML =
+              '<div class="no-data" style="padding: 10px;">保存された履歴がありません</div>';
+            return;
+          }
+
+          let historyHtml =
+            '<div style="display: flex; flex-direction: column; gap: 8px;">';
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const savedDate = new Date(data.savedAt).toLocaleString("ja-JP");
+            const locationName = data.location.name || "不明な地点";
+
+            historyHtml += `
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(30, 50, 80, 0.5); border: 1px solid #506080; border-radius: 4px;">
+                <div style="cursor: pointer; flex: 1;" onclick="loadHistoryData('${doc.id}')">
+                  <div style="color: #4db8ff; font-weight: 600; margin-bottom: 4px;">${escapeHtml(locationName)}</div>
+                  <small style="color: #8099b8; display: block;">${escapeHtml(data.location.latitude.toFixed(4))}, ${escapeHtml(data.location.longitude.toFixed(4))}</small>
+                  <small style="color: #6b7b82;">${savedDate}</small>
+                </div>
+                <button onclick="deleteHistoryData('${doc.id}')" style="padding: 6px 10px; background: rgba(255, 100, 100, 0.2); border: 1px solid #ff6b6b; color: #ff8787; border-radius: 2px; cursor: pointer; margin-left: 10px;">削除</button>
+              </div>
+            `;
+          });
+          historyHtml += "</div>";
+
+          historyContainer.innerHTML = historyHtml;
+
+          // Lucideアイコンを再初期化
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+        } catch (error) {
+          console.error("履歴読み込みエラー:", error);
+        }
+      }
+
+      /**
+       * Firebaseから履歴データを読み込んで表示
+       */
+      window.loadHistoryData = async function (docId) {
+        try {
+          const docRef = doc(db, "oceanCheckerHistory", docId);
+          const snapshot = await getDocs(
+            query(
+              collection(db, "oceanCheckerHistory"),
+              where("uid", "==", currentUser.uid),
+            ),
+          );
+
+          let historyData = null;
+          snapshot.forEach((d) => {
+            if (d.id === docId) {
+              historyData = d.data();
+            }
+          });
+
+          if (!historyData) {
+            alert("履歴データが見つかりません");
+            return;
+          }
+
+          // グローバル変数に保存
+          window.currentOceanData = {
+            location: historyData.location,
+            weather: historyData.weather,
+            waves: historyData.waves,
+            windTrend24h: historyData.windTrend24h,
+            sunrise: new Date(historyData.sunrise),
+            sunset: new Date(historyData.sunset),
+            timestamp: new Date(historyData.savedAt),
+          };
+
+          window.currentTideData = historyData.tideData;
+          window.currentWaveData = historyData.waveData;
+
+          // UIに表示
+          displayOceanData(
+            window.currentOceanData,
+            historyData.tideData,
+            historyData.waveData,
+          );
+        } catch (error) {
+          console.error("履歴データ読み込みエラー:", error);
+          alert("履歴データの読み込みに失敗しました");
+        }
+      };
+
+      /**
+       * Firebaseから履歴データを削除
+       */
+      window.deleteHistoryData = async function (docId) {
+        if (!confirm("この履歴を削除しますか？")) return;
+
+        try {
+          await deleteDoc(doc(db, "oceanCheckerHistory", docId));
+          loadOceanCheckerHistory();
+          alert("履歴を削除しました");
+        } catch (error) {
+          console.error("履歴削除エラー:", error);
+          alert("履歴の削除に失敗しました");
+        }
+      };
 
       // ページロード時に初期化
       window.addEventListener("load", () => {
