@@ -803,9 +803,15 @@
        * 波高の24時間推移グラフを描画
        */
       function drawWaveGraph(waveData) {
+        console.log("*** drawWaveGraph が呼ばれました ***");
+        console.log("waveData:", waveData);
+
         try {
           const svg = document.getElementById("waveGraphSvg");
           const placeholder = document.getElementById("waveGraphPlaceholder");
+
+          console.log("SVG要素:", svg);
+          console.log("Placeholder要素:", placeholder);
 
           if (!svg) {
             console.error("waveGraphSvg要素が見つかりません");
@@ -817,6 +823,7 @@
             !waveData.trend24h ||
             waveData.trend24h.length === 0
           ) {
+            console.warn("波高データが不足しています");
             if (placeholder) {
               placeholder.textContent = "波高データが利用できません";
               placeholder.style.display = "block";
@@ -837,9 +844,12 @@
           const maxWave = Math.max(...waveHeights);
           const rangeWave = maxWave - minWave || 1;
 
+          console.log("波高範囲:", { minWave, maxWave, rangeWave });
+
           // SVG初期化
           svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
           svg.innerHTML = "";
+          console.log("SVG初期化完了");
 
           // 背景グリッド
           const gridGroup = document.createElementNS(
@@ -913,12 +923,15 @@
           yAxisLabelMin.textContent = `${minWave.toFixed(1)}m`;
           svg.appendChild(yAxisLabelMin);
 
+          console.log("波高グラフ描画完了");
           if (placeholder) {
             placeholder.style.display = "none";
           }
           svg.style.display = "block";
+          console.log("波高グラフを表示しました（display: block）");
         } catch (error) {
           console.error("波高グラフの描画エラー:", error);
+          console.error("エラースタック:", error.stack);
         }
       }
 
@@ -926,9 +939,16 @@
        * 風速の24時間推移グラフを描画
        */
       function drawWindGraph(oceanData) {
+        console.log("*** drawWindGraph が呼ばれました ***");
+        console.log("oceanData:", oceanData);
+        console.log("oceanData?.windTrend24h:", oceanData?.windTrend24h);
+
         try {
           const svg = document.getElementById("windGraphSvg");
           const placeholder = document.getElementById("windGraphPlaceholder");
+
+          console.log("風速グラフSVG要素:", svg);
+          console.log("風速グラフPlaceholder要素:", placeholder);
 
           if (!svg) {
             console.error("windGraphSvg要素が見つかりません");
@@ -936,6 +956,7 @@
           }
 
           if (!oceanData || !oceanData.windTrend24h) {
+            console.warn("風速データが不足しています");
             if (placeholder) {
               placeholder.textContent = "風速データが利用できません";
               placeholder.style.display = "block";
@@ -946,6 +967,7 @@
 
           const windData = oceanData.windTrend24h;
           if (windData.length === 0) {
+            console.warn("風速データが空です");
             if (placeholder) {
               placeholder.textContent = "風速データが利用できません";
               placeholder.style.display = "block";
@@ -1040,12 +1062,15 @@
           yAxisLabelMin.textContent = `${minWind.toFixed(1)}m/s`;
           svg.appendChild(yAxisLabelMin);
 
+          console.log("風速グラフ描画完了");
           if (placeholder) {
             placeholder.style.display = "none";
           }
           svg.style.display = "block";
+          console.log("風速グラフを表示しました（display: block）");
         } catch (error) {
           console.error("風速グラフの描画エラー:", error);
+          console.error("エラースタック:", error.stack);
         }
       }
 
