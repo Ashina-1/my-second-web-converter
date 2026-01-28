@@ -7,6 +7,29 @@
 // API キーはバックエンド関数で管理
 
 /**
+ * 潮汐タイプを日本語に変換
+ * @private
+ * @param {string} type - "High" or "Low"
+ * @returns {Object} { label: string, emoji: string, description: string }
+ */
+function getTideTypeLabel(type) {
+  if (type === "High") {
+    return {
+      label: "満潮",
+      emoji: "🌊",
+      description: "水位が最も高い状態",
+    };
+  } else if (type === "Low") {
+    return {
+      label: "干潮",
+      emoji: "⬇️",
+      description: "水位が最も低い状態",
+    };
+  }
+  return { label: "不明", emoji: "❓", description: "" };
+}
+
+/**
  * StormGlass APIから潮汐データを取得
  * @param {number} latitude - 緯度
  * @param {number} longitude - 経度
@@ -103,21 +126,29 @@ function parseTideData(tideArray) {
   const firstTide = tideArray[0];
   const lastTide = tideArray[tideArray.length - 1];
 
+  // 次の潮時情報を整形
+  const nextTideInfo = nextTide
+    ? {
+        time: new Date(nextTide.time),
+        height: nextTide.height,
+        type: nextTide.type,
+        ...getTideTypeLabel(nextTide.type), // 日本語ラベルと絵文字を追加
+      }
+    : null;
+
+  // 現在の潮汐情報を整形
+  const currentTideInfo = currentTide
+    ? {
+        time: new Date(currentTide.time),
+        height: currentTide.height,
+        type: currentTide.type,
+        ...getTideTypeLabel(currentTide.type),
+      }
+    : null;
+
   return {
-    current: currentTide
-      ? {
-          time: new Date(currentTide.time),
-          height: currentTide.height,
-          type: currentTide.type, // "High" or "Low"
-        }
-      : null,
-    next: nextTide
-      ? {
-          time: new Date(nextTide.time),
-          height: nextTide.height,
-          type: nextTide.type,
-        }
-      : null,
+    current: currentTideInfo,
+    next: nextTideInfo,
     range: {
       min: Math.min(...tideArray.map((t) => t.height)),
       max: Math.max(...tideArray.map((t) => t.height)),
@@ -126,6 +157,7 @@ function parseTideData(tideArray) {
       time: new Date(t.time),
       height: t.height,
       type: t.type,
+      ...getTideTypeLabel(t.type), // 各予報にも日本語ラベルを追加
     })),
   };
 }

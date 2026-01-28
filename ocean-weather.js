@@ -26,6 +26,28 @@ export async function getOceanWeather(latitude, longitude) {
 
     const data = await response.json();
 
+    // 24時間の風速トレンドを構築（current + forecast データから）
+    const windTrend24h = [];
+    if (data.list && Array.isArray(data.list)) {
+      // forecastデータから最初の24時間分を抽出
+      for (let i = 0; i < Math.min(24, data.list.length); i++) {
+        windTrend24h.push({
+          time: new Date(data.list[i].dt * 1000),
+          windSpeed: data.list[i].wind.speed,
+          windDirection: data.list[i].wind.deg,
+        });
+      }
+    } else {
+      // forecastデータがない場合は、現在の風データを24時間分に展開
+      for (let i = 0; i < 24; i++) {
+        windTrend24h.push({
+          time: new Date(new Date().getTime() + i * 60 * 60 * 1000),
+          windSpeed: data.wind.speed,
+          windDirection: data.wind.deg,
+        });
+      }
+    }
+
     return {
       location: {
         name: data.name || "不明な地点",
@@ -50,6 +72,7 @@ export async function getOceanWeather(latitude, longitude) {
         windSpeed: data.wind.speed,
         recommendation: getWaveRecommendation(data.wind.speed),
       },
+      windTrend24h: windTrend24h,
       sunrise: new Date(data.sys.sunrise * 1000),
       sunset: new Date(data.sys.sunset * 1000),
       timestamp: new Date(),

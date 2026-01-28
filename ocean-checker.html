@@ -6,6 +6,8 @@
     <title>海況チェッカー - AbyssAtlas</title>
     <link rel="stylesheet" href="stylesheet.css" />
     <link rel="stylesheet" href="stylesheet-darksoul.css" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -197,6 +199,60 @@
         animation: spin 1s ease-in-out infinite;
       }
 
+      .lucide-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+
+      .lucide-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+      }
+
+      /* Lucideアイコンのインラインスタイル */
+      i[data-lucide] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.25em;
+        vertical-align: middle;
+        color: currentColor;
+      }
+
+      i[data-lucide] svg {
+        width: 100%;
+        height: 100%;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+      }
+
+      .weather-card .label i[data-lucide] {
+        width: 1.2em;
+        height: 1.2em;
+      }
+
+      button i[data-lucide] {
+        width: 1em;
+        height: 1em;
+        margin-right: 0.5em;
+      }
+
+      strong i[data-lucide] {
+        width: 1.2em;
+        height: 1.2em;
+      }
+
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -257,7 +313,7 @@
 
       <!-- 海況情報セクション -->
       <div class="section">
-        <h2>🌊 海況情報</h2>
+        <h2 id="oceanInfoTitle">🌊 海況情報</h2>
         <div id="oceanDataContainer">
           <div class="no-data">
             地点を選択して、その地点の海況情報を取得してください。
@@ -400,35 +456,35 @@
 
           <div class="weather-info">
             <div class="weather-card">
-              <div class="label">🌡️ 気温</div>
+              <div class="label"><i data-lucide="thermometer"></i> 気温</div>
               <div class="value">${oceanData.weather.temperature.toFixed(1)}°C</div>
             </div>
             <div class="weather-card">
-              <div class="label">💨 風速</div>
+              <div class="label"><i data-lucide="wind"></i> 風速</div>
               <div class="value">${oceanData.weather.windSpeed.toFixed(1)} m/s</div>
             </div>
             <div class="weather-card">
-              <div class="label">💧 湿度</div>
+              <div class="label"><i data-lucide="droplets"></i> 湿度</div>
               <div class="value">${oceanData.weather.humidity}%</div>
             </div>
             <div class="weather-card">
-              <div class="label">🌊 推定波高</div>
+              <div class="label"><i data-lucide="waves"></i> 推定波高</div>
               <div class="value">${oceanData.waves.estimatedHeight.max.toFixed(1)}m</div>
             </div>
             <div class="weather-card">
-              <div class="label">🌪️ 風向き</div>
+              <div class="label"><i data-lucide="compass"></i> 風向き</div>
               <div class="value">${getWindDirection(oceanData.weather.windDirection)}</div>
             </div>
             <div class="weather-card">
-              <div class="label">☁️ 雲量</div>
+              <div class="label"><i data-lucide="cloud"></i> 雲量</div>
               <div class="value">${oceanData.weather.cloudiness}%</div>
             </div>
             <div class="weather-card">
-              <div class="label">🌅  日出</div>
+              <div class="label"><i data-lucide="sun"></i> 日出</div>
               <div class="value">${oceanData.sunrise.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}</div>
             </div>
             <div class="weather-card">
-              <div class="label">🌅 日没</div>
+              <div class="label"><i data-lucide="moon"></i> 日没</div>
               <div class="value">${oceanData.sunset.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}</div>
             </div>
           </div>
@@ -437,15 +493,21 @@
             tideData
               ? `
           <div style="margin-top: 15px; padding: 15px; background: rgba(100, 180, 255, 0.1); border: 2px solid #4db8ff; border-radius: 4px;">
-            <h3 style="color: #4db8ff; margin-top: 0; margin-bottom: 12px;">🌊 潮汐情報（StormGlass）</h3>
+            <h3 style="color: #4db8ff; margin-top: 0; margin-bottom: 12px;"><i data-lucide="waves"></i> 潮汐情報（StormGlass）</h3>
 
             ${
               tideData.current
                 ? `
             <div class="weather-card" style="margin-bottom: 10px;">
               <div class="label">現在の潮位</div>
-              <div class="value">${tideData.current.height.toFixed(2)}m</div>
-              <small style="color: #8099b8; display: block; margin-top: 5px;">${tideData.current.type === "High" ? "満潮" : "干潮"}</small>
+              <div class="value" style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 24px;">${tideData.current.emoji}</span>
+                <div>
+                  <div>${tideData.current.label}</div>
+                  <small style="color: #8099b8;">${tideData.current.height.toFixed(2)}m</small>
+                </div>
+              </div>
+              <small style="color: #8099b8; display: block; margin-top: 5px;">${tideData.current.description}</small>
             </div>
             `
                 : ""
@@ -454,10 +516,16 @@
             ${
               tideData.next
                 ? `
-            <div class="weather-card" style="margin-bottom: 10px;">
+              <div class="weather-card" style="margin-bottom: 10px;">
               <div class="label">次の潮時</div>
-              <div class="value">${tideData.next.time.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}</div>
-              <small style="color: #8099b8; display: block; margin-top: 5px;">${tideData.next.type === "High" ? "満潮 (高さ: " : "干潮 (高さ: "}${tideData.next.height.toFixed(2)}m)</small>
+              <div class="value" style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 24px;">${tideData.next.emoji}</span>
+                <div>
+                  <div>${tideData.next.label}</div>
+                  <small style="color: #8099b8;">${tideData.next.time.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })} (高さ: ${tideData.next.height.toFixed(2)}m)</small>
+                </div>
+              </div>
+              <small style="color: #8099b8; display: block; margin-top: 5px;">${tideData.next.description}</small>
             </div>
             `
                 : ""
@@ -482,7 +550,7 @@
             waveData
               ? `
           <div style="margin-top: 15px; padding: 15px; background: rgba(255, 150, 100, 0.1); border: 2px solid #ff8c00; border-radius: 4px;">
-            <h3 style="color: #ff8c00; margin-top: 0; margin-bottom: 12px;">🏄 波浪情報（StormGlass）</h3>
+            <h3 style="color: #ff8c00; margin-top: 0; margin-bottom: 12px;"><i data-lucide="waves"></i> 波浪情報（StormGlass）</h3>
 
             <div class="weather-card" style="margin-bottom: 10px;">
               <div class="label">波高</div>
@@ -500,23 +568,44 @@
             `
                 : ""
             }
+
+            <div id="waveGraphContainer" style="margin-top: 15px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px;">
+              <p id="waveGraphPlaceholder" style="text-align: center; color: #8099b8; margin: 20px 0;">波高グラフを読み込み中...</p>
+              <svg id="waveGraphSvg" style="width: 100%; height: auto; display: none; background: linear-gradient(135deg, rgba(5, 4, 4, 0.9) 0%, rgba(15, 20, 35, 0.85) 100%);"></svg>
+            </div>
+
+            <div id="windGraphContainer" style="margin-top: 12px; background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 25, 45, 0.95)); border: 2px solid #3a4d6b; border-radius: 2px; padding: 12px;">
+              <p id="windGraphPlaceholder" style="text-align: center; color: #8099b8; margin: 20px 0;">風速グラフを読み込み中...</p>
+              <svg id="windGraphSvg" style="width: 100%; height: auto; display: none; background: linear-gradient(135deg, rgba(5, 4, 4, 0.9) 0%, rgba(15, 20, 35, 0.85) 100%);"></svg>
+            </div>
           </div>
           `
               : ""
           }
 
           <div class="recommendation-box">
-            <strong>🎣 釣りの推奨度:</strong><br/>
+            <strong><i data-lucide="target"></i> 釣りの推奨度:</strong><br/>
             ${oceanData.waves.recommendation}
           </div>
 
           <div class="button-group">
-            <button onclick="copyLocationToClipboard()">📋 座標をコピー</button>
-            <button onclick="saveFishingLocation()">💾 釣行記録に使用</button>
+            <button onclick="copyLocationToClipboard()"><i data-lucide="copy"></i> 座標をコピー</button>
+            <button onclick="saveFishingLocation()"><i data-lucide="save"></i> 釣行記録に使用</button>
           </div>
         `;
 
         container.innerHTML = html;
+
+        // Lucideアイコンを初期化
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+
+        // グラフを描画（waveDataがある場合）
+        if (waveData && waveData.trend24h) {
+          drawWaveGraph(waveData);
+          drawWindGraph(oceanData);
+        }
 
         // グローバル関数として機能を設定
         window.copyLocationToClipboard = function () {
@@ -625,8 +714,250 @@
         return String(text).replace(/[&<>"']/g, (m) => map[m]);
       }
 
+      /**
+       * 波高の24時間推移グラフを描画
+       */
+      function drawWaveGraph(waveData) {
+        const container = document.getElementById("waveGraphContainer");
+        const placeholder = document.getElementById("waveGraphPlaceholder");
+        const svg = document.getElementById("waveGraphSvg");
+
+        if (!waveData || !waveData.trend24h || waveData.trend24h.length === 0) {
+          placeholder.textContent = "波高データが利用できません";
+          return;
+        }
+
+        const width = 340;
+        const height = 150;
+        const padding = { top: 20, right: 15, bottom: 25, left: 35 };
+        const graphWidth = width - padding.left - padding.right;
+        const graphHeight = height - padding.top - padding.bottom;
+
+        // 波高の最大・最小を計算
+        const waveHeights = waveData.trend24h.map((d) => d.waveHeight);
+        const minWave = Math.min(...waveHeights);
+        const maxWave = Math.max(...waveHeights);
+        const rangeWave = maxWave - minWave || 1;
+
+        // SVG初期化
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svg.innerHTML = "";
+
+        // 背景グリッド
+        const gridGroup = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "g",
+        );
+        gridGroup.setAttribute("stroke", "#6b5d3f");
+        gridGroup.setAttribute("stroke-width", "0.5");
+
+        for (let i = 0; i <= 4; i++) {
+          const y = padding.top + (graphHeight / 4) * i;
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          line.setAttribute("x1", padding.left);
+          line.setAttribute("x2", width - padding.right);
+          line.setAttribute("y1", y);
+          line.setAttribute("y2", y);
+          gridGroup.appendChild(line);
+        }
+        svg.appendChild(gridGroup);
+
+        // 波高曲線を描画
+        let pathData = `M ${padding.left} ${padding.top + graphHeight}`;
+        for (let i = 0; i < waveData.trend24h.length; i++) {
+          const x =
+            padding.left +
+            (graphWidth / (waveData.trend24h.length - 1 || 1)) * i;
+          const normalizedHeight =
+            (waveData.trend24h[i].waveHeight - minWave) / rangeWave;
+          const y = padding.top + graphHeight - normalizedHeight * graphHeight;
+          pathData += ` L ${x} ${y}`;
+        }
+
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "#ff9944");
+        path.setAttribute("stroke-width", "2");
+        svg.appendChild(path);
+
+        // 軸ラベル
+        const yAxisLabel = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text",
+        );
+        yAxisLabel.setAttribute("x", 5);
+        yAxisLabel.setAttribute("y", padding.top + 10);
+        yAxisLabel.setAttribute("font-size", "10");
+        yAxisLabel.setAttribute("fill", "#8099b8");
+        yAxisLabel.textContent = `${maxWave.toFixed(1)}m`;
+        svg.appendChild(yAxisLabel);
+
+        const yAxisLabelMin = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text",
+        );
+        yAxisLabelMin.setAttribute("x", 5);
+        yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 10);
+        yAxisLabelMin.setAttribute("font-size", "10");
+        yAxisLabelMin.setAttribute("fill", "#8099b8");
+        yAxisLabelMin.textContent = `${minWave.toFixed(1)}m`;
+        svg.appendChild(yAxisLabelMin);
+
+        placeholder.style.display = "none";
+        svg.style.display = "block";
+      }
+
+      /**
+       * 風速の24時間推移グラフを描画
+       */
+      function drawWindGraph(oceanData) {
+        const container = document.getElementById("windGraphContainer");
+        const placeholder = document.getElementById("windGraphPlaceholder");
+        const svg = document.getElementById("windGraphSvg");
+
+        if (!oceanData || !oceanData.windTrend24h) {
+          placeholder.textContent = "風速データが利用できません";
+          return;
+        }
+
+        const windData = oceanData.windTrend24h;
+        if (windData.length === 0) {
+          placeholder.textContent = "風速データが利用できません";
+          return;
+        }
+
+        const width = 340;
+        const height = 150;
+        const padding = { top: 20, right: 15, bottom: 25, left: 35 };
+        const graphWidth = width - padding.left - padding.right;
+        const graphHeight = height - padding.top - padding.bottom;
+
+        // 風速の最大・最小を計算
+        const windSpeeds = windData.map((d) => d.windSpeed);
+        const minWind = Math.min(...windSpeeds);
+        const maxWind = Math.max(...windSpeeds);
+        const rangeWind = maxWind - minWind || 1;
+
+        // SVG初期化
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svg.innerHTML = "";
+
+        // 背景グリッド
+        const gridGroup = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "g",
+        );
+        gridGroup.setAttribute("stroke", "#6b5d3f");
+        gridGroup.setAttribute("stroke-width", "0.5");
+
+        for (let i = 0; i <= 4; i++) {
+          const y = padding.top + (graphHeight / 4) * i;
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          line.setAttribute("x1", padding.left);
+          line.setAttribute("x2", width - padding.right);
+          line.setAttribute("y1", y);
+          line.setAttribute("y2", y);
+          gridGroup.appendChild(line);
+        }
+        svg.appendChild(gridGroup);
+
+        // 風速曲線を描画
+        let pathData = `M ${padding.left} ${padding.top + graphHeight}`;
+        for (let i = 0; i < windData.length; i++) {
+          const x =
+            padding.left + (graphWidth / (windData.length - 1 || 1)) * i;
+          const normalizedSpeed = (windData[i].windSpeed - minWind) / rangeWind;
+          const y = padding.top + graphHeight - normalizedSpeed * graphHeight;
+          pathData += ` L ${x} ${y}`;
+        }
+
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "#6fb8ff");
+        path.setAttribute("stroke-width", "2");
+        svg.appendChild(path);
+
+        // 軸ラベル
+        const yAxisLabel = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text",
+        );
+        yAxisLabel.setAttribute("x", 5);
+        yAxisLabel.setAttribute("y", padding.top + 10);
+        yAxisLabel.setAttribute("font-size", "10");
+        yAxisLabel.setAttribute("fill", "#8099b8");
+        yAxisLabel.textContent = `${maxWind.toFixed(1)}m/s`;
+        svg.appendChild(yAxisLabel);
+
+        const yAxisLabelMin = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text",
+        );
+        yAxisLabelMin.setAttribute("x", 5);
+        yAxisLabelMin.setAttribute("y", padding.top + graphHeight + 10);
+        yAxisLabelMin.setAttribute("font-size", "10");
+        yAxisLabelMin.setAttribute("fill", "#8099b8");
+        yAxisLabelMin.textContent = `${minWind.toFixed(1)}m/s`;
+        svg.appendChild(yAxisLabelMin);
+
+        placeholder.style.display = "none";
+        svg.style.display = "block";
+      }
+
+      /**
+       * Lucideアイコンを表示（IDで指定）
+       * @param {string} iconName - Lucideアイコン名
+       * @param {number} size - アイコンサイズ（デフォルト24）
+       * @returns {string} SVGアイコンHTML文字列
+       */
+      function getLucideIcon(iconName, size = 24) {
+        // アイコン名をキャメルケースに変換
+        const camelCase = iconName
+          .split("-")
+          .map((word, i) =>
+            i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1),
+          )
+          .join("");
+
+        // Lucideアイコンを取得して表示
+        if (window.lucide && window.lucide[camelCase]) {
+          const icon = window.lucide[camelCase];
+          const svg = icon.toSvg();
+          svg.setAttribute("width", size);
+          svg.setAttribute("height", size);
+          svg.setAttribute("stroke", "currentColor");
+          svg.setAttribute("fill", "none");
+          svg.setAttribute("stroke-width", "2");
+          svg.style.display = "inline";
+          svg.style.verticalAlign = "middle";
+          svg.style.marginRight = "4px";
+          return svg.outerHTML;
+        }
+        return `<span style="font-size: ${size}px; vertical-align: middle; margin-right: 4px;">?</span>`;
+      }
+
       // ページロード時に初期化
-      window.addEventListener("load", init);
+      window.addEventListener("load", () => {
+        init();
+        // ページロード後にLucideアイコンを初期化
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
     </script>
   </body>
 </html>
