@@ -664,6 +664,21 @@
 
         container.innerHTML = html;
 
+        console.log("=== HTML が container に設定されました ===");
+        console.log("HTML長:", html.length);
+        console.log(
+          "waveGraphSvg が HTML に含まれているか:",
+          html.includes("waveGraphSvg"),
+        );
+        console.log(
+          "windGraphSvg が HTML に含まれているか:",
+          html.includes("windGraphSvg"),
+        );
+        console.log(
+          "container内のSVG要素:",
+          container.querySelectorAll("svg").length,
+        );
+
         // Lucideアイコンを初期化
         if (window.lucide) {
           window.lucide.createIcons();
