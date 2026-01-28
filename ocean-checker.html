@@ -470,6 +470,11 @@
           window.currentTideData = tideData;
           window.currentWaveData = waveData;
 
+          console.log("oceanData:", oceanData);
+          console.log("tideData:", tideData);
+          console.log("waveData:", waveData);
+          console.log("waveData.trend24h:", waveData?.trend24h);
+
           displayOceanData(oceanData, tideData, waveData);
         } catch (error) {
           console.error("海況データ取得エラー:", error);
@@ -502,6 +507,11 @@
        * 海況データをUIに表示
        */
       function displayOceanData(oceanData, tideData, waveData) {
+        console.log("=== displayOceanData が呼ばれました ===");
+        console.log("waveData:", waveData);
+        console.log("waveData?.trend24h:", waveData?.trend24h);
+        console.log("waveData?.trend24h の長さ:", waveData?.trend24h?.length);
+
         const container = document.getElementById("oceanDataContainer");
 
         const html = `
@@ -660,11 +670,25 @@
         }
 
         // グラフを描画（waveDataがある場合）
+        console.log(
+          "グラフ描画判定: waveData =",
+          !!waveData,
+          ", waveData.trend24h =",
+          !!waveData?.trend24h,
+        );
+
         if (waveData && waveData.trend24h) {
+          console.log("グラフを描画します（条件満たした）");
           // 次のフレームで描画（DOM更新を確実にする）
           requestAnimationFrame(() => {
+            console.log("requestAnimationFrame 内で描画実行");
             drawWaveGraph(waveData);
             drawWindGraph(oceanData);
+          });
+        } else {
+          console.warn("グラフを描画できません:", {
+            hasWaveData: !!waveData,
+            hasTrend24h: !!waveData?.trend24h,
           });
         }
 
