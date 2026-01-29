@@ -171,6 +171,11 @@ function parseWaveData(hoursArray) {
     return null;
   }
 
+  console.log("=== parseWaveData called ===");
+  console.log("hoursArray[0]:", hoursArray[0]);
+  console.log("hoursArray[0].time:", hoursArray[0]?.time);
+  console.log("typeof hoursArray[0].time:", typeof hoursArray[0]?.time);
+
   // 現在のデータと24時間の傾向を取得
   const current = hoursArray[0];
   const next24Hours = hoursArray.slice(0, Math.min(24, hoursArray.length));
