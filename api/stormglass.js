@@ -105,6 +105,14 @@ module.exports = async function handler(req, res) {
       throw new Error(`Failed to parse JSON response: ${jsonError.message}`);
     }
 
+    // デバッグ: 最初のデータポイントをログ出力
+    if (type === "wave" && data.hours && data.hours.length > 0) {
+      console.log(
+        "[StormGlass API] First hour data:",
+        JSON.stringify(data.hours[0], null, 2),
+      );
+    }
+
     res.status(200).json(data);
   } catch (error) {
     console.error("[StormGlass API] Error:", error);

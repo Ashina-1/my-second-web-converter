@@ -256,8 +256,13 @@ function parseWaveData(hoursArray) {
         console.log("calculatedWaveHeight:", waveHeight);
       }
 
+      // StormGlass APIの時刻は現在時刻 + index時間で計算
+      const timeValue = hour.time
+        ? new Date(hour.time)
+        : new Date(new Date().getTime() + index * 60 * 60 * 1000);
+
       return {
-        time: new Date(hour.time),
+        time: timeValue,
         waveHeight: waveHeight,
       };
     }),
