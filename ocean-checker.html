@@ -858,11 +858,22 @@
           }
 
           // データの時間と波高を抽出
-          const labels = waveData.trend24h.map((d) => {
+          const labels = waveData.trend24h.map((d, index) => {
+            console.log(
+              `trend24h[${index}].time:`,
+              d.time,
+              "type:",
+              typeof d.time,
+            );
             const date = new Date(d.time);
-            return date.getHours() + ":00";
+            const hours = date.getHours();
+            console.log(`  -> parsed hours:`, hours);
+            return hours + ":00";
           });
-          const dataPoints = waveData.trend24h.map((d) => d.waveHeight);
+          const dataPoints = waveData.trend24h.map((d, index) => {
+            console.log(`trend24h[${index}].waveHeight:`, d.waveHeight);
+            return d.waveHeight;
+          });
 
           console.log("グラフデータ:", { labels, dataPoints });
 
