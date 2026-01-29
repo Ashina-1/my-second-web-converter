@@ -178,13 +178,26 @@ function parseWaveData(hoursArray) {
   // 複数のデータソースがある場合の値の取得（優先度順）
   const getValueFromSources = (sources) => {
     for (const source of sources) {
-      if (
-        source &&
-        source[0] &&
-        source[0].value !== undefined &&
-        source[0].value !== null
-      ) {
-        return source[0].value;
+      // source が null/undefined の場合はスキップ
+      if (!source) continue;
+
+      // ケース1: source が配列 [{ value: X, source: "..." }]
+      if (Array.isArray(source)) {
+        if (
+          source[0] &&
+          source[0].value !== undefined &&
+          source[0].value !== null
+        ) {
+          return source[0].value;
+        }
+      }
+      // ケース2: source が直接オブジェクト { value: X, source: "..." }
+      else if (source.value !== undefined && source.value !== null) {
+        return source.value;
+      }
+      // ケース3: source が直接数値
+      else if (typeof source === "number") {
+        return source;
       }
     }
     return null;
