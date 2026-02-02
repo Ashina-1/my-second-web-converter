@@ -166,10 +166,39 @@
         cursor: pointer;
         padding: 8px;
         transition: color 0.2s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .menu-icon:hover {
         color: #4db8ff;
+      }
+
+      .hamburger {
+        width: 24px;
+        height: 24px;
+        stroke: currentColor;
+      }
+
+      .hamburger .bar {
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        transition: all 0.3s ease;
+      }
+
+      .menu-icon[aria-expanded="true"] .bar1 {
+        transform: translateY(10px) rotate(45deg);
+      }
+
+      .menu-icon[aria-expanded="true"] .bar2 {
+        opacity: 0;
+      }
+
+      .menu-icon[aria-expanded="true"] .bar3 {
+        transform: translateY(-10px) rotate(-45deg);
       }
 
       .submenu[aria-hidden="true"] {
@@ -186,7 +215,7 @@
         }
 
         .menu-icon {
-          display: block;
+          display: flex !important;
         }
       }
 
@@ -392,8 +421,38 @@
           </div>
           <a href="profile.html">プロフィール</a>
         </div>
-        <button class="menu-icon" id="menuIcon" aria-label="メニュー">
-          <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <button class="menu-icon" id="menuIcon" aria-label="メニュー" aria-expanded="false">
+          <svg
+            class="hamburger"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              class="bar bar1"
+              d="M4 6h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+            <path
+              class="bar bar2"
+              d="M4 12h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+            <path
+              class="bar bar3"
+              d="M4 18h16"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
       </div>
     </header>
