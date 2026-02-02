@@ -71,7 +71,9 @@ a {
   padding: 14px;
   box-shadow: 0 6px 18px rgba(9, 59, 76, 0.06);
   border: 1px solid rgba(15, 106, 148, 0.06);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
   outline: none;
 }
 .catch-item:hover {
@@ -297,7 +299,9 @@ header .container {
   display: inline-flex;
   align-items: center;
   border-radius: 8px;
-  transition: background-color 200ms ease, transform 150ms ease;
+  transition:
+    background-color 200ms ease,
+    transform 150ms ease;
 }
 
 .header-right a:hover {
@@ -359,7 +363,9 @@ button.menu-icon:hover {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
-  transition: opacity 220ms ease, transform 220ms ease;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
 }
 .nav-tools .submenu.open {
   opacity: 1;
@@ -961,5 +967,300 @@ button:hover {
   .tide-tab {
     padding: 6px 12px;
     font-size: 12px;
+  }
+}
+
+/* ===== 統一されたレスポンシブデザイン ===== */
+
+/* 大画面（1200px以上） */
+@media (min-width: 1200px) {
+  .catch-list {
+    max-width: 1200px;
+    margin: 18px auto 36px auto;
+  }
+
+  body {
+    padding-top: 0;
+  }
+}
+
+/* タブレット / 小型デスクトップ（901px - 1199px） */
+@media (max-width: 1199px) {
+  .catch-list {
+    max-width: 100%;
+    margin: 18px 0 36px 0;
+    padding: 0 15px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+}
+
+/* タブレット（751px - 900px） */
+@media (max-width: 900px) {
+  .catch-list {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    padding: 0 15px;
+  }
+
+  .catch-item {
+    padding: 12px;
+  }
+
+  .catch-item img {
+    max-width: 100%;
+  }
+
+  .card {
+    margin: 1rem 0;
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  button,
+  .btn {
+    padding: 10px 15px;
+    font-size: 0.95rem;
+  }
+
+  .top-wrapper {
+    padding: 120px 20px 60px 20px;
+  }
+
+  .top-wrapper h1,
+  .top-wrapper h2 {
+    font-size: 1.8rem;
+  }
+
+  main {
+    margin-top: 15px !important;
+  }
+}
+
+/* スマートフォン（481px - 750px） */
+@media (max-width: 750px) {
+  body {
+    padding: 10px;
+  }
+
+  .catch-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 10px;
+    max-width: 100%;
+  }
+
+  .catch-item {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  .catch-item img {
+    max-width: 100%;
+    height: 200px;
+  }
+
+  .img-wrap {
+    max-width: 100%;
+  }
+
+  .img-wrap img {
+    height: 200px;
+  }
+
+  .top-wrapper {
+    padding: 100px 15px 50px 15px;
+  }
+
+  .top-wrapper h1,
+  .top-wrapper h2 {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .top-wrapper p {
+    font-size: 0.95rem;
+    margin: 10px 0;
+  }
+
+  .card {
+    margin: 1rem 0;
+    padding: 1.25rem;
+    max-width: 100%;
+  }
+
+  .card label {
+    font-size: 0.95rem;
+  }
+
+  .card input,
+  .card select,
+  .card textarea {
+    font-size: 16px;
+    padding: 0.75rem;
+  }
+
+  .card button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  #convertBtn,
+  #clearBtn {
+    flex: 1;
+  }
+
+  .weather-card {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .weather-card h4 {
+    font-size: 1rem;
+  }
+
+  .weather-card p {
+    font-size: 0.85rem;
+  }
+
+  .tide-extremes-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tide-extremes-item {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .tide-tabs {
+    gap: 6px;
+  }
+
+  .tide-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  main {
+    margin-top: 10px !important;
+  }
+}
+
+/* 小型スマートフォン（480px以下） */
+@media (max-width: 480px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+
+  body {
+    padding: 8px;
+  }
+
+  .catch-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 0 8px;
+    max-width: 100%;
+  }
+
+  .catch-item {
+    grid-template-columns: 1fr;
+    padding: 8px;
+  }
+
+  .catch-item img,
+  .img-wrap img {
+    height: 150px;
+  }
+
+  .top-wrapper {
+    padding: 80px 12px 40px 12px;
+    margin-top: 0;
+  }
+
+  .top-wrapper h1,
+  .top-wrapper h2 {
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+
+  .top-wrapper p {
+    font-size: 0.85rem;
+    margin: 8px 0;
+  }
+
+  .card {
+    margin: 0.75rem 0;
+    padding: 1rem;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .card label {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .card input,
+  .card select,
+  .card textarea {
+    font-size: 16px;
+    padding: 0.6rem;
+  }
+
+  .card button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .weather-card {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .weather-card h4 {
+    font-size: 0.9rem;
+  }
+
+  .weather-card p {
+    font-size: 0.8rem;
+  }
+
+  #convertBtn,
+  #clearBtn {
+    flex: 1;
+  }
+
+  button,
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .tide-extremes-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .tide-extremes-item {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .tide-tabs {
+    gap: 4px;
+  }
+
+  .tide-tab {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  main {
+    margin-top: 8px !important;
   }
 }

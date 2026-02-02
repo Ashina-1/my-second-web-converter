@@ -5,7 +5,8 @@ body {
   margin: 0;
   padding: 85px 20px 0px 0px;
   background: #050404 !important;
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       ellipse at 50% 0%,
       rgba(100, 150, 200, 0.05) 0%,
       transparent 50%
@@ -19,7 +20,8 @@ h1 {
   color: #c4d8f0;
   margin-bottom: 10px;
   font-size: 2rem;
-  text-shadow: 0 0 15px rgba(180, 200, 220, 0.6),
+  text-shadow:
+    0 0 15px rgba(180, 200, 220, 0.6),
     0 0 30px rgba(100, 150, 200, 0.3);
 }
 
@@ -44,12 +46,14 @@ input {
   color: #c4d8f0;
   outline: none;
   transition: 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6),
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
     inset 0 0 8px rgba(128, 153, 184, 0.05);
 }
 input:focus {
   border-color: #8099b8;
-  box-shadow: 0 4px 16px rgba(128, 153, 184, 0.3),
+  box-shadow:
+    0 4px 16px rgba(128, 153, 184, 0.3),
     inset 0 0 8px rgba(128, 153, 184, 0.1);
 }
 
@@ -64,7 +68,9 @@ button {
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 15px rgba(128, 153, 184, 0.3);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(128, 153, 184, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -72,7 +78,8 @@ button:hover {
   background: linear-gradient(135deg, #6b8fb0, #8099b8);
   border-color: #c4d8f0;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(128, 153, 184, 0.4),
+  box-shadow:
+    0 6px 20px rgba(128, 153, 184, 0.4),
     0 0 20px rgba(180, 200, 220, 0.2);
 }
 
@@ -150,7 +157,8 @@ button:hover::after {
   padding: 24px;
   margin: 32px auto;
   max-width: 800px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9),
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.9),
     inset 0 0 20px rgba(128, 153, 184, 0.02);
 }
 
@@ -244,7 +252,9 @@ button:hover::after {
   border: 2px solid #8b7500;
   padding: 20px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
@@ -391,7 +401,9 @@ button:hover::after {
   padding: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   min-height: 80px;
 }
 
@@ -488,5 +500,167 @@ button:hover::after {
   .catch-fish {
     min-width: auto;
     flex-basis: 100%;
+  }
+}
+
+/* ===== 統一されたレスポンシブデザイン ===== */
+
+/* 大画面（1200px以上） */
+@media (min-width: 1200px) {
+  body {
+    padding: 85px 40px 0px 40px;
+  }
+}
+
+/* タブレット / 小型デスクトップ（901px - 1199px） */
+@media (max-width: 1199px) {
+  body {
+    padding: 85px 20px 0px 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 10px 15px;
+    font-size: 0.95rem;
+  }
+}
+
+/* タブレット（751px - 900px） */
+@media (max-width: 900px) {
+  body {
+    padding: 75px 15px 0px 15px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  input {
+    padding: 8px;
+    margin: 12px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  #result {
+    font-size: 1.2rem;
+  }
+}
+
+/* スマートフォン（481px - 750px） */
+@media (max-width: 750px) {
+  body {
+    padding: 70px 12px 0px 12px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 0.9rem;
+    margin: 10px 0;
+  }
+
+  input {
+    padding: 8px;
+    margin: 10px;
+    font-size: 16px;
+    width: calc(100% - 40px);
+  }
+
+  button {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin: 10px 5px;
+  }
+
+  #result {
+    font-size: 1.1rem;
+    margin-top: 15px;
+  }
+
+  .recent-catch-item {
+    gap: 10px;
+  }
+}
+
+/* 小型スマートフォン（480px以下） */
+@media (max-width: 480px) {
+  html,
+  body {
+    font-size: 13px;
+  }
+
+  body {
+    padding: 60px 8px 0px 8px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 0.85rem;
+    margin: 8px 0;
+  }
+
+  input {
+    padding: 7px;
+    margin: 8px;
+    font-size: 16px;
+    width: calc(100% - 30px);
+    border-radius: 2px;
+  }
+
+  button {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    margin: 8px 4px;
+  }
+
+  #result {
+    font-size: 1rem;
+    margin-top: 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .catch-thumbnail {
+    width: 50px;
+    height: 50px;
+  }
+
+  .catch-fish {
+    font-size: 0.95rem;
+  }
+
+  .catch-meta {
+    font-size: 0.8rem;
+  }
+
+  .recent-catch-item {
+    gap: 8px;
+  }
+
+  .recent-catches {
+    padding: 12px;
   }
 }
