@@ -55,6 +55,19 @@
         transition: all 0.3s ease;
       }
 
+      .card select {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(5, 4, 4, 0.6);
+        border: 1px solid #506080;
+        color: #c4d8f0;
+        border-radius: 2px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+      }
+
       .card input:focus {
         outline: none;
         border-color: #8099b8;
@@ -139,14 +152,134 @@
         color: #8099b8;
       }
 
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .menu-icon {
+        display: none;
+        background: transparent;
+        border: none;
+        color: #8099b8;
+        cursor: pointer;
+        padding: 8px;
+        transition: color 0.2s ease;
+      }
+
+      .menu-icon:hover {
+        color: #4db8ff;
+      }
+
+      .submenu[aria-hidden="true"] {
+        display: none;
+      }
+
+      .submenu[aria-hidden="false"] {
+        display: flex;
+      }
+
+      @media (max-width: 900px) {
+        .header-right {
+          display: none;
+        }
+
+        .menu-icon {
+          display: block;
+        }
+      }
+
       @media (max-width: 750px) {
+        body {
+          padding: 10px;
+        }
+
         .card {
-          margin: 1rem;
+          margin: 1rem 0;
           padding: 1.5rem;
+          max-width: 100%;
         }
 
         h2 {
           font-size: 1.3rem;
+          letter-spacing: 1px;
+        }
+
+        .top-wrapper p {
+          font-size: 0.95rem;
+          margin: 10px 15px !important;
+        }
+
+        .card label {
+          font-size: 0.95rem;
+        }
+
+        .card input,
+        .card select {
+          font-size: 16px;
+          padding: 0.85rem;
+        }
+
+        .card button {
+          padding: 0.85rem 1.25rem;
+          font-size: 0.95rem;
+        }
+
+        #convertBtn,
+        #clearBtn {
+          flex: 1;
+        }
+
+        #result {
+          font-size: 1rem;
+        }
+
+        #result a {
+          font-size: 0.9rem;
+          padding: 0.5rem 0.75rem;
+        }
+
+        footer {
+          padding: 1.5rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h2 {
+          font-size: 1.1rem;
+          margin: 15px 10px;
+        }
+
+        .top-wrapper p {
+          font-size: 0.9rem;
+          margin: 8px 12px !important;
+        }
+
+        .card {
+          padding: 1.25rem;
+          margin: 1rem 0;
+        }
+
+        .card label {
+          font-size: 0.9rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .card input,
+        .card select {
+          padding: 0.7rem;
+          font-size: 16px;
+        }
+
+        #result {
+          font-size: 0.95rem;
+        }
+
+        footer {
+          padding: 1rem 0.5rem;
+          font-size: 0.85rem;
         }
       }
     </style>
@@ -250,10 +383,11 @@
           <a href="fishing-log2.html">釣果一覧</a>
           <a href="fishing-log.html">登録</a>
           <div class="nav-tools">
-            <button class="tools-btn" aria-haspopup="true" aria-expanded="false">ツール ▾</button>
-            <div class="submenu" role="menu">
-              <a role="menuitem" href="pe-converter.html">PE変換</a>
-              <a role="menuitem" href="index.html">その他</a>
+            <button class="tools-btn" aria-haspopup="true" aria-expanded="false" aria-controls="tools-submenu">ツール ▾</button>
+            <div id="tools-submenu" class="submenu" role="menu" aria-hidden="true">
+              <a role="menuitem" href="pe-converter.html" tabindex="0">PE変換</a>
+              <a role="menuitem" href="pe(tanatoru4)-converter.html" tabindex="0">タナトル4</a>
+              <a role="menuitem" href="index.html" tabindex="0">その他</a>
             </div>
           </div>
           <a href="profile.html">プロフィール</a>
@@ -290,7 +424,7 @@
       <label for="pe">号数を入力してください</label>
       <input type="number" id="pe" step="0.1" placeholder="例: 1.5" />
       <div
-        style="display: flex; gap: 12px; margin-top: 12px; align-items: center"
+        style="display: flex; gap: 12px; margin-top: 12px; align-items: center; flex-wrap: wrap;"
       >
         <button id="convertBtn">計算する</button>
         <button id="clearBtn">クリア</button>
@@ -381,6 +515,47 @@
         document.getElementById("pe").value = "";
         document.getElementById("result").innerHTML = "";
       });
+
+      // ハンバーガーメニュー機能
+      const menuIcon = document.getElementById("menuIcon");
+      const toolsBtn = document.querySelector(".tools-btn");
+      const toolsSubmenu = document.getElementById("tools-submenu");
+      const headerRight = document.querySelector(".header-right");
+
+      if (menuIcon) {
+        menuIcon.addEventListener("click", () => {
+          const isExpanded = menuIcon.getAttribute("aria-expanded") === "true";
+          menuIcon.setAttribute("aria-expanded", !isExpanded);
+
+          if (headerRight) {
+            if (!isExpanded) {
+              headerRight.style.display = "flex";
+              headerRight.style.position = "absolute";
+              headerRight.style.top = "100%";
+              headerRight.style.left = "0";
+              headerRight.style.right = "0";
+              headerRight.style.flexDirection = "column";
+              headerRight.style.gap = "0";
+              headerRight.style.background = "rgba(15, 25, 45, 0.95)";
+              headerRight.style.border = "1px solid #506080";
+              headerRight.style.padding = "10px 0";
+              headerRight.style.zIndex = "999";
+            } else {
+              headerRight.style.display = "none";
+            }
+          }
+        });
+      }
+
+      if (toolsBtn) {
+        toolsBtn.addEventListener("click", () => {
+          const isExpanded = toolsBtn.getAttribute("aria-expanded") === "true";
+          toolsBtn.setAttribute("aria-expanded", !isExpanded);
+          if (toolsSubmenu) {
+            toolsSubmenu.setAttribute("aria-hidden", isExpanded);
+          }
+        });
+      }
     </script>
     <script src="scripts/header.js"></script>
   </body>
