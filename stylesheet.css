@@ -383,7 +383,7 @@ button.menu-icon:hover {
 }
 
 /* Mobile: show right nav when header has .open */
-@media all and (max-width: 670px) {
+@media (max-width: 670px) {
   .header-right {
     display: none; /* hide desktop links on small screens */
   }
@@ -529,7 +529,7 @@ footer {
 }
 
 /* Menu icon positioned version - overrides for mobile */
-@media all and (max-width: 750px) {
+@media (max-width: 750px) {
   .menu-icon {
     color: white;
     display: block;
@@ -562,7 +562,7 @@ header .nav-tools .tools-btn {
   clear: left;
 }
 
-@media all and (max-width: 1000px) {
+@media (max-width: 1000px) {
   .lesson {
     width: 50%;
     margin-bottom: 50px;
@@ -577,7 +577,7 @@ header .nav-tools .tools-btn {
   }
 }
 
-@media all and (max-width: 750px) {
+@media (max-width: 750px) {
   .top-wrapper h1 {
     font-size: 32px;
   }
@@ -587,7 +587,7 @@ header .nav-tools .tools-btn {
   }
 }
 
-@media all and (max-width: 670px) {
+@media (max-width: 670px) {
   .header-right {
     display: none;
   }
@@ -630,7 +630,7 @@ header .nav-tools .tools-btn {
 }
 
 /* Additional mobile-friendly rules */
-@media all and (max-width: 480px) {
+@media (max-width: 480px) {
   .top-wrapper {
     padding: 120px 12px 60px 12px;
     background-position: center;
@@ -664,7 +664,7 @@ header .nav-tools .tools-btn {
   }
 }
 
-@media all and (max-width: 360px) {
+@media (max-width: 360px) {
   .top-wrapper p,
   .text-contents {
     font-size: 13px;
