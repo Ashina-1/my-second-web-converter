@@ -1,9 +1,14 @@
+html {
+  overflow-x: hidden;
+}
+
 /* 全体 */
 body {
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
   text-align: center;
   margin: 0;
   padding-top: 65px;
+  overflow-x: hidden;
   background: #050404 !important;
   background-image:
     radial-gradient(

@@ -3,6 +3,10 @@
    Fishing × Dark Souls Theme
    =================================== */
 
+html {
+  overflow-x: hidden;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,6 +14,7 @@
 body {
   margin: 0;
   padding-top: 65px;
+  overflow-x: hidden;
   font-family: "Cinzel", "Hiragino Kaku Gothic ProN", serif;
   background: linear-gradient(
     135deg,

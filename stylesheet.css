@@ -1,3 +1,7 @@
+html {
+  overflow-x: hidden;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -5,6 +9,7 @@
 body {
   margin: 0;
   padding-top: 65px;
+  overflow-x: hidden;
   font-family: "Hiragino Kaku Gothic ProN";
   /* Ensure a default background so pages that don't load the separate theme still look correct */
   background: linear-gradient(135deg, #cdefff, #f0faff);
