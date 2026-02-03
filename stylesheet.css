@@ -4,6 +4,7 @@
 
 body {
   margin: 0;
+  padding-top: 65px;
   font-family: "Hiragino Kaku Gothic ProN";
   /* Ensure a default background so pages that don't load the separate theme still look correct */
   background: linear-gradient(135deg, #cdefff, #f0faff);
@@ -1262,5 +1263,236 @@ button:hover {
 
   main {
     margin-top: 8px !important;
+  }
+}
+/* ===== グローバルモバイル改善 ===== */
+@media (max-width: 750px) {
+  header {
+    height: auto;
+    padding: 12px 8px;
+  }
+
+  header .container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  body {
+    padding-top: 0;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .container {
+    padding: 0 !important;
+  }
+
+  .top-wrapper {
+    padding: 80px 15px 50px !important;
+    margin-top: 0;
+  }
+
+  .top-wrapper h2,
+  .top-wrapper h1 {
+    font-size: 22px !important;
+    margin: 15px 0 !important;
+  }
+
+  .top-wrapper p {
+    font-size: 14px !important;
+  }
+
+  /* Catch list responsive */
+  .catch-list {
+    grid-template-columns: 1fr !important;
+    margin: 15px auto !important;
+    padding: 0 10px !important;
+    gap: 12px !important;
+  }
+
+  .catch-item {
+    grid-template-columns: 1fr !important;
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+
+  .img-wrap {
+    max-width: 100% !important;
+  }
+
+  .img-wrap img {
+    height: 180px !important;
+  }
+
+  /* Form responsiveness */
+  form {
+    padding: 15px !important;
+    max-width: 100% !important;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    width: 100% !important;
+    padding: 10px 8px !important;
+    font-size: 14px !important;
+  }
+
+  button {
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    position: relative !important;
+    margin-bottom: 10px;
+  }
+
+  header .logo {
+    font-size: 16px !important;
+  }
+
+  .top-wrapper {
+    padding: 60px 12px 40px !important;
+  }
+
+  .top-wrapper h2,
+  .top-wrapper h1 {
+    font-size: 18px !important;
+  }
+
+  .top-wrapper p {
+    font-size: 12px !important;
+    display: none;
+  }
+
+  .catch-list {
+    margin: 10px auto !important;
+  }
+
+  .catch-item {
+    padding: 10px !important;
+  }
+
+  .img-wrap img {
+    height: 140px !important;
+  }
+
+  form {
+    padding: 12px !important;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    padding: 8px 6px !important;
+    font-size: 13px !important;
+  }
+
+  button {
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .form-row {
+    gap: 8px !important;
+  }
+
+  h1 {
+    font-size: 20px !important;
+  }
+
+  h2 {
+    font-size: 18px !important;
+  }
+
+  h3 {
+    font-size: 16px !important;
+  }
+
+  p {
+    font-size: 13px !important;
+  }
+}
+
+/* ===== 全ページ共通モバイル最適化 ===== */
+@media (max-width: 750px) {
+  /* Fix body padding for fixed header */
+  body {
+    padding-top: 65px;
+  }
+
+  /* Prevent content from overlapping fixed header */
+  main,
+  .top-wrapper {
+    margin-top: 0 !important;
+  }
+
+  /* Responsive container */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Form elements full-width on mobile */
+  form {
+    width: 100% !important;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100% !important;
+  }
+
+  /* Image responsiveness */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small adjustments */
+  body {
+    padding-top: 65px;
+    font-size: 13px;
+  }
+
+  .container {
+    width: 100% !important;
+  }
+
+  main {
+    width: 100vw !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+  }
+
+  button,
+  a.btn {
+    min-height: 44px !important;
+  }
+
+  input,
+  select {
+    min-height: 44px !important;
   }
 }

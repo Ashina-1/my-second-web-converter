@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
@@ -10,98 +10,6 @@
     />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="stylesheet-darksoul.css" />
-    <style>
-      /* page-specific improvements for readability */
-      main.container {
-        max-width: 920px;
-        margin: 0 auto;
-        padding: 28px 16px;
-      }
-      h1 {
-        font-size: 1.6rem;
-        margin-bottom: 12px;
-        color: #c4d8f0;
-        text-shadow: 0 0 15px rgba(180, 200, 220, 0.6),
-          0 0 30px rgba(100, 150, 200, 0.3), 0 2px 10px rgba(0, 0, 0, 0.8);
-      }
-      .site-card {
-        background: linear-gradient(
-          135deg,
-          rgba(5, 4, 4, 0.95),
-          rgba(15, 25, 45, 0.95)
-        );
-        border: 2px solid #506080;
-        border-radius: 2px;
-        padding: 16px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9),
-          inset 0 0 20px rgba(128, 153, 184, 0.02);
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-        color: #8099b8;
-      }
-      .img-wrap {
-        flex: 0 0 360px;
-        max-width: 360px;
-      }
-      .img-wrap img {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 8px;
-        object-fit: cover;
-      }
-      .meta {
-        flex: 1 1 auto;
-        min-width: 0;
-      }
-      .meta h2 {
-        font-size: 1.2rem;
-        margin: 0 0 8px 0;
-        color: #c4d8f0;
-        text-shadow: 0 0 10px rgba(180, 200, 220, 0.5),
-          0 2px 5px rgba(0, 0, 0, 0.8);
-      }
-      .meta p {
-        margin: 6px 0;
-        color: #8099b8;
-        text-shadow: 0 0 8px rgba(128, 153, 184, 0.3),
-          0 1px 3px rgba(0, 0, 0, 0.6);
-      }
-      .home-btn {
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        background: linear-gradient(135deg, #506080, #6b8fb0);
-        color: #c4d8f0;
-        border: 2px solid #8099b8;
-        padding: 12px;
-        border-radius: 50%;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8),
-          0 0 20px rgba(128, 153, 184, 0.4);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-shadow: 0 0 8px rgba(128, 153, 184, 0.5);
-      }
-      .home-btn:hover {
-        box-shadow: 0 8px 40px rgba(128, 153, 184, 0.6),
-          0 0 30px rgba(180, 200, 220, 0.3);
-        border-color: #c4d8f0;
-        color: #ffffff;
-      }
-      .home-btn svg {
-        display: block;
-      }
-      @media (max-width: 900px) {
-        .site-card {
-          flex-direction: column;
-        }
-        .img-wrap {
-          flex: 0 0 auto;
-          max-width: 100%;
-        }
-      }
-    </style>
   </head>
   <body>
     <header role="banner" aria-label="サイトヘッダー">
@@ -280,7 +188,7 @@
       </svg>
     </div>
 
-    <main class="container" style="padding-top: 40px">
+    <main class="container">
       <div id="fishinglogs">読み込み中...</div>
     </main>
 
@@ -447,11 +355,11 @@
               <h2 style="margin:0 0 8px 0;color:#4db8ff">${
                 data.catch.fish || "不明"
               } <small style="color:#6b7b82">${
-          data.catch.date || ""
-        }</small></h2>
+                data.catch.date || ""
+              }</small></h2>
               <p><strong>サイズ:</strong> ${data.catch.size || ""} cm${
-          data.catch.weight ? " / " + data.catch.weight + " g" : ""
-        }</p>
+                data.catch.weight ? " / " + data.catch.weight + " g" : ""
+              }</p>
               <p><strong>場所:</strong> ${data.catch.location || ""}</p>
               <p><strong>メモ:</strong> ${data.catch.memo || ""}</p>
               ${oceanDataHtml}
@@ -519,7 +427,7 @@
         try {
           const q = query(
             collection(db, "fishinglogs"),
-            where("catch.imageUrl", "==", imageUrl)
+            where("catch.imageUrl", "==", imageUrl),
           );
           const querySnapshot = await getDocs(q);
           if (!querySnapshot.empty) {
@@ -539,7 +447,7 @@
       } else {
         if (!db) {
           renderError(
-            "Firestore が初期化されていません。firebase-config.js を確認してください。"
+            "Firestore が初期化されていません。firebase-config.js を確認してください。",
           );
         } else if (logId) {
           fetchFishingLogById(logId);
@@ -556,7 +464,7 @@
         if (hb)
           hb.addEventListener(
             "click",
-            () => (window.location.href = "index.html")
+            () => (window.location.href = "index.html"),
           );
       } catch (e) {
         console.warn("homeBtn handler failed", e);
@@ -661,7 +569,7 @@
           // 背景グリッド
           const gridGroup = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "g"
+            "g",
           );
           gridGroup.setAttribute("stroke", "#6b5d3f");
           gridGroup.setAttribute("stroke-width", "0.5");
@@ -670,7 +578,7 @@
             const y = padding.top + (graphHeight / 4) * i;
             const line = document.createElementNS(
               "http://www.w3.org/2000/svg",
-              "line"
+              "line",
             );
             line.setAttribute("x1", padding.left);
             line.setAttribute("x2", width - padding.right);
@@ -692,7 +600,7 @@
 
           const path = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "path"
+            "path",
           );
           path.setAttribute("d", pathData);
           path.setAttribute("fill", "none");
@@ -731,7 +639,7 @@
 
                 const circle = document.createElementNS(
                   "http://www.w3.org/2000/svg",
-                  "circle"
+                  "circle",
                 );
                 circle.setAttribute("cx", x);
                 circle.setAttribute("cy", y);
@@ -744,7 +652,7 @@
                 // 時刻ラベルを追加
                 const timeLabel = document.createElementNS(
                   "http://www.w3.org/2000/svg",
-                  "text"
+                  "text",
                 );
                 timeLabel.setAttribute("x", x);
                 timeLabel.setAttribute("y", y - 10);
@@ -761,7 +669,7 @@
           // Y軸ラベル
           const minLabel = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "text"
+            "text",
           );
           minLabel.setAttribute("x", "2");
           minLabel.setAttribute("y", padding.top + graphHeight + 4);
@@ -773,7 +681,7 @@
 
           const maxLabel = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "text"
+            "text",
           );
           maxLabel.setAttribute("x", "2");
           maxLabel.setAttribute("y", padding.top + 12);
@@ -786,7 +694,7 @@
           // X軸ラベル（開始・終了）
           const startLabel = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "text"
+            "text",
           );
           startLabel.setAttribute("x", padding.left);
           startLabel.setAttribute("y", height - 8);
@@ -798,7 +706,7 @@
 
           const endLabel = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "text"
+            "text",
           );
           endLabel.setAttribute("x", width - padding.right);
           endLabel.setAttribute("y", height - 8);
@@ -849,7 +757,7 @@
                   (loc) =>
                     `<option value="${loc.lat},${loc.lon}" ${
                       currentData.catch.location === loc.name ? "selected" : ""
-                    }>${loc.name}</option>`
+                    }>${loc.name}</option>`,
                 )
                 .join("")}
             </select>
@@ -930,14 +838,14 @@
                 const periods = marineData.hourly.wave_period;
 
                 const targetMs = new Date(
-                  `${dateStr}T${timeStr}:00Z`
+                  `${dateStr}T${timeStr}:00Z`,
                 ).getTime();
                 let closestIdx = 0;
                 let minDiff = Infinity;
 
                 for (let i = 0; i < times.length; i++) {
                   const diff = Math.abs(
-                    new Date(times[i]).getTime() - targetMs
+                    new Date(times[i]).getTime() - targetMs,
                   );
                   if (diff < minDiff) {
                     minDiff = diff;
@@ -957,13 +865,13 @@
               }
 
               oceanDataText = `気温:${temp}°C 風:${wind}m/s(${getWindDirStr(
-                windDir
+                windDir,
               )}) 気圧:${pressure}hPa 水温:${waterTemp}°C 潮位:${tideHeight} 波:${waveHeight} 周期:${wavePeriod}`;
 
               resultText.innerHTML = `
               <strong>取得済み海況データ (${dateStr} ${timeStr}):</strong><br>
               気温: ${temp}°C | 風速: ${wind}m/s (${getWindDirStr(
-                windDir
+                windDir,
               )}) | 気圧: ${pressure}hPa<br>
               水温: ${waterTemp}°C | 潮位: ${tideHeight} | 波高: ${waveHeight} | 周期: ${wavePeriod}
             `;
