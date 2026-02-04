@@ -1415,6 +1415,12 @@ body {
   gap: 20px;
   padding: 0 20px;
 }
+
+.ocean-checker-container > .section {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .section {
   background: linear-gradient(
     135deg,
