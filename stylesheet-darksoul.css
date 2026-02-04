@@ -2597,3 +2597,170 @@ strong i[data-lucide] {
     flex-basis: 100%;
   }
 }
+
+/* ===================================
+   stylesheet.css から統合: fishing-log スタイル
+   =================================== */
+
+/* 釣果アイテム: 広い画面では画像左 + 詳細右 */
+.catch-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.img-wrap {
+  max-width: 180px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.img-wrap img {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+/* サムネイル ラッパー */
+.img-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 180px;
+}
+
+.img-thumb .thumb-img {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* メタ情報タイポグラフィ */
+.catch-item .meta p {
+  margin: 0 0 6px 0;
+  color: #334e57;
+  line-height: 1.3;
+}
+
+.catch-item .meta h2,
+.catch-item .meta p strong {
+  color: #024f6f;
+}
+
+/* 狭い画面では画像が全幅 */
+@media (max-width: 700px) {
+  .img-wrap {
+    max-width: 100%;
+  }
+
+  .img-wrap img {
+    height: 220px;
+  }
+
+  .catch-item {
+    padding: 12px;
+  }
+}
+
+/* 非常に大きなディスプレイでのグリッドギャップ調整 */
+@media (min-width: 1200px) {
+  .catch-list {
+    max-width: 1180px;
+    gap: 22px;
+  }
+}
+
+.ownerHeader {
+  max-width: 520px;
+  margin: 8px auto;
+  text-align: center;
+  color: #024f6f;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8px 14px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-size: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.friends-panel {
+  max-width: 520px;
+  margin: 16px auto;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(9, 59, 76, 0.04);
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 18px 0 36px 0;
+}
+
+.action-row button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #0288d1 0%, #26c6da 100%);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-row button[aria-pressed="true"] {
+  background: linear-gradient(90deg, #607d8b 0%, #90a4ae 100%);
+}
+
+/* 空状態ユーティリティ */
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: #556b72;
+}
+
+/* 釣果リスト: カード グリッド */
+.catch-list {
+  max-width: 980px;
+  margin: 18px auto 36px auto;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  padding: 0 12px;
+}
+
+.catch-item {
+  background: linear-gradient(180deg, #ffffff, #fbfeff);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(9, 59, 76, 0.06);
+  border: 1px solid rgba(15, 106, 148, 0.06);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+  outline: none;
+}
+
+.catch-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 34px rgba(9, 59, 76, 0.12);
+}
+
+.catch-item:focus {
+  box-shadow: 0 12px 34px rgba(9, 59, 76, 0.16);
+  transform: translateY(-6px);
+  border-color: rgba(2, 136, 209, 0.14);
+}
+
+/* ユーティリティ: テキスト修飾 */
+.text-muted {
+  color: #777;
+}
